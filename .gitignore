@@ -398,3 +398,8 @@ FodyWeavers.xsd
 *.sln.iml
 /.vs/ShineCoder-Helpdesk-API/DesignTimeBuild/.dtbcache.v2
 /.vs/ShineCoder-Helpdesk-API/FileContentIndex/0b7a6d80-ec9d-495d-90ad-2d3c0d17a151.vsidx
+
+.vs/ShineCoder-Helpdesk-API/DesignTimeBuild*/
+.vs/ShineCoder-Helpdesk-API/DesignTimeBuild*/
+*.vsidx
+*.vsidx
