@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "dgSpecHash": "yJtDdWNu2qVrA5EZMnu2HERkVioEIVaD6LdlDcuVSIkyg8Xj+QSaB6znkx4jcM8UD5nAigMeq+//txZBJxgsrA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\suchakraborty\\source\\repos\\ShineCoder-Helpdesk-API\\ShineCoder-Helpdesk.Core\\ShineCoder-Helpdesk.Core.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\suchakraborty\\.nuget\\packages\\microsoft.aspnetcore.http.abstractions\\2.2.0\\microsoft.aspnetcore.http.abstractions.2.2.0.nupkg.sha512",
+    "C:\\Users\\suchakraborty\\.nuget\\packages\\microsoft.aspnetcore.http.features\\2.2.0\\microsoft.aspnetcore.http.features.2.2.0.nupkg.sha512",
+    "C:\\Users\\suchakraborty\\.nuget\\packages\\microsoft.extensions.primitives\\2.2.0\\microsoft.extensions.primitives.2.2.0.nupkg.sha512",
+    "C:\\Users\\suchakraborty\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\suchakraborty\\.nuget\\packages\\system.memory\\4.5.1\\system.memory.4.5.1.nupkg.sha512",
+    "C:\\Users\\suchakraborty\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\4.5.1\\system.runtime.compilerservices.unsafe.4.5.1.nupkg.sha512",
+    "C:\\Users\\suchakraborty\\.nuget\\packages\\system.text.encodings.web\\4.5.0\\system.text.encodings.web.4.5.0.nupkg.sha512"
+  ],
+  "logs": []
+}

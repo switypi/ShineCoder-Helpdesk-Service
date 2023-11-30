@@ -1,0 +1,5 @@
+C:\Users\suchakraborty\source\repos\ShineCoder-Helpdesk-API\ShineCoder-Helpdesk.Core\obj\Debug\net6.0\ShineCoder-Helpdesk.Core.csproj.AssemblyReference.cache
+C:\Users\suchakraborty\source\repos\ShineCoder-Helpdesk-API\ShineCoder-Helpdesk.Core\obj\Debug\net6.0\ShineCoder-Helpdesk.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\suchakraborty\source\repos\ShineCoder-Helpdesk-API\ShineCoder-Helpdesk.Core\obj\Debug\net6.0\ShineCoder-Helpdesk.Core.AssemblyInfoInputs.cache
+C:\Users\suchakraborty\source\repos\ShineCoder-Helpdesk-API\ShineCoder-Helpdesk.Core\obj\Debug\net6.0\ShineCoder-Helpdesk.Core.AssemblyInfo.cs
+C:\Users\suchakraborty\source\repos\ShineCoder-Helpdesk-API\ShineCoder-Helpdesk.Core\obj\Debug\net6.0\ShineCoder-Helpdesk.Core.csproj.CoreCompileInputs.cache
