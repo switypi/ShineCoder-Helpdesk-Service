@@ -8,5 +8,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Models
 {
 	public class Ticket_Issues:BaseEntity
 	{
+		public string iss_desc { get;set; }
+
 	}
 }
