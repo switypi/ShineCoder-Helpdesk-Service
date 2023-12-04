@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ShineCoder_Helpdesk.Infrastructure.Models
 {
-    public class Ticket_Status:BaseEntity
+    public class Category : BaseEntity
     {
         public string Name { get; set; }
     }

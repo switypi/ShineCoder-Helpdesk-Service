@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using ShineCoder_Helpdesk.Core;
 using Newtonsoft.Json.Linq;
 using ShineCoder_Helpdesk.Repository;
+using ShineCoder_Helpdesk.Core.Helpers;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -10,7 +11,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 {
 	[ApiController]
 	[Produces("application/json")]
-	[Route("api/v{version:apiVersion}" + ShineCoder_HelpDeskConstants.TICKET_SERVICE_API_PREFIX)]
+	[Route("api/v{version:apiVersion}" + ShineCoder_HelpDeskConstants.STUDENT_SERVICE_API_PREFIX)]
 	[ApiVersion(ShineCoder_HelpDeskConstants.SHINECODERLMS_VERSION)]
 	public class TicketsController : ControllerBase
 	{
@@ -27,6 +28,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 		}
 		[HttpGet]
 		[ActionName("GetTickets")]
+		
 		public JObject GetTickets()
 		{
 			var studentData = _unitOfWork.TicketRepository.Get();

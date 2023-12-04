@@ -8,5 +8,6 @@ namespace ShineCoder_Helpdesk.Infrastructure.Models
 {
 	public class Ticket_Priorities : BaseEntity
 	{
+		public string Name { get; set; }
 	}
 }
