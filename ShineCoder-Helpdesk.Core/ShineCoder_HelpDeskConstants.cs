@@ -9,7 +9,7 @@ namespace ShineCoder_Helpdesk.Core
     public class ShineCoder_HelpDeskConstants
     {
         public const string SHINECODERLMS_VERSION = "1.0";
-        public const string TICKETS_SERVICE_API_PREFIX = "/tickets";
+        public const string TICKETS_SERVICE_API_PREFIX = "/Tickets";
         public const string AUTHENTICATION_SERVICE_API_PREFIX = "/Authentication";
 
 		public const string INSTRUCTOR_SERVICE_API_PREFIX = "/instructor";

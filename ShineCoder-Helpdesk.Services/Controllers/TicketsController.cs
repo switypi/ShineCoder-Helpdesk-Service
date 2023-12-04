@@ -4,6 +4,10 @@ using ShineCoder_Helpdesk.Core;
 using Newtonsoft.Json.Linq;
 using ShineCoder_Helpdesk.Repository;
 using ShineCoder_Helpdesk.Core.Helpers;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+
+
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,6 +17,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 	[Produces("application/json")]
 	[Route("api/v{version:apiVersion}" + ShineCoder_HelpDeskConstants.TICKETS_SERVICE_API_PREFIX)]
 	[ApiVersion(ShineCoder_HelpDeskConstants.SHINECODERLMS_VERSION)]
+	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 	public class TicketsController : ControllerBase
 	{
 
@@ -27,12 +32,12 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 			_responseBuilder = responseBuilder;
 		}
 		[HttpGet]
-		[ActionName("GetTickets")]
+		[Route("GetTickets")]
 		
-		public JObject GetTickets()
+		public  JObject GetTickets()
 		{
 			var studentData = _unitOfWork.TicketRepository.Get();
-			return _responseBuilder.Success(studentData.ToJArray());
+			return  _responseBuilder.Success(studentData.ToJArray());
 		}
 
 		// GET api/<TicketsController>/5

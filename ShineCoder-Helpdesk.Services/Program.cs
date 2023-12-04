@@ -12,6 +12,7 @@ using System.Text;
 using ShineCoder_Helpdesk.Core.Helpers;
 using ShineCoder_Helpdesk.Infrastructure.Models;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,6 +57,7 @@ builder.Services.AddApiVersioning(config =>
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<HelpdeskDbContext>()
     .AddDefaultTokenProviders();
+
 builder.Services.Configure<IdentityOptions>(opt =>
 {
 	opt.Password.RequireDigit = true;
@@ -92,7 +94,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
          {
              ValidateIssuer = true,
              ValidateAudience = true,
-             ValidateLifetime = true,
+             ValidateLifetime = false,
              ValidateIssuerSigningKey = true,
              ValidIssuer= builder.Configuration["JWT:ValidIssuer"],
              ValidAudience= builder.Configuration["JWT:ValidAudience"],
@@ -100,6 +102,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 			 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])),
              ClockSkew = TimeSpan.Zero
          }
+         
+
     );
 builder.Services.AddTransient<IAuthService, AuthService>();
 
