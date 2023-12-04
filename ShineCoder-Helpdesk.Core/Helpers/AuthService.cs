@@ -37,6 +37,12 @@ namespace ShineCoder_Helpdesk.Core.Helpers
                 UserName = model.Username,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
+                EmailConfirmed = false,
+                PhoneNumberConfirmed=false,
+                TwoFactorEnabled = false,
+                LockoutEnabled = false,
+                AccessFailedCount = 0,
+
             };
             var createUserResult = await userManager.CreateAsync(user, model.Password);
             if (!createUserResult.Succeeded)
@@ -75,12 +81,13 @@ namespace ShineCoder_Helpdesk.Core.Helpers
         }
         private string GenerateToken(IEnumerable<Claim> claims)
         {
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWTKey:Secret"]));
-            var _TokenExpiryTimeInHour = Convert.ToInt64(_configuration["JWTKey:TokenExpiryTimeInHour"]);
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
+            var _TokenExpiryTimeInHour = Convert.ToInt64(_configuration["JWT:Expiry"]);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Issuer = _configuration["JWTKey:ValidIssuer"],
-                Audience = _configuration["JWTKey:ValidAudience"],
+                Issuer = _configuration["JWT:ValidIssuer"],
+                Audience = _configuration["JWT:ValidAudience"],
+                
                 //Expires = DateTime.UtcNow.AddHours(_TokenExpiryTimeInHour),
                 Expires = DateTime.UtcNow.AddMinutes(1),
                 SigningCredentials = new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256),

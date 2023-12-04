@@ -11,12 +11,16 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using ShineCoder_Helpdesk.Core.Helpers;
 using ShineCoder_Helpdesk.Infrastructure.Models;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//builder.Services.AddControllers()
+//	.addn();
+
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddVersionedApiExplorer(setup =>
 {
@@ -28,6 +32,8 @@ builder.Services.AddVersionedApiExplorer(setup =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+
 builder.Services.AddDbContext<HelpdeskDbContext>(options =>
 options.UseSqlServer(
 					builder.Configuration.GetConnectionString("DefaultConnection"),
@@ -37,6 +43,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IResponseBuilder, ResponseBuilder>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IHttpContextProxy, HttpContextProxy>();
+builder.Services.AddLogging();
 builder.Services.AddApiVersioning(config =>
 {
 	config.DefaultApiVersion = new ApiVersion(1, 0);
@@ -49,17 +56,48 @@ builder.Services.AddApiVersioning(config =>
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<HelpdeskDbContext>()
     .AddDefaultTokenProviders();
+builder.Services.Configure<IdentityOptions>(opt =>
+{
+	opt.Password.RequireDigit = true;
+	opt.Password.RequireLowercase = true;
+	opt.Password.RequireNonAlphanumeric = true;
+	opt.Password.RequireUppercase = true;
+	opt.Password.RequiredLength = 4;
+	opt.Password.RequiredUniqueChars = 1;
+
+	// Lockout settings 
+	opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+	opt.Lockout.MaxFailedAccessAttempts = 5;
+	opt.Lockout.AllowedForNewUsers = true;
+
+	//Signin option
+	opt.SignIn.RequireConfirmedEmail = false;
+
+	// User settings 
+	opt.User.RequireUniqueEmail = true;
+
+	//Token Option
+	//opt.Tokens.AuthenticatorTokenProvider = "Name of AuthenticatorTokenProvider";
+
+});
+builder.Services.Configure<PasswordHasherOptions>(option =>
+{
+	option.IterationCount = 12000;
+});
 
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
          options.TokenValidationParameters = new TokenValidationParameters
          {
-             ValidateIssuer = false,
-             ValidateAudience = false,
+             ValidateIssuer = true,
+             ValidateAudience = true,
              ValidateLifetime = true,
              ValidateIssuerSigningKey = true,
-             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])),
+             ValidIssuer= builder.Configuration["JWT:ValidIssuer"],
+             ValidAudience= builder.Configuration["JWT:ValidAudience"],
+
+			 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])),
              ClockSkew = TimeSpan.Zero
          }
     );
@@ -70,6 +108,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("Open", builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 });
 
+builder.Services.AddTransient<IValidator, CustomValidator>();
 
 var app = builder.Build();
 

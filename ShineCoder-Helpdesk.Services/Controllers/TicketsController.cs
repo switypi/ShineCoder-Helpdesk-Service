@@ -11,7 +11,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 {
 	[ApiController]
 	[Produces("application/json")]
-	[Route("api/v{version:apiVersion}" + ShineCoder_HelpDeskConstants.STUDENT_SERVICE_API_PREFIX)]
+	[Route("api/v{version:apiVersion}" + ShineCoder_HelpDeskConstants.TICKETS_SERVICE_API_PREFIX)]
 	[ApiVersion(ShineCoder_HelpDeskConstants.SHINECODERLMS_VERSION)]
 	public class TicketsController : ControllerBase
 	{

@@ -30,5 +30,40 @@ namespace ShineCoder_Helpdesk.Infrastructure
 		{
 			return await base.SaveChangesAsync();
 		}
+
+		protected override void OnModelCreating(ModelBuilder builder)
+		{
+			base.OnModelCreating(builder);
+			builder.HasDefaultSchema("Dbo");
+
+			builder.Entity<ApplicationUser>(entity =>
+			{
+				entity.ToTable(name: "User","Identity");
+			});
+			builder.Entity<IdentityRole>(entity =>
+			{
+				entity.ToTable(name: "Role", "Identity");
+			});
+			builder.Entity<IdentityUserRole<string>>(entity =>
+			{
+				entity.ToTable("UserRoles", "Identity");
+			});
+			builder.Entity<IdentityUserClaim<string>>(entity =>
+			{
+				entity.ToTable("UserClaims", "Identity");
+			});
+			builder.Entity<IdentityUserLogin<string>>(entity =>
+			{
+				entity.ToTable("UserLogins", "Identity");
+			});
+			builder.Entity<IdentityRoleClaim<string>>(entity =>
+			{
+				entity.ToTable("RoleClaims", "Identity");
+			});
+			builder.Entity<IdentityUserToken<string>>(entity =>
+			{
+				entity.ToTable("UserTokens", "Identity");
+			});
+		}
 	}
 }

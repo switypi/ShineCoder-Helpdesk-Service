@@ -93,7 +93,7 @@ namespace ShineCoder_Helpdesk.Core
 		{
 			JObject response = new JObject();
 			response[CommonField.HTTP_RESPONE_CODE] = (int)code;
-			response[CommonField.HTTP_RESPONE_MESSAGE] = CommonConstants.Messages[(int)code];
+			response[CommonField.HTTP_RESPONE_MESSAGE] ="" ;
 
 			return response;
 		}
