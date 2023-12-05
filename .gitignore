@@ -400,3 +400,5 @@ FodyWeavers.xsd
 /.vs
 /.obj
 /.bin
+/.vs/ShineCoder-Helpdesk-API/DesignTimeBuild/.dtbcache.v2
+/.vs/ShineCoder-Helpdesk-API/v17/.suo

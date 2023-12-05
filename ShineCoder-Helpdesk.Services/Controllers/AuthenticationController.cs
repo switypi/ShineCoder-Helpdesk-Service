@@ -74,7 +74,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 					return _responseBuilder.BadRequest(listOfErrors.ToJArray());
 
 				};
-				var (status, message) = await _authService.Registeration(inputModel, UserRolesValues.Admin);
+				var (status, message) = await _authService.Registeration(inputModel, UserRolesValues.User);
 				if (status == 0)
 				{
 					return _responseBuilder.BadRequest(message);
@@ -88,6 +88,22 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 				return _responseBuilder.ServerError(ex.Message);
 			}
 		}
+
+		[HttpPost]
+		[Route("CreateRole")]
+		public async Task<JObject> CreateRole()
+		{
+			var roleName = _httpContextProxy.GetQueryString("roleName");
+			var (status, message) = await _authService.CreateRole(roleName);
+			if (status == 0)
+			{
+				return _responseBuilder.BadRequest(message);
+			}
+			return _responseBuilder.Success(message);
+			
+		}
+
+		
 
 	}
 }

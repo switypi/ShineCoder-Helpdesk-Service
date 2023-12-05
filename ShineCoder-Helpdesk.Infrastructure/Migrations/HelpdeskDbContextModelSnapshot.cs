@@ -47,7 +47,9 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("Role", "Identity");
+                    b.ToTable("AspNetRoles", "Dbo");
+
+                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -215,6 +217,9 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<int>("UserType")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -517,6 +522,12 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                     b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("TicketPriorityId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TicketStatusId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Ticket_ModeId")
                         .HasColumnType("int");
 
@@ -544,9 +555,6 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Tkt_PrioritiesId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Tkt_RequestTypeId")
                         .HasColumnType("int");
 
@@ -556,9 +564,6 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                     b.Property<string>("Tkt_RequestUserName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Tkt_StatusId")
-                        .HasColumnType("int");
 
                     b.Property<int>("Tkt_SubCategoryId")
                         .HasColumnType("int");
@@ -572,21 +577,37 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("TicketPriorityId");
+
+                    b.HasIndex("TicketStatusId");
+
                     b.HasIndex("Ticket_ModeId");
 
                     b.HasIndex("Tkt_DepartmentId");
 
                     b.HasIndex("Tkt_LocationId");
 
-                    b.HasIndex("Tkt_PrioritiesId");
-
                     b.HasIndex("Tkt_RequestTypeId");
-
-                    b.HasIndex("Tkt_StatusId");
 
                     b.HasIndex("Tkt_SubCategoryId");
 
                     b.ToTable("Tickets", "Dbo");
+                });
+
+            modelBuilder.Entity("ShineCoder_Helpdesk.Infrastructure.Models.ApplicationRole", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsAgent")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsClient")
+                        .HasColumnType("bit");
+
+                    b.ToTable("Role", "Identity");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -664,6 +685,18 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
             modelBuilder.Entity("ShineCoder_Helpdesk.Infrastructure.Models.Tickets", b =>
                 {
+                    b.HasOne("ShineCoder_Helpdesk.Infrastructure.Models.Ticket_Priorities", "Tkt_Priorities")
+                        .WithMany()
+                        .HasForeignKey("TicketPriorityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ShineCoder_Helpdesk.Infrastructure.Models.Ticket_Status", "Tkt_Status")
+                        .WithMany()
+                        .HasForeignKey("TicketStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ShineCoder_Helpdesk.Infrastructure.Models.Ticket_Mode", "Ticket_Mode")
                         .WithMany()
                         .HasForeignKey("Ticket_ModeId")
@@ -682,21 +715,9 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ShineCoder_Helpdesk.Infrastructure.Models.Ticket_Priorities", "Tkt_Priorities")
-                        .WithMany()
-                        .HasForeignKey("Tkt_PrioritiesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("ShineCoder_Helpdesk.Infrastructure.Models.RequestType", "Tkt_RequestType")
                         .WithMany()
                         .HasForeignKey("Tkt_RequestTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ShineCoder_Helpdesk.Infrastructure.Models.Ticket_Status", "Tkt_Status")
-                        .WithMany()
-                        .HasForeignKey("Tkt_StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -719,6 +740,15 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                     b.Navigation("Tkt_Status");
 
                     b.Navigation("Tkt_SubCategory");
+                });
+
+            modelBuilder.Entity("ShineCoder_Helpdesk.Infrastructure.Models.ApplicationRole", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithOne()
+                        .HasForeignKey("ShineCoder_Helpdesk.Infrastructure.Models.ApplicationRole", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

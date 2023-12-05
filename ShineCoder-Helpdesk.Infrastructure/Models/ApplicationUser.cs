@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using ShineCoder_Helpdesk.Infrastructure.Enums;
 
 namespace ShineCoder_Helpdesk.Infrastructure.Models
 {
@@ -11,5 +12,6 @@ namespace ShineCoder_Helpdesk.Infrastructure.Models
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public UserTypeEnum UserType { get; set; }
     }
 }

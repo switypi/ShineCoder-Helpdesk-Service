@@ -18,6 +18,21 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                 name: "Identity");
 
             migrationBuilder.CreateTable(
+                name: "AspNetRoles",
+                schema: "Dbo",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Categories",
                 schema: "Dbo",
                 columns: table => new
@@ -87,21 +102,6 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_RequestTypes", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Role",
-                schema: "Identity",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Role", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -187,6 +187,51 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Role",
+                schema: "Identity",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsClient = table.Column<bool>(type: "bit", nullable: false),
+                    IsAgent = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Role", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Role_AspNetRoles_Id",
+                        column: x => x.Id,
+                        principalSchema: "Dbo",
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RoleClaims",
+                schema: "Identity",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RoleClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RoleClaims_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalSchema: "Dbo",
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SubCategories",
                 schema: "Dbo",
                 columns: table => new
@@ -208,29 +253,6 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         column: x => x.CategoryId,
                         principalSchema: "Dbo",
                         principalTable: "Categories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "RoleClaims",
-                schema: "Identity",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RoleClaims", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_RoleClaims_Role_RoleId",
-                        column: x => x.RoleId,
-                        principalSchema: "Identity",
-                        principalTable: "Role",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -292,10 +314,10 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_UserRoles", x => new { x.UserId, x.RoleId });
                     table.ForeignKey(
-                        name: "FK_UserRoles_Role_RoleId",
+                        name: "FK_UserRoles_AspNetRoles_RoleId",
                         column: x => x.RoleId,
-                        principalSchema: "Identity",
-                        principalTable: "Role",
+                        principalSchema: "Dbo",
+                        principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -344,8 +366,8 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                     Tkt_AssignedUser = table.Column<int>(type: "int", nullable: false),
                     Tkt_AssignedUserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Tkt_DueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Tkt_StatusId = table.Column<int>(type: "int", nullable: false),
-                    Tkt_PrioritiesId = table.Column<int>(type: "int", nullable: false),
+                    TicketStatusId = table.Column<int>(type: "int", nullable: false),
+                    TicketPriorityId = table.Column<int>(type: "int", nullable: false),
                     Tkt_LocationId = table.Column<int>(type: "int", nullable: false),
                     Tkt_DepartmentId = table.Column<int>(type: "int", nullable: false),
                     Tkt_SubCategoryId = table.Column<int>(type: "int", nullable: false),
@@ -395,15 +417,15 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Tickets_Ticket_Priorities_Tkt_PrioritiesId",
-                        column: x => x.Tkt_PrioritiesId,
+                        name: "FK_Tickets_Ticket_Priorities_TicketPriorityId",
+                        column: x => x.TicketPriorityId,
                         principalSchema: "Dbo",
                         principalTable: "Ticket_Priorities",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Tickets_Ticket_Status_Tkt_StatusId",
-                        column: x => x.Tkt_StatusId,
+                        name: "FK_Tickets_Ticket_Status_TicketStatusId",
+                        column: x => x.TicketStatusId,
                         principalSchema: "Dbo",
                         principalTable: "Ticket_Status",
                         principalColumn: "Id",
@@ -438,8 +460,8 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
-                schema: "Identity",
-                table: "Role",
+                schema: "Dbo",
+                table: "AspNetRoles",
                 column: "NormalizedName",
                 unique: true,
                 filter: "[NormalizedName] IS NOT NULL");
@@ -469,6 +491,18 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                 column: "Ticket_ModeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Tickets_TicketPriorityId",
+                schema: "Dbo",
+                table: "Tickets",
+                column: "TicketPriorityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tickets_TicketStatusId",
+                schema: "Dbo",
+                table: "Tickets",
+                column: "TicketStatusId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tickets_Tkt_DepartmentId",
                 schema: "Dbo",
                 table: "Tickets",
@@ -481,22 +515,10 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                 column: "Tkt_LocationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tickets_Tkt_PrioritiesId",
-                schema: "Dbo",
-                table: "Tickets",
-                column: "Tkt_PrioritiesId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Tickets_Tkt_RequestTypeId",
                 schema: "Dbo",
                 table: "Tickets",
                 column: "Tkt_RequestTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Tickets_Tkt_StatusId",
-                schema: "Dbo",
-                table: "Tickets",
-                column: "Tkt_StatusId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tickets_Tkt_SubCategoryId",
@@ -541,6 +563,10 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Role",
+                schema: "Identity");
+
+            migrationBuilder.DropTable(
                 name: "RoleClaims",
                 schema: "Identity");
 
@@ -569,8 +595,8 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                 schema: "Dbo");
 
             migrationBuilder.DropTable(
-                name: "Role",
-                schema: "Identity");
+                name: "AspNetRoles",
+                schema: "Dbo");
 
             migrationBuilder.DropTable(
                 name: "User",

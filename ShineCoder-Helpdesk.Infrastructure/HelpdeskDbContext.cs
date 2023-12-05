@@ -40,7 +40,7 @@ namespace ShineCoder_Helpdesk.Infrastructure
 			{
 				entity.ToTable(name: "User","Identity");
 			});
-			builder.Entity<IdentityRole>(entity =>
+			builder.Entity<ApplicationRole>(entity =>
 			{
 				entity.ToTable(name: "Role", "Identity");
 			});

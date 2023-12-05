@@ -16,11 +16,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//builder.Services.AddControllers()
-//	.addn();
-
-// Add services to the container.
-
 builder.Services.AddControllers().AddNewtonsoftJson();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddVersionedApiExplorer(setup =>
@@ -54,7 +49,7 @@ builder.Services.AddApiVersioning(config =>
                                                                                         new MediaTypeApiVersionReader("x-api-version"));
 });
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
     .AddEntityFrameworkStores<HelpdeskDbContext>()
     .AddDefaultTokenProviders();
 
@@ -94,7 +89,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
          {
              ValidateIssuer = true,
              ValidateAudience = true,
-             ValidateLifetime = false,
+             ValidateLifetime = true,
              ValidateIssuerSigningKey = true,
              ValidIssuer= builder.Configuration["JWT:ValidIssuer"],
              ValidAudience= builder.Configuration["JWT:ValidAudience"],
