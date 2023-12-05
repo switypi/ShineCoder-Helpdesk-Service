@@ -109,6 +109,8 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddTransient<IValidator, CustomValidator>();
 
+builder.Services.AddAutoMapper(typeof(Program));
+
 var app = builder.Build();
 
 var apiVersionDescriptionProvider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();

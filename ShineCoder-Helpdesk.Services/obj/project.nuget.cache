@@ -1,9 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "dscJXHccHr3rswVIn0RTYH+8Je24wVh0RgRSLMdMIB6Ovg2s6uMYOHhYoVyJiIBwaXLOexl3de+u1ty+QYdaVA==",
+  "dgSpecHash": "EKPwcsW+vRWaCSci8D9m0tTeDXet/Ywyun9Ab4ZfLwJvFc8xdjrz+/ZUQcKE0xvA9F76NsUyACo2iQgSdUH17A==",
   "success": true,
   "projectFilePath": "C:\\Users\\suchakraborty\\source\\repos\\ShineCoder-Helpdesk-API\\ShineCoder-Helpdesk.Services\\ShineCoder-Helpdesk.Services.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\suchakraborty\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
+    "C:\\Users\\suchakraborty\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
     "C:\\Users\\suchakraborty\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\suchakraborty\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
     "C:\\Users\\suchakraborty\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using ShineCoder_Helpdesk.Infrastructure.Models;
 using ShineCoder_Helpdesk.Infrastructure;
+using AutoMapper;
 
 
 
@@ -28,15 +29,17 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 		protected readonly IResponseBuilder _responseBuilder;
 		private readonly ILogger _logger;
 		private readonly IValidator _customerValidator;
+		private readonly IMapper _mapper;
 
 		public TicketsController(IHttpContextProxy httpContextProxy, IUnitOfWork unitOfWork, IResponseBuilder responseBuilder,
-			ILogger<AuthenticationController> logger, IValidator customerValidator)
+			ILogger<AuthenticationController> logger, IValidator customerValidator,IMapper mapper)
 		{
 			_httpContextProxy = httpContextProxy;
 			_unitOfWork = unitOfWork;
 			_responseBuilder = responseBuilder;
 			_logger = logger;
 			_customerValidator = customerValidator;
+			_mapper=mapper;
 		}
 		[HttpGet]
 		[Route("GetTickets")]
@@ -62,7 +65,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 
 				};
 				_unitOfWork.TicketRepository.Insert(inputModel);
-
+				_unitOfWork.Save();
 				return _responseBuilder.Success("Tickets created.");
 			}
 			catch (Exception ex)
@@ -80,6 +83,8 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 			try
 			{
 				var inputModel = _httpContextProxy.GetRequestBody<Tickets>();
+				
+
 				var listOfErrors = _customerValidator.Validate(inputModel);
 				if (listOfErrors.Count() > 0)
 				{
@@ -87,10 +92,12 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 
 				};
 				var tickets = _unitOfWork.TicketRepository.Get(x => x.Id == inputModel.Id).FirstOrDefault();
+				
 				if (tickets != null)
 				{
-					
-					_unitOfWork.TicketRepository.Update(inputModel);
+					var outputModel = _mapper.Map<Tickets>(inputModel);
+					_unitOfWork.TicketRepository.Update(outputModel);
+					_unitOfWork.Save();
 				}
 
 				return _responseBuilder.Success("Tickets updated.");
@@ -104,15 +111,30 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 		}
 
 		// PUT api/<TicketsController>/5
-		[HttpPut("{id}")]
-		public void Put(int id, [FromBody] string value)
+		[HttpDelete]
+		[Route("DeleteTicket")]
+		public JObject DeleteTicket()
 		{
+			try
+			{
+				var ticketId = int.Parse(_httpContextProxy.GetQueryString("ticketId"));
+				var tickets = _unitOfWork.TicketRepository.Get(x => x.Id == ticketId).FirstOrDefault();
+				if (tickets != null)
+				{
+					_unitOfWork.TicketRepository.Delete(tickets);
+					_unitOfWork.Save();
+				}
+
+				return _responseBuilder.Success("Tickets updated.");
+			}
+			catch (Exception ex)
+			{
+
+				_logger.LogError(ex.Message);
+				return _responseBuilder.BadRequest(ex.Message);
+			}
 		}
 
-		// DELETE api/<TicketsController>/5
-		[HttpDelete("{id}")]
-		public void Delete(int id)
-		{
-		}
+		
 	}
 }
