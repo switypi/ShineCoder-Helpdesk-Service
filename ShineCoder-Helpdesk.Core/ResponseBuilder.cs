@@ -18,6 +18,11 @@ namespace ShineCoder_Helpdesk.Core
 			return CreateReponse(ServerResponseCodeEnums.SUCCESS, data, extraData);
 		}
 
+		//public JObject Success(JObject extraData = null)
+		//{
+		//	return CreateReponse(ServerResponseCodeEnums.SUCCESS, extraData);
+		//}
+
 		public JObject BadRequest(string error)
 		{
 			var errorobj = new JObject();

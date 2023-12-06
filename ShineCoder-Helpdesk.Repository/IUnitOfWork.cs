@@ -1,4 +1,5 @@
-﻿using ShineCoder_Helpdesk.Infrastructure.Models;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using ShineCoder_Helpdesk.Infrastructure.Models;
 
 namespace ShineCoder_Helpdesk.Repository
 {
@@ -9,7 +10,8 @@ namespace ShineCoder_Helpdesk.Repository
 		GenericRepository<Tickets> TicketRepository { get; }
 		GenericRepository<Ticket_Solutions> TicketSolutionsRepository { get; }
 		GenericRepository<Ticket_Status> TicketStatusRepository { get; }
-
+		IDbContextTransaction GetDbTransaction { get; }
+		
 		void Dispose();
 		void Rollback();
 		void Save();

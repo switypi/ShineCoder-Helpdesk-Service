@@ -10,7 +10,7 @@ using ShineCoder_Helpdesk.Infrastructure.Models;
 
 namespace ShineCoder_Helpdesk.Infrastructure
 {
-	public class HelpdeskDbContext : IdentityDbContext<ApplicationUser>, IHelpdeskDbContext
+	public class HelpdeskDbContext : IdentityDbContext<ApplicationUser,ApplicationRole,string>, IHelpdeskDbContext
 	{
 		public DbSet<Tickets> Tickets { get; set; }
 		public DbSet<Ticket_Mode> Ticket_Modes { get; set; }
@@ -43,6 +43,8 @@ namespace ShineCoder_Helpdesk.Infrastructure
 			builder.Entity<ApplicationRole>(entity =>
 			{
 				entity.ToTable(name: "Role", "Identity");
+			
+				
 			});
 			builder.Entity<IdentityUserRole<string>>(entity =>
 			{

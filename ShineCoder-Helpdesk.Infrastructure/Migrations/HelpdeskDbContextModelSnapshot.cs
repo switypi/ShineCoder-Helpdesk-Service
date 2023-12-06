@@ -23,35 +23,6 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles", "Dbo");
-
-                    b.UseTptMappingStrategy();
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
@@ -156,6 +127,46 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("UserTokens", "Identity");
+                });
+
+            modelBuilder.Entity("ShineCoder_Helpdesk.Infrastructure.Models.ApplicationRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsAgent")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsClient")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("RoleName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("Role", "Identity");
                 });
 
             modelBuilder.Entity("ShineCoder_Helpdesk.Infrastructure.Models.ApplicationUser", b =>
@@ -531,31 +542,34 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                     b.Property<int>("Ticket_ModeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Tkt_AssignedUser")
+                    b.Property<int?>("Tkt_AssignedUser")
                         .HasColumnType("int");
 
                     b.Property<string>("Tkt_AssignedUserName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Tkt_DepartmentId")
+                    b.Property<int?>("Tkt_CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Tkt_DepartmentId")
                         .HasColumnType("int");
 
                     b.Property<string>("Tkt_Desc")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Tkt_DueDate")
+                    b.Property<DateTime?>("Tkt_DueDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Tkt_LocationId")
+                    b.Property<int?>("Tkt_LocationId")
                         .HasColumnType("int");
 
                     b.Property<string>("Tkt_Number")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Tkt_RequestTypeId")
+                    b.Property<int?>("Tkt_RequestTypeId")
                         .HasColumnType("int");
 
                     b.Property<int>("Tkt_RequestUserId")
@@ -565,7 +579,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Tkt_SubCategoryId")
+                    b.Property<int?>("Tkt_SubCategoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Tkt_Subject")
@@ -583,6 +597,8 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
                     b.HasIndex("Ticket_ModeId");
 
+                    b.HasIndex("Tkt_CategoryId");
+
                     b.HasIndex("Tkt_DepartmentId");
 
                     b.HasIndex("Tkt_LocationId");
@@ -594,25 +610,9 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                     b.ToTable("Tickets", "Dbo");
                 });
 
-            modelBuilder.Entity("ShineCoder_Helpdesk.Infrastructure.Models.ApplicationRole", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsAgent")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsClient")
-                        .HasColumnType("bit");
-
-                    b.ToTable("Role", "Identity");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("ShineCoder_Helpdesk.Infrastructure.Models.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -639,7 +639,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("ShineCoder_Helpdesk.Infrastructure.Models.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -703,31 +703,29 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ShineCoder_Helpdesk.Infrastructure.Models.Category", "Tkt_Category")
+                        .WithMany()
+                        .HasForeignKey("Tkt_CategoryId");
+
                     b.HasOne("ShineCoder_Helpdesk.Infrastructure.Models.Department", "Tkt_Department")
                         .WithMany()
-                        .HasForeignKey("Tkt_DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Tkt_DepartmentId");
 
                     b.HasOne("ShineCoder_Helpdesk.Infrastructure.Models.Location", "Tkt_Location")
                         .WithMany()
-                        .HasForeignKey("Tkt_LocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Tkt_LocationId");
 
                     b.HasOne("ShineCoder_Helpdesk.Infrastructure.Models.RequestType", "Tkt_RequestType")
                         .WithMany()
-                        .HasForeignKey("Tkt_RequestTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Tkt_RequestTypeId");
 
                     b.HasOne("ShineCoder_Helpdesk.Infrastructure.Models.SubCategory", "Tkt_SubCategory")
                         .WithMany()
-                        .HasForeignKey("Tkt_SubCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Tkt_SubCategoryId");
 
                     b.Navigation("Ticket_Mode");
+
+                    b.Navigation("Tkt_Category");
 
                     b.Navigation("Tkt_Department");
 
@@ -740,15 +738,6 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                     b.Navigation("Tkt_Status");
 
                     b.Navigation("Tkt_SubCategory");
-                });
-
-            modelBuilder.Entity("ShineCoder_Helpdesk.Infrastructure.Models.ApplicationRole", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                        .WithOne()
-                        .HasForeignKey("ShineCoder_Helpdesk.Infrastructure.Models.ApplicationRole", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

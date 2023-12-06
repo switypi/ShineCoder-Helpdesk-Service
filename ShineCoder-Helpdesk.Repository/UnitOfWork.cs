@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using ShineCoder_Helpdesk.Infrastructure;
 using ShineCoder_Helpdesk.Infrastructure.Models;
 
@@ -17,6 +19,12 @@ namespace ShineCoder_Helpdesk.Repository
 		{
 
 			this.context = _context as HelpdeskDbContext;
+		}
+
+		public IDbContextTransaction GetDbTransaction { get
+			{
+				return this.context.Database.BeginTransaction();
+			}
 		}
 		// private SchoolContext context = new SchoolContext();
 		private GenericRepository<Tickets> ticketRepository;

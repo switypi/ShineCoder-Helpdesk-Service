@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "EKPwcsW+vRWaCSci8D9m0tTeDXet/Ywyun9Ab4ZfLwJvFc8xdjrz+/ZUQcKE0xvA9F76NsUyACo2iQgSdUH17A==",
+  "dgSpecHash": "0bzPIiARFugoQZrfBTLSeYuq+oF6LcYMmgiHxOJiD6Bz9Oi0eyZnrbOfAxe97qIq+wCxAxjjv4Q8k7m0xYFYZQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\suchakraborty\\source\\repos\\ShineCoder-Helpdesk-API\\ShineCoder-Helpdesk.Services\\ShineCoder-Helpdesk.Services.csproj",
   "expectedPackageFiles": [
@@ -62,6 +62,7 @@
     "C:\\Users\\suchakraborty\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\suchakraborty\\.nuget\\packages\\newtonsoft.json.bson\\1.0.2\\newtonsoft.json.bson.1.0.2.nupkg.sha512",
     "C:\\Users\\suchakraborty\\.nuget\\packages\\swashbuckle.aspnetcore\\6.5.0\\swashbuckle.aspnetcore.6.5.0.nupkg.sha512",
+    "C:\\Users\\suchakraborty\\.nuget\\packages\\swashbuckle.aspnetcore.annotations\\6.5.0\\swashbuckle.aspnetcore.annotations.6.5.0.nupkg.sha512",
     "C:\\Users\\suchakraborty\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.5.0\\swashbuckle.aspnetcore.swagger.6.5.0.nupkg.sha512",
     "C:\\Users\\suchakraborty\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.5.0\\swashbuckle.aspnetcore.swaggergen.6.5.0.nupkg.sha512",
     "C:\\Users\\suchakraborty\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.5.0\\swashbuckle.aspnetcore.swaggerui.6.5.0.nupkg.sha512",

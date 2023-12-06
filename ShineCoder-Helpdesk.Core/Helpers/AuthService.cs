@@ -7,9 +7,12 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Linq;
 using ShineCoder_Helpdesk.Core.Enums;
 using ShineCoder_Helpdesk.Infrastructure.Enums;
 using ShineCoder_Helpdesk.Infrastructure.Models;
@@ -28,62 +31,70 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 			this.userManager = userManager;
 			this.roleManager = roleManager;
 			_configuration = configuration;
-			_logger=logger;
+			_logger = logger;
 
 		}
-		public async Task<(int, string)> Registeration(RegistrationModel model, string role)
+		public async Task<(int, HelpDeskError)> Registeration(RegistrationModel model, string role)
 		{
-			var userExists = await userManager.FindByNameAsync(model.Username);
-			if (userExists != null)
-				return (0, "User already exists");
-
-			ApplicationUser user = new()
+			try
 			{
-				Email = model.Email,
-				SecurityStamp = Guid.NewGuid().ToString(),
-				UserName = model.Username,
-				FirstName = model.FirstName,
-				LastName = model.LastName,
-				EmailConfirmed = false,
-				PhoneNumberConfirmed = false,
-				TwoFactorEnabled = false,
-				LockoutEnabled = false,
-				AccessFailedCount = 0,
-				UserType = Infrastructure.Enums.UserTypeEnum.CLIENT
+				var userExists = await userManager.FindByNameAsync(model.Username);
+				if (userExists != null)
+					return (0, new HelpDeskError(true, "User exists."));
 
-			};
-			ApplicationRole rolee = new ApplicationRole();
-			rolee.IsActive = false;
-			rolee.IsClient = false;
-			rolee.IsAgent = false;
-			rolee.Name = role;
+				ApplicationUser user = new()
+				{
+					Email = model.Email,
+					SecurityStamp = Guid.NewGuid().ToString(),
+					UserName = model.Username,
+					FirstName = model.FirstName,
+					LastName = model.LastName,
+					EmailConfirmed = false,
+					PhoneNumberConfirmed = false,
+					TwoFactorEnabled = false,
+					LockoutEnabled = false,
+					AccessFailedCount = 0,
+					UserType = Infrastructure.Enums.UserTypeEnum.CLIENT
 
-			var createUserResult = await userManager.CreateAsync(user, model.Password);
-			if (!createUserResult.Succeeded)
-				return (0, "User creation failed! Please check user details and try again.");
+				};
+				ApplicationRole rolee = new ApplicationRole();
+				rolee.IsActive = false;
+				rolee.IsClient = false;
+				rolee.IsAgent = false;
+				rolee.Name = role;
+				rolee.RoleName = role;
 
-			if (!await roleManager.RoleExistsAsync(role))
-				await roleManager.CreateAsync(rolee);
+				var createUserResult = await userManager.CreateAsync(user, model.Password);
+				if (!createUserResult.Succeeded)
+					return (0, new HelpDeskError { Succeeded = createUserResult.Succeeded, Message = "", Errors = createUserResult.Errors });
 
-			if (await roleManager.RoleExistsAsync(role))
-				await userManager.AddToRoleAsync(user, role);
+				if (!await roleManager.RoleExistsAsync(role))
+					await roleManager.CreateAsync(rolee);
 
-			await userManager.AddClaimAsync(user, new Claim(Enum.GetName(typeof(ClaimEnum), ClaimEnum.FULLACCESS), "False"));
-			await userManager.AddClaimAsync(user, new Claim(Enum.GetName(typeof(ClaimEnum), ClaimEnum.EDIT), "False"));
-			await userManager.AddClaimAsync(user, new Claim(Enum.GetName(typeof(ClaimEnum), ClaimEnum.ADD), "False"));
-			await userManager.AddClaimAsync(user, new Claim(Enum.GetName(typeof(ClaimEnum), ClaimEnum.VIEW), "False"));
-			await userManager.AddClaimAsync(user, new Claim(Enum.GetName(typeof(ClaimEnum), ClaimEnum.DELETE), "False"));
+				if (await roleManager.RoleExistsAsync(role))
+					await userManager.AddToRoleAsync(user, role);
 
-			return (1, "User created successfully!");
+				await userManager.AddClaimAsync(user, new Claim(Enum.GetName(typeof(ClaimEnum), ClaimEnum.FULLACCESS), "False"));
+				await userManager.AddClaimAsync(user, new Claim(Enum.GetName(typeof(ClaimEnum), ClaimEnum.EDIT), "False"));
+				await userManager.AddClaimAsync(user, new Claim(Enum.GetName(typeof(ClaimEnum), ClaimEnum.ADD), "False"));
+				await userManager.AddClaimAsync(user, new Claim(Enum.GetName(typeof(ClaimEnum), ClaimEnum.VIEW), "False"));
+				await userManager.AddClaimAsync(user, new Claim(Enum.GetName(typeof(ClaimEnum), ClaimEnum.DELETE), "False"));
+
+				return (1, new HelpDeskError { Succeeded = true, Message = "User created successfully!" });
+			}
+			catch (Exception ex)
+			{
+				throw;
+			}
 		}
 
-		public async Task<(int, string)> Login(LoginModel model)
+		public async Task<(int, HelpDeskError)> Login(LoginModel model)
 		{
 			var user = await userManager.FindByNameAsync(model.Username);
 			if (user == null)
-				return (0, "Invalid username");
+				return (0, new HelpDeskError { Succeeded = false, Message = "Invalid username" });
 			if (!await userManager.CheckPasswordAsync(user, model.Password))
-				return (0, "Invalid password");
+				return (0, new HelpDeskError { Succeeded = false, Message = "Invalid password" });
 
 			var userRoles = await userManager.GetRolesAsync(user);
 			var authClaims = new List<Claim>
@@ -97,7 +108,7 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 				authClaims.Add(new Claim(ClaimTypes.Role, userRole));
 			}
 			string token = GenerateToken(authClaims);
-			return (1, token);
+			return (1, new HelpDeskError { Succeeded = true, Message = token });
 		}
 		private string GenerateToken(IEnumerable<Claim> claims)
 		{
@@ -119,7 +130,7 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 			return tokenHandler.WriteToken(token);
 		}
 
-		public async Task<(int, string)> CreateRole(string roleName)
+		public async Task<(int, HelpDeskError)> CreateRole(string roleName)
 		{
 			var roleExist = await roleManager.RoleExistsAsync(roleName);
 			if (!roleExist)
@@ -130,75 +141,134 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 				rolee.IsClient = false;
 				rolee.IsAgent = false;
 				rolee.Name = roleName;
+				rolee.RoleName = roleName;
 				var roleResult = await roleManager.CreateAsync(rolee);
 
 				if (roleResult.Succeeded)
 				{
 					_logger.LogInformation(1, "Roles Added");
-					return (1, "Role created successfully!");
+					return (1, new HelpDeskError { Succeeded = true, Message = "Role created successfully!" });
 				}
 				else
 				{
 					_logger.LogInformation(2, "Error");
-					return (1, roleResult.Errors.ToString());
+					return (1, new HelpDeskError { Succeeded = false, Errors = roleResult.Errors });
 				}
 			}
 			else
 			{
 				_logger.LogInformation(2, "Role Exist");
-				return (0, "Role Exist");
+				return (0, new HelpDeskError { Succeeded = true, Message = "Role Exist" });
 
 			}
 		}
 
-		public async Task<(int, string)> UpdateRole(ApplicationRole role)
+		public async Task<(int, HelpDeskError)> UpdateRole(ApplicationRole role)
 		{
 			var roleResult = await roleManager.UpdateAsync(role);
 
 			if (roleResult.Succeeded)
 			{
 				_logger.LogInformation(1, "Roles updated");
-				return (1, "role updated successfully!");
+				return (1, new HelpDeskError { Succeeded = true, Message = "role updated successfully!" });
 			}
 			else
 			{
 				_logger.LogInformation(2, "Error");
-				return (0, roleResult.Errors.ToString());
+				return (0, new HelpDeskError { Succeeded = false, Errors = roleResult.Errors });
 			}
 
 		}
 
-		public async Task<(int, string)> UpdateUserClaim(ApplicationUser user, Dictionary<string, string> claims)
+		public async Task<(int, HelpDeskError)> UpdateUserClaim(ApplicationUser user, Dictionary<string, string> claims)
 		{
-			List<Claim> clms = new List<Claim>();
-			var existingclaimsforUser=await userManager.GetClaimsAsync(user);
-
-			foreach (var clm in claims)
+			try
 			{
-				clms.Add(new Claim(clm.Key,clm.Value));
-			}
-			
-			var result = await userManager.RemoveClaimsAsync(user, existingclaimsforUser);
+				List<Claim> clms = new List<Claim>();
+				var existingclaimsforUser = await userManager.GetClaimsAsync(user);
 
-			if (result.Succeeded)
-			{
-				var res=await userManager.AddClaimsAsync(user, clms);
-				if (res.Succeeded)
+				foreach (var clm in claims)
 				{
-					_logger.LogInformation(1, "Claims updated");
-					return (1, "Claims  updated successfully!");
+					clms.Add(new Claim(clm.Key, clm.Value));
+				}
+
+				var result = await userManager.RemoveClaimsAsync(user, existingclaimsforUser);
+
+				if (result.Succeeded)
+				{
+					var res = await userManager.AddClaimsAsync(user, clms);
+					if (res.Succeeded)
+					{
+						_logger.LogInformation(1, "Claims updated");
+						return (1, new HelpDeskError { Succeeded = true, Message = "Claims  updated successfully!" });
+					}
+					else
+					{
+						_logger.LogInformation(2, "Error");
+						return (0, new HelpDeskError { Succeeded = false, Errors = result.Errors });
+					}
 				}
 				else
 				{
 					_logger.LogInformation(2, "Error");
-					return (0, result.Errors.ToString());
+					return (0, new HelpDeskError { Succeeded = false, Errors = result.Errors });
 				}
 			}
-			else
+			catch (Exception ex)
 			{
-				_logger.LogInformation(2, "Error");
-				return (0, result.Errors.ToString());
+				_logger.LogError("Error in UpdateClaim.");
+				throw ex;
+			}
+
+		}
+
+		public async Task<(int, HelpDeskError)> GetUserRoles(string email)
+		{
+			try
+			{
+				// Resolve the user via their email
+				var user = await userManager.FindByEmailAsync(email);
+				// Get the roles for the user
+				var roles = await userManager.GetRolesAsync(user);
+				return (1, new HelpDeskError { Succeeded = true, Result = roles.ToJArray() });
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError("Error in GetUserRoles");
+				throw ex;
+			}
+
+		}
+
+		public async Task<(int,HelpDeskError)> GetAllUsers()
+		{
+			try
+			{
+				var users = await userManager.Users.ToListAsync();
+				return (1, new HelpDeskError { Succeeded = true, Result = users.ToJArray() });
+			}
+			catch (Exception ex)
+			{
+
+				_logger.LogError("Error in GetAllUsers");
+				return (0, new HelpDeskError { Succeeded = false, Message = ex.Message });
 			}
 		}
+
+		public async Task<(int, HelpDeskError)> GetAllRoles()
+		{
+			try
+			{
+				var roles = await roleManager.Roles.ToListAsync();
+				return (1, new HelpDeskError { Succeeded = true, Result = roles.ToJArray() });
+			}
+			catch (Exception ex)
+			{
+
+				_logger.LogError("Error in GetAllRoles");
+				return (0, new HelpDeskError { Succeeded = false, Message=ex.Message });
+			}
+		}
+
 	}
 }

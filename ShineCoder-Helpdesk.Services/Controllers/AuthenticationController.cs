@@ -1,6 +1,9 @@
 ﻿using System.Linq;
+using Azure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Storage;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ShineCoder_Helpdesk.Core;
 using ShineCoder_Helpdesk.Core.Helpers;
@@ -46,13 +49,13 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 				if (listOfErrors.Count() > 0)
 				{
 					return _responseBuilder.BadRequest(listOfErrors.ToJArray());
-					
+
 				};
 
 				var (status, message) = await _authService.Login(inputModel);
 				if (status == 0)
-					return _responseBuilder.BadRequest(message);
-				return _responseBuilder.Success(message);
+					return _responseBuilder.BadRequest(message.ToJObject());
+				return _responseBuilder.Success(message.ToJObject()) ;
 			}
 			catch (Exception ex)
 			{
@@ -63,10 +66,13 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 
 		[HttpPost]
 		[Route("Register")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
 		public async Task<JObject> Register()
 		{
+			IDbContextTransaction trans=null;
 			try
 			{
+
 				var inputModel = _httpContextProxy.GetRequestBody<RegistrationModel>();
 				var listOfErrors = _customerValidator.Validate(inputModel);
 				if (listOfErrors.Count() > 0)
@@ -74,16 +80,22 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 					return _responseBuilder.BadRequest(listOfErrors.ToJArray());
 
 				};
-				var (status, message) = await _authService.Registeration(inputModel, UserRolesValues.User);
-				if (status == 0)
+				using ( trans = _unitOfWork.GetDbTransaction)
 				{
-					return _responseBuilder.BadRequest(message);
+					var (status, message) = await _authService.Registeration(inputModel, UserRolesValues.User);
+
+					if (status == 0)
+					{
+						return _responseBuilder.BadRequest(message.ToJObject());
+					}
+					trans.Commit();
 				}
 				return _responseBuilder.Success("User Registered.");
 
 			}
 			catch (Exception ex)
 			{
+				trans.Rollback();
 				_logger.LogError(ex.Message);
 				return _responseBuilder.ServerError(ex.Message);
 			}
@@ -97,13 +109,13 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 			var (status, message) = await _authService.CreateRole(roleName);
 			if (status == 0)
 			{
-				return _responseBuilder.BadRequest(message);
+				return _responseBuilder.BadRequest(message.ToJObject());
 			}
-			return _responseBuilder.Success(message);
-			
+			return _responseBuilder.Success(message.ToJObject());
+
 		}
 
-		
+
 
 	}
 }

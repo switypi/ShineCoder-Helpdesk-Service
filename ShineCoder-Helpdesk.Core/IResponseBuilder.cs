@@ -14,6 +14,7 @@ namespace ShineCoder_Helpdesk.Core
 		JObject NotImplementedError(JToken data = null, JObject extraData = null);
 		JObject ServerError(JToken data = null, JObject extraData = null);
 		JObject Success(JToken data = null, JObject extraData = null);
+		//JObject Success( JObject extraData = null);
 		JObject Unauthorized(JToken data = null, JObject extraData = null);
 	}
 }
