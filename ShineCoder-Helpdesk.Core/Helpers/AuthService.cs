@@ -34,13 +34,13 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 			_logger = logger;
 
 		}
-		public async Task<(int, HelpDeskError)> Registeration(RegistrationModel model, string role)
+		public async Task<(int, HelpDeskResults)> Registeration(RegistrationModel model, string role)
 		{
 			try
 			{
 				var userExists = await userManager.FindByNameAsync(model.Username);
 				if (userExists != null)
-					return (0, new HelpDeskError(true, "User exists."));
+					return (0, new HelpDeskResults(true, "User exists."));
 
 				ApplicationUser user = new()
 				{
@@ -66,7 +66,7 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 
 				var createUserResult = await userManager.CreateAsync(user, model.Password);
 				if (!createUserResult.Succeeded)
-					return (0, new HelpDeskError { Succeeded = createUserResult.Succeeded, Message = "", Errors = createUserResult.Errors });
+					return (0, new HelpDeskResults { Succeeded = createUserResult.Succeeded, Message = "", Errors = createUserResult.Errors });
 
 				if (!await roleManager.RoleExistsAsync(role))
 					await roleManager.CreateAsync(rolee);
@@ -80,7 +80,7 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 				await userManager.AddClaimAsync(user, new Claim(Enum.GetName(typeof(ClaimEnum), ClaimEnum.VIEW), "False"));
 				await userManager.AddClaimAsync(user, new Claim(Enum.GetName(typeof(ClaimEnum), ClaimEnum.DELETE), "False"));
 
-				return (1, new HelpDeskError { Succeeded = true, Message = "User created successfully!" });
+				return (1, new HelpDeskResults { Succeeded = true, Message = "User created successfully!" });
 			}
 			catch (Exception ex)
 			{
@@ -88,13 +88,13 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 			}
 		}
 
-		public async Task<(int, HelpDeskError)> Login(LoginModel model)
+		public async Task<(int, HelpDeskResults)> Login(LoginModel model)
 		{
 			var user = await userManager.FindByNameAsync(model.Username);
 			if (user == null)
-				return (0, new HelpDeskError { Succeeded = false, Message = "Invalid username" });
+				return (0, new HelpDeskResults { Succeeded = false, Message = "Invalid username" });
 			if (!await userManager.CheckPasswordAsync(user, model.Password))
-				return (0, new HelpDeskError { Succeeded = false, Message = "Invalid password" });
+				return (0, new HelpDeskResults { Succeeded = false, Message = "Invalid password" });
 
 			var userRoles = await userManager.GetRolesAsync(user);
 			var authClaims = new List<Claim>
@@ -108,8 +108,8 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 				authClaims.Add(new Claim(ClaimTypes.Role, userRole));
 			}
 			string token = GenerateToken(authClaims);
-			return (1, new HelpDeskError { Succeeded = true, Message = token });
-		}
+			return (1, new HelpDeskResults { Succeeded = true, Message = token });
+		} 
 		private string GenerateToken(IEnumerable<Claim> claims)
 		{
 			var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
@@ -130,7 +130,7 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 			return tokenHandler.WriteToken(token);
 		}
 
-		public async Task<(int, HelpDeskError)> CreateRole(string roleName)
+		public async Task<(int, HelpDeskResults)> CreateRole(string roleName)
 		{
 			var roleExist = await roleManager.RoleExistsAsync(roleName);
 			if (!roleExist)
@@ -147,40 +147,40 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 				if (roleResult.Succeeded)
 				{
 					_logger.LogInformation(1, "Roles Added");
-					return (1, new HelpDeskError { Succeeded = true, Message = "Role created successfully!" });
+					return (1, new HelpDeskResults { Succeeded = true, Message = "Role created successfully!" });
 				}
 				else
 				{
 					_logger.LogInformation(2, "Error");
-					return (1, new HelpDeskError { Succeeded = false, Errors = roleResult.Errors });
+					return (1, new HelpDeskResults { Succeeded = false, Errors = roleResult.Errors });
 				}
 			}
 			else
 			{
 				_logger.LogInformation(2, "Role Exist");
-				return (0, new HelpDeskError { Succeeded = true, Message = "Role Exist" });
+				return (0, new HelpDeskResults { Succeeded = true, Message = "Role Exist" });
 
 			}
 		}
 
-		public async Task<(int, HelpDeskError)> UpdateRole(ApplicationRole role)
+		public async Task<(int, HelpDeskResults)> UpdateRole(ApplicationRole role)
 		{
 			var roleResult = await roleManager.UpdateAsync(role);
 
 			if (roleResult.Succeeded)
 			{
 				_logger.LogInformation(1, "Roles updated");
-				return (1, new HelpDeskError { Succeeded = true, Message = "role updated successfully!" });
+				return (1, new HelpDeskResults { Succeeded = true, Message = "role updated successfully!" });
 			}
 			else
 			{
 				_logger.LogInformation(2, "Error");
-				return (0, new HelpDeskError { Succeeded = false, Errors = roleResult.Errors });
+				return (0, new HelpDeskResults { Succeeded = false, Errors = roleResult.Errors });
 			}
 
 		}
 
-		public async Task<(int, HelpDeskError)> UpdateUserClaim(ApplicationUser user, Dictionary<string, string> claims)
+		public async Task<(int, HelpDeskResults)> UpdateUserClaim(ApplicationUser user, Dictionary<string, string> claims)
 		{
 			try
 			{
@@ -200,18 +200,18 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 					if (res.Succeeded)
 					{
 						_logger.LogInformation(1, "Claims updated");
-						return (1, new HelpDeskError { Succeeded = true, Message = "Claims  updated successfully!" });
+						return (1, new HelpDeskResults { Succeeded = true, Message = "Claims  updated successfully!" });
 					}
 					else
 					{
 						_logger.LogInformation(2, "Error");
-						return (0, new HelpDeskError { Succeeded = false, Errors = result.Errors });
+						return (0, new HelpDeskResults { Succeeded = false, Errors = result.Errors });
 					}
 				}
 				else
 				{
 					_logger.LogInformation(2, "Error");
-					return (0, new HelpDeskError { Succeeded = false, Errors = result.Errors });
+					return (0, new HelpDeskResults { Succeeded = false, Errors = result.Errors });
 				}
 			}
 			catch (Exception ex)
@@ -222,7 +222,7 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 
 		}
 
-		public async Task<(int, HelpDeskError)> GetUserRoles(string email)
+		public async Task<(int, HelpDeskResults)> GetUserRoles(string email)
 		{
 			try
 			{
@@ -230,7 +230,7 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 				var user = await userManager.FindByEmailAsync(email);
 				// Get the roles for the user
 				var roles = await userManager.GetRolesAsync(user);
-				return (1, new HelpDeskError { Succeeded = true, Result = roles.ToJArray() });
+				return (1, new HelpDeskResults { Succeeded = true, Result = roles.ToJArray() });
 			}
 			catch (Exception ex)
 			{
@@ -240,33 +240,33 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 
 		}
 
-		public async Task<(int,HelpDeskError)> GetAllUsers()
+		public async Task<(int,HelpDeskResults)> GetAllUsers()
 		{
 			try
 			{
 				var users = await userManager.Users.ToListAsync();
-				return (1, new HelpDeskError { Succeeded = true, Result = users.ToJArray() });
+				return (1, new HelpDeskResults { Succeeded = true, Result = users.ToJArray() });
 			}
 			catch (Exception ex)
 			{
 
 				_logger.LogError("Error in GetAllUsers");
-				return (0, new HelpDeskError { Succeeded = false, Message = ex.Message });
+				return (0, new HelpDeskResults { Succeeded = false, Message = ex.Message });
 			}
 		}
 
-		public async Task<(int, HelpDeskError)> GetAllRoles()
+		public async Task<(int, HelpDeskResults)> GetAllRoles()
 		{
 			try
 			{
 				var roles = await roleManager.Roles.ToListAsync();
-				return (1, new HelpDeskError { Succeeded = true, Result = roles.ToJArray() });
+				return (1, new HelpDeskResults { Succeeded = true, Result = roles.ToJArray() });
 			}
 			catch (Exception ex)
 			{
 
 				_logger.LogError("Error in GetAllRoles");
-				return (0, new HelpDeskError { Succeeded = false, Message=ex.Message });
+				return (0, new HelpDeskResults { Succeeded = false, Message=ex.Message });
 			}
 		}
 

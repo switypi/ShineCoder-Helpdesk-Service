@@ -8,9 +8,9 @@ using Newtonsoft.Json.Linq;
 
 namespace ShineCoder_Helpdesk.Core.Helpers
 {
-	public class HelpDeskError
+	public class HelpDeskResults
 	{
-		public HelpDeskError(bool isSucceeded = false, string message = "", IEnumerable<IdentityError> error = null, JArray result = null)
+		public HelpDeskResults(bool isSucceeded = false, string message = "", IEnumerable<IdentityError> error = null, JArray result = null)
 		{
 			Succeeded = isSucceeded;
 			Message = message;

@@ -5,8 +5,11 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 {
     public interface IAuthService
     {
-        Task<(int, HelpDeskError)> Login(LoginModel model);
-        Task<(int, HelpDeskError)> Registeration(RegistrationModel model, string role);
-        Task<(int, HelpDeskError)> CreateRole(string roleName);
+        Task<(int, HelpDeskResults)> Login(LoginModel model);
+        Task<(int, HelpDeskResults)> Registeration(RegistrationModel model, string role);
+        Task<(int, HelpDeskResults)> CreateRole(string roleName);
+        Task<(int, HelpDeskResults)> GetAllUsers();
+        Task<(int, HelpDeskResults)> GetAllRoles();
+        Task<(int, HelpDeskResults)> GetUserRoles(string email);
 	}
 }

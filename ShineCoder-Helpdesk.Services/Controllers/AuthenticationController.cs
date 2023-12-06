@@ -55,7 +55,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 				var (status, message) = await _authService.Login(inputModel);
 				if (status == 0)
 					return _responseBuilder.BadRequest(message.ToJObject());
-				return _responseBuilder.Success(message.ToJObject()) ;
+				return _responseBuilder.Success(message.ToJObject());
 			}
 			catch (Exception ex)
 			{
@@ -69,7 +69,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		public async Task<JObject> Register()
 		{
-			IDbContextTransaction trans=null;
+			IDbContextTransaction trans = null;
 			try
 			{
 
@@ -80,7 +80,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 					return _responseBuilder.BadRequest(listOfErrors.ToJArray());
 
 				};
-				using ( trans = _unitOfWork.GetDbTransaction)
+				using (trans = _unitOfWork.GetDbTransaction)
 				{
 					var (status, message) = await _authService.Registeration(inputModel, UserRolesValues.User);
 
@@ -105,17 +105,58 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 		[Route("CreateRole")]
 		public async Task<JObject> CreateRole()
 		{
-			var roleName = _httpContextProxy.GetQueryString("roleName");
-			var (status, message) = await _authService.CreateRole(roleName);
-			if (status == 0)
-			{
-				return _responseBuilder.BadRequest(message.ToJObject());
-			}
-			return _responseBuilder.Success(message.ToJObject());
 
+			IDbContextTransaction trans = null;
+			try
+			{
+				using (trans = _unitOfWork.GetDbTransaction)
+				{
+					var roleName = _httpContextProxy.GetQueryString("roleName");
+					var (status, message) = await _authService.CreateRole(roleName);
+					if (status == 0)
+					{
+						return _responseBuilder.BadRequest(message.ToJObject());
+					}
+					return _responseBuilder.Success(message.ToJObject());
+
+				}
+			}
+			catch (Exception ex)
+			{
+				trans.Rollback();
+				_logger.LogError(ex.Message);
+				return _responseBuilder.ServerError(ex.Message);
+			}
+			
 		}
 
+		[HttpGet]
+		[Route("GetAllRoles")]
+		public async Task<JObject> GetAllRoles()
+		{
 
+			IDbContextTransaction trans = null;
+			try
+			{
+				using (trans = _unitOfWork.GetDbTransaction)
+				{
+					var (status, message) = await _authService.GetAllRoles();
+					if (status == 0)
+					{
+						return _responseBuilder.BadRequest(message.ToJObject());
+					}
+					return _responseBuilder.Success(message.ToJObject());
+
+				}
+			}
+			catch (Exception ex)
+			{
+				trans.Rollback();
+				_logger.LogError(ex.Message);
+				return _responseBuilder.ServerError(ex.Message);
+			}
+
+		}
 
 	}
 }
