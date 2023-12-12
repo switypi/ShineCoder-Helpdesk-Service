@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using ShineCoder_Helpdesk.Infrastructure.Models;
 using ShineCoder_Helpdesk.Infrastructure;
 using AutoMapper;
+using ShineCoder_Helpdesk.Core.Models;
+using Microsoft.EntityFrameworkCore.Storage;
+using Swashbuckle.AspNetCore.Annotations;
 
 
 
@@ -46,30 +49,47 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 
 		public JObject GetTickets()
 		{
-			var studentData = _unitOfWork.TicketRepository.Get();
-			return _responseBuilder.Success(studentData.ToJArray());
+			try
+			{
+				var studentData = _unitOfWork.TicketRepository.Get();
+				return _responseBuilder.Success(studentData.ToJArray());
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex.Message);
+				return _responseBuilder.BadRequest(ex.Message);
+			}
+			
 		}
 
 		// GET api/<TicketsController>/5
 		[HttpPost]
 		[Route("CreateTickets")]
+		
 		public JObject CreateTickets()
 		{
+			IDbContextTransaction trans = null;
 			try
 			{
-				var inputModel = _httpContextProxy.GetRequestBody<Tickets>();
-				var listOfErrors = _customerValidator.Validate(inputModel);
-				if (listOfErrors.Count() > 0)
+				using (trans = _unitOfWork.GetDbTransaction)
 				{
-					return _responseBuilder.BadRequest(listOfErrors.ToJArray());
+					var inputModel = _httpContextProxy.GetRequestBody<TicketsModel>();
+					var listOfErrors = _customerValidator.Validate(inputModel);
+					if (listOfErrors.Count() > 0)
+					{
+						return _responseBuilder.BadRequest(listOfErrors.ToJArray());
 
-				};
-				_unitOfWork.TicketRepository.Insert(inputModel);
-				_unitOfWork.Save();
-				return _responseBuilder.Success("Tickets created.");
+					};
+					var outputModel = _mapper.Map<Tickets>(inputModel);
+					_unitOfWork.TicketRepository.Insert(outputModel);
+					_unitOfWork.Save();
+					return _responseBuilder.Success("Tickets created.");
+				}
+					
 			}
 			catch (Exception ex)
 			{
+				trans.Rollback();
 				_logger.LogError(ex.Message);
 				return _responseBuilder.BadRequest(ex.Message);
 			}

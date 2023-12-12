@@ -16,7 +16,7 @@ using Newtonsoft.Json.Linq;
 using ShineCoder_Helpdesk.Core.Enums;
 using ShineCoder_Helpdesk.Infrastructure.Enums;
 using ShineCoder_Helpdesk.Infrastructure.Models;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+
 
 namespace ShineCoder_Helpdesk.Core.Helpers
 {

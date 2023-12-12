@@ -7,10 +7,11 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ShineCoder_Helpdesk.Infrastructure.Models;
+using System.Reflection.Emit;
 
 namespace ShineCoder_Helpdesk.Infrastructure
 {
-	public class HelpdeskDbContext : IdentityDbContext<ApplicationUser,ApplicationRole,string>, IHelpdeskDbContext
+	public class HelpdeskDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Int32>, IHelpdeskDbContext
 	{
 		public DbSet<Tickets> Tickets { get; set; }
 		public DbSet<Ticket_Mode> Ticket_Modes { get; set; }
@@ -38,34 +39,47 @@ namespace ShineCoder_Helpdesk.Infrastructure
 
 			builder.Entity<ApplicationUser>(entity =>
 			{
-				entity.ToTable(name: "User","Identity");
+				entity.ToTable(name: "User", "Identity");
+				entity.Property(u=>u.Id).HasDefaultValue(1);
 			});
 			builder.Entity<ApplicationRole>(entity =>
 			{
-				entity.ToTable(name: "Role", "Identity");
-			
-				
+				entity.ToTable(name: "Roles", "Identity");
+				entity.Property(u => u.Id).HasDefaultValue(1);
+
 			});
-			builder.Entity<IdentityUserRole<string>>(entity =>
+			builder.Entity<IdentityUserRole<Int32>>(entity =>
 			{
 				entity.ToTable("UserRoles", "Identity");
 			});
-			builder.Entity<IdentityUserClaim<string>>(entity =>
+			builder.Entity<IdentityUserClaim<Int32>>(entity =>
 			{
 				entity.ToTable("UserClaims", "Identity");
 			});
-			builder.Entity<IdentityUserLogin<string>>(entity =>
+			builder.Entity<IdentityUserLogin<Int32>>(entity =>
 			{
 				entity.ToTable("UserLogins", "Identity");
 			});
-			builder.Entity<IdentityRoleClaim<string>>(entity =>
+			builder.Entity<IdentityRoleClaim<Int32>>(entity =>
 			{
 				entity.ToTable("RoleClaims", "Identity");
 			});
-			builder.Entity<IdentityUserToken<string>>(entity =>
+			builder.Entity<IdentityUserToken<Int32>>(entity =>
 			{
 				entity.ToTable("UserTokens", "Identity");
 			});
+
+			builder.Entity<Ticket_Status>().HasData(
+			new Ticket_Status { Id = 1, Name = "New", CreatedBy = 1, CreatedDate = DateTime.Now },
+			new Ticket_Status { Id = 2, Name = "Open", CreatedBy = 1, CreatedDate = DateTime.Now },
+			new Ticket_Status { Id = 3, Name = "Closed", CreatedBy = 1, CreatedDate = DateTime.Now },
+			new Ticket_Status { Id = 4, Name = "Resolved", CreatedBy = 1, CreatedDate = DateTime.Now },
+			new Ticket_Status { Id = 5, Name = "Assigned", CreatedBy = 1, CreatedDate = DateTime.Now });
+			builder.Entity<Ticket_Priorities>().HasData(
+			new Ticket_Priorities { Id = 1, Name = "Low", CreatedBy = 1, CreatedDate = DateTime.Now },
+			new Ticket_Priorities { Id = 2, Name = "High", CreatedBy = 1, CreatedDate = DateTime.Now },
+			new Ticket_Priorities { Id = 3, Name = "Medium", CreatedBy = 1, CreatedDate = DateTime.Now });
+
 		}
 	}
 }

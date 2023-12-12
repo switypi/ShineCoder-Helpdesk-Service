@@ -28,11 +28,16 @@ namespace ShineCoder_Helpdesk.Repository
 		}
 		// private SchoolContext context = new SchoolContext();
 		private GenericRepository<Tickets> ticketRepository;
-		private GenericRepository<Ticket_Issues> ticketIssuesRepository;
 		private GenericRepository<Ticket_Priorities> ticketPrioritiesRepository;
 		private GenericRepository<Ticket_Solutions> ticketSolutionsRepository;
-
 		private GenericRepository<Ticket_Status> ticketStatusRepository;
+		private GenericRepository<Ticket_Mode> ticketModeRepository;
+
+		private GenericRepository<Category> categoryRepository;
+		private GenericRepository<SubCategory> subCategoryRepository;
+		private GenericRepository<Location> locationRepository;
+		private GenericRepository<Department> departmentRepository;
+		private GenericRepository<RequestType> requesttypeRepository;
 		//private GenericRepository<Ticket_Issues> courseRepository;
 
 		public GenericRepository<Tickets> TicketRepository
@@ -48,18 +53,7 @@ namespace ShineCoder_Helpdesk.Repository
 			}
 		}
 
-		public GenericRepository<Ticket_Issues> TicketIssuesRepository
-		{
-			get
-			{
-
-				if (this.ticketIssuesRepository == null)
-				{
-					this.ticketIssuesRepository = new GenericRepository<Ticket_Issues>(context);
-				}
-				return ticketIssuesRepository;
-			}
-		}
+		
 		public GenericRepository<Ticket_Priorities> TicketPrioritiesRepository
 		{
 			get
@@ -98,6 +92,85 @@ namespace ShineCoder_Helpdesk.Repository
 				return ticketStatusRepository;
 			}
 		}
+
+		public GenericRepository<Category> CategorysRepository {
+			get
+			{
+
+				if (this.categoryRepository == null)
+				{
+					this.categoryRepository = new GenericRepository<Category>(context);
+				}
+				return categoryRepository;
+			}
+		}
+
+		public GenericRepository<SubCategory> SubCategorysRepository
+		{
+			get
+			{
+
+				if (this.subCategoryRepository == null)
+				{
+					this.subCategoryRepository = new GenericRepository<SubCategory>(context);
+				}
+				return subCategoryRepository;
+			}
+		}
+
+		public GenericRepository<Department> DepartmentRepository
+		{
+			get
+			{
+
+				if (this.departmentRepository == null)
+				{
+					this.departmentRepository = new GenericRepository<Department>(context);
+				}
+				return departmentRepository;
+			}
+		}
+
+		public GenericRepository<Location> LocationRepository
+		{
+			get
+			{
+
+				if (this.locationRepository == null)
+				{
+					this.locationRepository = new GenericRepository<Location>(context);
+				}
+				return locationRepository;
+			}
+		}
+
+		public GenericRepository<RequestType> RequestTypeRepository
+		{
+			get
+			{
+
+				if (this.requesttypeRepository == null)
+				{
+					this.requesttypeRepository = new GenericRepository<RequestType>(context);
+				}
+				return requesttypeRepository;
+			}
+		}
+
+		public GenericRepository<Ticket_Mode> TicketModeRepository
+		{
+			get
+			{
+
+				if (this.ticketModeRepository == null)
+				{
+					this.ticketModeRepository = new GenericRepository<Ticket_Mode>(context);
+				}
+				return ticketModeRepository;
+			}
+		}
+
+		
 
 		public void Save()
 		{
