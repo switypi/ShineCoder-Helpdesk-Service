@@ -258,14 +258,13 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("ModifiedDate")
+                    b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
@@ -293,14 +292,13 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("ModifiedDate")
+                    b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
@@ -328,14 +326,13 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("ModifiedDate")
+                    b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
@@ -363,14 +360,13 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("ModifiedDate")
+                    b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
@@ -401,14 +397,13 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("ModifiedDate")
+                    b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
@@ -438,14 +433,13 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("ModifiedDate")
+                    b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
@@ -473,14 +467,13 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("ModifiedDate")
+                    b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
@@ -501,8 +494,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 1,
                             Active = false,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2023, 12, 13, 17, 54, 33, 767, DateTimeKind.Local).AddTicks(7919),
-                            ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2023, 12, 13, 18, 48, 23, 25, DateTimeKind.Local).AddTicks(7363),
                             Name = "Low",
                             UpdatedBy = ""
                         },
@@ -511,8 +503,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 2,
                             Active = false,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2023, 12, 13, 17, 54, 33, 767, DateTimeKind.Local).AddTicks(7921),
-                            ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2023, 12, 13, 18, 48, 23, 25, DateTimeKind.Local).AddTicks(7366),
                             Name = "High",
                             UpdatedBy = ""
                         },
@@ -521,8 +512,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 3,
                             Active = false,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2023, 12, 13, 17, 54, 33, 767, DateTimeKind.Local).AddTicks(7923),
-                            ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2023, 12, 13, 18, 48, 23, 25, DateTimeKind.Local).AddTicks(7368),
                             Name = "Medium",
                             UpdatedBy = ""
                         });
@@ -540,14 +530,13 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("ModifiedDate")
+                    b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
@@ -580,14 +569,13 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("ModifiedDate")
+                    b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
@@ -608,8 +596,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 1,
                             Active = false,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2023, 12, 13, 17, 54, 33, 767, DateTimeKind.Local).AddTicks(7630),
-                            ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2023, 12, 13, 18, 48, 23, 25, DateTimeKind.Local).AddTicks(6466),
                             Name = "New",
                             UpdatedBy = ""
                         },
@@ -618,8 +605,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 2,
                             Active = false,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2023, 12, 13, 17, 54, 33, 767, DateTimeKind.Local).AddTicks(7641),
-                            ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2023, 12, 13, 18, 48, 23, 25, DateTimeKind.Local).AddTicks(6478),
                             Name = "Open",
                             UpdatedBy = ""
                         },
@@ -628,8 +614,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 3,
                             Active = false,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2023, 12, 13, 17, 54, 33, 767, DateTimeKind.Local).AddTicks(7643),
-                            ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2023, 12, 13, 18, 48, 23, 25, DateTimeKind.Local).AddTicks(6481),
                             Name = "Closed",
                             UpdatedBy = ""
                         },
@@ -638,8 +623,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 4,
                             Active = false,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2023, 12, 13, 17, 54, 33, 767, DateTimeKind.Local).AddTicks(7645),
-                            ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2023, 12, 13, 18, 48, 23, 25, DateTimeKind.Local).AddTicks(6828),
                             Name = "Resolved",
                             UpdatedBy = ""
                         },
@@ -648,8 +632,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 5,
                             Active = false,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2023, 12, 13, 17, 54, 33, 767, DateTimeKind.Local).AddTicks(7646),
-                            ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2023, 12, 13, 18, 48, 23, 25, DateTimeKind.Local).AddTicks(6840),
                             Name = "Assigned",
                             UpdatedBy = ""
                         });
@@ -667,14 +650,13 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("ModifiedDate")
+                    b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("TicketPriorityId")

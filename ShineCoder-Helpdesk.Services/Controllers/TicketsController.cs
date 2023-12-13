@@ -50,12 +50,12 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 		[HttpGet]
 		[Route("GetAllTickets")]
 
-		public async Task<JObject> GetAllTickets()
+		public async Task<JObject> GetAllTicketsAsyn()
 		{
 			try
 			{
-				var studentData = _unitOfWork.TicketRepository.Get(x => x.Active == true);
-				return _responseBuilder.Success(studentData.ToJArray());
+				var ticketData = await _unitOfWork.TicketRepository.GetAsync(x => x.Active == true);
+				return _responseBuilder.Success(ticketData.ToJArray());
 			}
 			catch (Exception ex)
 			{
@@ -67,12 +67,12 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 
 		[HttpGet]
 		[Route("GetOpenTickets")]
-		public async Task<JObject> GetOpenTickets()
+		public async Task<JObject> GetOpenTicketsAsync()
 		{
 			try
 			{
-				var studentData = _unitOfWork.TicketRepository.Get(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.Open);
-				return _responseBuilder.Success(studentData.ToJArray());
+				var ticketData = await _unitOfWork.TicketRepository.GetAsync(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.Open);
+				return _responseBuilder.Success(ticketData.ToJArray());
 			}
 			catch (Exception ex)
 			{
@@ -84,12 +84,12 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 
 		[HttpGet]
 		[Route("GetAssignedTickets")]
-		public async Task<JObject> GetAssignedTickets()
+		public async Task<JObject> GetAssignedTicketsAsync()
 		{
 			try
 			{
-				var studentData = _unitOfWork.TicketRepository.Get(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.Assigned);
-				return _responseBuilder.Success(studentData.ToJArray());
+				var ticketData =await _unitOfWork.TicketRepository.GetAsync(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.Assigned);
+				return _responseBuilder.Success(ticketData.ToJArray());
 			}
 			catch (Exception ex)
 			{
@@ -101,12 +101,12 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 
 		[HttpGet]
 		[Route("GetNewTickets")]
-		public async Task<JObject> GetNewTickets()
+		public async Task<JObject> GetNewTicketsAsync()
 		{
 			try
 			{
-				var studentData = _unitOfWork.TicketRepository.Get(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.New);
-				return _responseBuilder.Success(studentData.ToJArray());
+				var ticketData =await _unitOfWork.TicketRepository.GetAsync(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.New);
+				return _responseBuilder.Success(ticketData.ToJArray());
 			}
 			catch (Exception ex)
 			{
@@ -118,12 +118,12 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 
 		[HttpGet]
 		[Route("GetResolvedTickets")]
-		public async Task<JObject> GetResolvedTickets()
+		public async Task<JObject> GetResolvedTicketsAsync()
 		{
 			try
 			{
-				var studentData = _unitOfWork.TicketRepository.Get(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.Resolved);
-				return _responseBuilder.Success(studentData.ToJArray());
+				var ticketData = await _unitOfWork.TicketRepository.GetAsync(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.Resolved);
+				return _responseBuilder.Success(ticketData.ToJArray());
 			}
 			catch (Exception ex)
 			{
@@ -137,7 +137,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 		[HttpPost]
 		[Route("CreateTickets")]
 
-		public async Task<JObject> CreateTickets()
+		public async Task<JObject> CreateTicketsAsync()
 		{
 			IDbContextTransaction trans = null;
 			using (trans = _unitOfWork.GetDbTransaction)
@@ -153,8 +153,8 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 
 					};
 					var outputModel = _mapper.Map<Tickets>(inputModel);
-					_unitOfWork.TicketRepository.Insert(outputModel);
-					_unitOfWork.Save();
+					_unitOfWork.TicketRepository.InsertAsyn(outputModel);
+					await _unitOfWork.SaveAsync();
 					await trans.CommitAsync();
 					return _responseBuilder.Success("Tickets created.");
 
@@ -172,7 +172,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 		// POST api/<TicketsController>
 		[HttpPost]
 		[Route("UpdateTickets")]
-		public JObject UpdateTickets()
+		public async Task<JObject> UpdateTicketsAsync()
 		{
 			try
 			{
@@ -185,13 +185,13 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 					return _responseBuilder.BadRequest(listOfErrors.ToJArray());
 
 				};
-				var tickets = _unitOfWork.TicketRepository.Get(x => x.Id == inputModel.Id).FirstOrDefault();
+				var tickets = _unitOfWork.TicketRepository.GetAsync(x => x.Id == inputModel.Id).Result.FirstOrDefault();
 
 				if (tickets != null)
 				{
 					var outputModel = _mapper.Map<Tickets>(inputModel);
-					_unitOfWork.TicketRepository.Update(outputModel);
-					_unitOfWork.Save();
+					_unitOfWork.TicketRepository.UpdateAsync(outputModel);
+					await _unitOfWork.SaveAsync();
 				}
 
 				return _responseBuilder.Success("Tickets updated.");
@@ -216,14 +216,19 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 				{
 
 					var ticketId = int.Parse(_httpContextProxy.GetQueryString("ticketId"));
-					var tickets = _unitOfWork.TicketRepository.Get(x => x.Id == ticketId).FirstOrDefault();
+					var tickets = _unitOfWork.TicketRepository.GetAsync(x => x.Id == ticketId).Result.FirstOrDefault();
 					if (tickets != null)
 					{
 						_unitOfWork.TicketRepository.Delete(tickets);
-						_unitOfWork.Save();
+						await _unitOfWork.SaveAsync();
+						await trans.CommitAsync();
+						return _responseBuilder.Success("Tickets updated.");
 					}
-					await trans.CommitAsync();
-					return _responseBuilder.Success("Tickets updated.");
+					else
+					{
+						return _responseBuilder.Success($"Could not find tickets with ticketId = {ticketId}");
+					}
+
 
 				}
 				catch (Exception ex)
@@ -237,7 +242,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 
 		[HttpPost]
 		[Route("AssignTickets")]
-		public async Task<JObject> AssignTickets()
+		public async Task<JObject> AssignTicketsAsync()
 		{
 			IDbContextTransaction trans = null;
 			using (trans = _unitOfWork.GetDbTransaction)
@@ -247,16 +252,20 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 
 					var ticketObj = _httpContextProxy.GetRequestBody<TicketAssignedModel>();
 
-					var tickets = _unitOfWork.TicketRepository.Get(x => x.Id == ticketObj.TicketId).FirstOrDefault();
+					var tickets = _unitOfWork.TicketRepository.GetAsync(x => x.Id == ticketObj.TicketId).Result.FirstOrDefault();
 					if (tickets != null)
 					{
 						tickets.Tkt_AssignedUserId = ticketObj.AssignedUserId;
-						_unitOfWork.TicketRepository.Update(tickets);
-						_unitOfWork.Save();
+						_unitOfWork.TicketRepository.UpdateAsync(tickets);
+						await _unitOfWork.SaveAsync();
+						await trans.CommitAsync();
+						return _responseBuilder.Success("Tickets updated.");
 					}
-
-					return _responseBuilder.Success("Tickets updated.");
-					await trans.CommitAsync();
+					else
+					{
+						return _responseBuilder.Success($"Could not find tickets with ticketId = {ticketObj.TicketId}");
+					}
+					
 
 				}
 				catch (Exception ex)

@@ -172,7 +172,7 @@ namespace ShineCoder_Helpdesk.Repository
 
 		
 
-		public async Task<int> Save()
+		public async Task<int> SaveAsync()
 		{
 		 	return await context.SaveChangesAsync();
 		}

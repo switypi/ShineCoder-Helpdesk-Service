@@ -37,12 +37,12 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 
 		[HttpGet]
 		[Route("GetSubCategoriesByCategoryId")]
-		public JObject GetSubCategoriesByCategoryId()
+		public async Task<JObject> GetSubCategoriesByCategoryIdAsync()
 		{
 			try
 			{
 				var id = int.Parse(_httpContextProxy.GetQueryString("CategoryId"));
-				var subCategoryData = _unitOfWork.SubCategorysRepository.Get(x=>x.CategoryId==id && x.Active==true);
+				var subCategoryData = await _unitOfWork.SubCategorysRepository.GetAsync(x=>x.CategoryId==id && x.Active==true);
 				return _responseBuilder.Success(subCategoryData.ToJArray());
 			}
 			catch (Exception ex)

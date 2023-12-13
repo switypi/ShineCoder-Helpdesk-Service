@@ -21,6 +21,6 @@ namespace ShineCoder_Helpdesk.Repository
 		
 		void Dispose();
 		void Rollback();
-		 Task<int> Save();
+		 Task<int> SaveAsync();
 	}
 }

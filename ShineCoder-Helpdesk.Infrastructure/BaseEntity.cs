@@ -13,10 +13,10 @@ namespace ShineCoder_Helpdesk.Infrastructure
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int Id { get; set; }
-		public DateTime CreatedDate { get; set; }
-		public DateTime ModifiedDate { get; set; }
+		public DateTime? CreatedDate { get; set; }
+		public DateTime? ModifiedDate { get; set; }
 		[MaxLength(256)]
-		public string CreatedBy { get; set; }
+		public string? CreatedBy { get; set; }
 		[MaxLength(256)]
 		public string? UpdatedBy { get; set; }
 		public bool Active { get; set; }

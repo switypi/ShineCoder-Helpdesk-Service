@@ -87,8 +87,13 @@ namespace ShineCoder_Helpdesk.Infrastructure
 
 		public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 		{
-			string userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
-			ChangeTracker.SetAuditProperties(userName);
+
+			if (_httpContextAccessor.HttpContext.User.Identity != null) // During User registration Identity is not set.
+			{
+				string userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
+				ChangeTracker.SetAuditProperties(userName);
+			}
+			
 			return await base.SaveChangesAsync();
 		}
 	}
