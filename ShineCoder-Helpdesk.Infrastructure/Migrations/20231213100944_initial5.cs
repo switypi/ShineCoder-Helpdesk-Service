@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class initial1 : Migration
+    public partial class initial5 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -29,8 +29,9 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<int>(type: "int", nullable: true),
-                    UpdatedBy = table.Column<int>(type: "int", nullable: true)
+                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Active = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -47,8 +48,9 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<int>(type: "int", nullable: true),
-                    UpdatedBy = table.Column<int>(type: "int", nullable: true)
+                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Active = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -65,8 +67,9 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<int>(type: "int", nullable: true),
-                    UpdatedBy = table.Column<int>(type: "int", nullable: true)
+                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Active = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -83,8 +86,9 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<int>(type: "int", nullable: true),
-                    UpdatedBy = table.Column<int>(type: "int", nullable: true)
+                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Active = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -120,8 +124,9 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<int>(type: "int", nullable: true),
-                    UpdatedBy = table.Column<int>(type: "int", nullable: true)
+                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Active = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -138,8 +143,9 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<int>(type: "int", nullable: true),
-                    UpdatedBy = table.Column<int>(type: "int", nullable: true)
+                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Active = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -156,8 +162,9 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<int>(type: "int", nullable: true),
-                    UpdatedBy = table.Column<int>(type: "int", nullable: true)
+                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Active = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -204,8 +211,9 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<int>(type: "int", nullable: true),
-                    UpdatedBy = table.Column<int>(type: "int", nullable: true)
+                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Active = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -346,10 +354,8 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                     Tkt_Desc = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Tkt_Number = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Tkt_Subject = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Tkt_RequestUserId = table.Column<int>(type: "int", nullable: false),
-                    Tkt_RequestUserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Tkt_AssignedUser = table.Column<int>(type: "int", nullable: true),
-                    Tkt_AssignedUserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Tkt_RequestUserId = table.Column<int>(type: "int", nullable: true),
+                    Tkt_AssignedUserId = table.Column<int>(type: "int", nullable: true),
                     Tkt_DueDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     TicketStatusId = table.Column<int>(type: "int", nullable: false),
                     TicketPriorityId = table.Column<int>(type: "int", nullable: false),
@@ -361,8 +367,9 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                     Ticket_ModeId = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<int>(type: "int", nullable: true),
-                    UpdatedBy = table.Column<int>(type: "int", nullable: true)
+                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Active = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -418,6 +425,18 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         principalTable: "Ticket_Status",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Tickets_User_Tkt_AssignedUserId",
+                        column: x => x.Tkt_AssignedUserId,
+                        principalSchema: "Identity",
+                        principalTable: "User",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Tickets_User_Tkt_RequestUserId",
+                        column: x => x.Tkt_RequestUserId,
+                        principalSchema: "Identity",
+                        principalTable: "User",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -431,8 +450,9 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                     ticketsId = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<int>(type: "int", nullable: true),
-                    UpdatedBy = table.Column<int>(type: "int", nullable: true)
+                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Active = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -449,25 +469,25 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
             migrationBuilder.InsertData(
                 schema: "Dbo",
                 table: "Ticket_Priorities",
-                columns: new[] { "Id", "CreatedBy", "CreatedDate", "ModifiedDate", "Name", "UpdatedBy" },
+                columns: new[] { "Id", "Active", "CreatedBy", "CreatedDate", "ModifiedDate", "Name", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2023, 12, 12, 19, 21, 4, 95, DateTimeKind.Local).AddTicks(128), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Low", null },
-                    { 2, 1, new DateTime(2023, 12, 12, 19, 21, 4, 95, DateTimeKind.Local).AddTicks(131), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "High", null },
-                    { 3, 1, new DateTime(2023, 12, 12, 19, 21, 4, 95, DateTimeKind.Local).AddTicks(133), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Medium", null }
+                    { 1, false, "admin", new DateTime(2023, 12, 13, 15, 39, 44, 424, DateTimeKind.Local).AddTicks(1977), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Low", "" },
+                    { 2, false, "admin", new DateTime(2023, 12, 13, 15, 39, 44, 424, DateTimeKind.Local).AddTicks(1981), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "High", "" },
+                    { 3, false, "admin", new DateTime(2023, 12, 13, 15, 39, 44, 424, DateTimeKind.Local).AddTicks(1982), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Medium", "" }
                 });
 
             migrationBuilder.InsertData(
                 schema: "Dbo",
                 table: "Ticket_Status",
-                columns: new[] { "Id", "CreatedBy", "CreatedDate", "ModifiedDate", "Name", "UpdatedBy" },
+                columns: new[] { "Id", "Active", "CreatedBy", "CreatedDate", "ModifiedDate", "Name", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2023, 12, 12, 19, 21, 4, 94, DateTimeKind.Local).AddTicks(9903), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "New", null },
-                    { 2, 1, new DateTime(2023, 12, 12, 19, 21, 4, 94, DateTimeKind.Local).AddTicks(9913), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Open", null },
-                    { 3, 1, new DateTime(2023, 12, 12, 19, 21, 4, 94, DateTimeKind.Local).AddTicks(9915), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Closed", null },
-                    { 4, 1, new DateTime(2023, 12, 12, 19, 21, 4, 94, DateTimeKind.Local).AddTicks(9916), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Resolved", null },
-                    { 5, 1, new DateTime(2023, 12, 12, 19, 21, 4, 94, DateTimeKind.Local).AddTicks(9918), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Assigned", null }
+                    { 1, false, "admin", new DateTime(2023, 12, 13, 15, 39, 44, 424, DateTimeKind.Local).AddTicks(1770), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "New", "" },
+                    { 2, false, "admin", new DateTime(2023, 12, 13, 15, 39, 44, 424, DateTimeKind.Local).AddTicks(1785), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Open", "" },
+                    { 3, false, "admin", new DateTime(2023, 12, 13, 15, 39, 44, 424, DateTimeKind.Local).AddTicks(1787), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Closed", "" },
+                    { 4, false, "admin", new DateTime(2023, 12, 13, 15, 39, 44, 424, DateTimeKind.Local).AddTicks(1788), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Resolved", "" },
+                    { 5, false, "admin", new DateTime(2023, 12, 13, 15, 39, 44, 424, DateTimeKind.Local).AddTicks(1790), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Assigned", "" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -515,6 +535,12 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                 column: "TicketStatusId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Tickets_Tkt_AssignedUserId",
+                schema: "Dbo",
+                table: "Tickets",
+                column: "Tkt_AssignedUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tickets_Tkt_CategoryId",
                 schema: "Dbo",
                 table: "Tickets",
@@ -537,6 +563,12 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                 schema: "Dbo",
                 table: "Tickets",
                 column: "Tkt_RequestTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tickets_Tkt_RequestUserId",
+                schema: "Dbo",
+                table: "Tickets",
+                column: "Tkt_RequestUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tickets_Tkt_SubCategoryId",
@@ -613,10 +645,6 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                 schema: "Identity");
 
             migrationBuilder.DropTable(
-                name: "User",
-                schema: "Identity");
-
-            migrationBuilder.DropTable(
                 name: "Departments",
                 schema: "Dbo");
 
@@ -643,6 +671,10 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
             migrationBuilder.DropTable(
                 name: "Ticket_Status",
                 schema: "Dbo");
+
+            migrationBuilder.DropTable(
+                name: "User",
+                schema: "Identity");
 
             migrationBuilder.DropTable(
                 name: "Categories",

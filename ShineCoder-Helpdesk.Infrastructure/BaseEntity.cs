@@ -15,7 +15,10 @@ namespace ShineCoder_Helpdesk.Infrastructure
 		public int Id { get; set; }
 		public DateTime CreatedDate { get; set; }
 		public DateTime ModifiedDate { get; set; }
-		public int? CreatedBy { get; set; }
-		public int? UpdatedBy { get; set; }
+		[MaxLength(256)]
+		public string CreatedBy { get; set; }
+		[MaxLength(256)]
+		public string? UpdatedBy { get; set; }
+		public bool Active { get; set; }
 	}
 }

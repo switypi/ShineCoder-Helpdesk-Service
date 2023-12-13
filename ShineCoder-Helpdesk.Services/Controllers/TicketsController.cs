@@ -12,6 +12,9 @@ using AutoMapper;
 using ShineCoder_Helpdesk.Core.Models;
 using Microsoft.EntityFrameworkCore.Storage;
 using Swashbuckle.AspNetCore.Annotations;
+using ShineCoder_Helpdesk.Core.Enums;
+using System.Diagnostics;
+using System.Security.Claims;
 
 
 
@@ -35,23 +38,23 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 		private readonly IMapper _mapper;
 
 		public TicketsController(IHttpContextProxy httpContextProxy, IUnitOfWork unitOfWork, IResponseBuilder responseBuilder,
-			ILogger<AuthenticationController> logger, IValidator customerValidator,IMapper mapper)
+			ILogger<AuthenticationController> logger, IValidator customerValidator, IMapper mapper)
 		{
 			_httpContextProxy = httpContextProxy;
 			_unitOfWork = unitOfWork;
 			_responseBuilder = responseBuilder;
 			_logger = logger;
 			_customerValidator = customerValidator;
-			_mapper=mapper;
+			_mapper = mapper;
 		}
 		[HttpGet]
-		[Route("GetTickets")]
+		[Route("GetAllTickets")]
 
-		public JObject GetTickets()
+		public async Task<JObject> GetAllTickets()
 		{
 			try
 			{
-				var studentData = _unitOfWork.TicketRepository.Get();
+				var studentData = _unitOfWork.TicketRepository.Get(x => x.Active == true);
 				return _responseBuilder.Success(studentData.ToJArray());
 			}
 			catch (Exception ex)
@@ -59,20 +62,89 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 				_logger.LogError(ex.Message);
 				return _responseBuilder.BadRequest(ex.Message);
 			}
-			
+
+		}
+
+		[HttpGet]
+		[Route("GetOpenTickets")]
+		public async Task<JObject> GetOpenTickets()
+		{
+			try
+			{
+				var studentData = _unitOfWork.TicketRepository.Get(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.Open);
+				return _responseBuilder.Success(studentData.ToJArray());
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex.Message);
+				return _responseBuilder.BadRequest(ex.Message);
+			}
+
+		}
+
+		[HttpGet]
+		[Route("GetAssignedTickets")]
+		public async Task<JObject> GetAssignedTickets()
+		{
+			try
+			{
+				var studentData = _unitOfWork.TicketRepository.Get(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.Assigned);
+				return _responseBuilder.Success(studentData.ToJArray());
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex.Message);
+				return _responseBuilder.BadRequest(ex.Message);
+			}
+
+		}
+
+		[HttpGet]
+		[Route("GetNewTickets")]
+		public async Task<JObject> GetNewTickets()
+		{
+			try
+			{
+				var studentData = _unitOfWork.TicketRepository.Get(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.New);
+				return _responseBuilder.Success(studentData.ToJArray());
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex.Message);
+				return _responseBuilder.BadRequest(ex.Message);
+			}
+
+		}
+
+		[HttpGet]
+		[Route("GetResolvedTickets")]
+		public async Task<JObject> GetResolvedTickets()
+		{
+			try
+			{
+				var studentData = _unitOfWork.TicketRepository.Get(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.Resolved);
+				return _responseBuilder.Success(studentData.ToJArray());
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex.Message);
+				return _responseBuilder.BadRequest(ex.Message);
+			}
+
 		}
 
 		// GET api/<TicketsController>/5
 		[HttpPost]
 		[Route("CreateTickets")]
-		
-		public JObject CreateTickets()
+
+		public async Task<JObject> CreateTickets()
 		{
 			IDbContextTransaction trans = null;
-			try
+			using (trans = _unitOfWork.GetDbTransaction)
 			{
-				using (trans = _unitOfWork.GetDbTransaction)
+				try
 				{
+
 					var inputModel = _httpContextProxy.GetRequestBody<TicketsModel>();
 					var listOfErrors = _customerValidator.Validate(inputModel);
 					if (listOfErrors.Count() > 0)
@@ -83,15 +155,17 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 					var outputModel = _mapper.Map<Tickets>(inputModel);
 					_unitOfWork.TicketRepository.Insert(outputModel);
 					_unitOfWork.Save();
+					await trans.CommitAsync();
 					return _responseBuilder.Success("Tickets created.");
+
+
 				}
-					
-			}
-			catch (Exception ex)
-			{
-				trans.Rollback();
-				_logger.LogError(ex.Message);
-				return _responseBuilder.BadRequest(ex.Message);
+				catch (Exception ex)
+				{
+					await trans.RollbackAsync();
+					_logger.LogError(ex.Message);
+					return _responseBuilder.BadRequest(ex.Message);
+				}
 			}
 		}
 
@@ -103,7 +177,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 			try
 			{
 				var inputModel = _httpContextProxy.GetRequestBody<Tickets>();
-				
+
 
 				var listOfErrors = _customerValidator.Validate(inputModel);
 				if (listOfErrors.Count() > 0)
@@ -112,7 +186,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 
 				};
 				var tickets = _unitOfWork.TicketRepository.Get(x => x.Id == inputModel.Id).FirstOrDefault();
-				
+
 				if (tickets != null)
 				{
 					var outputModel = _mapper.Map<Tickets>(inputModel);
@@ -133,28 +207,67 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 		// PUT api/<TicketsController>/5
 		[HttpDelete]
 		[Route("DeleteTicket")]
-		public JObject DeleteTicket()
+		public async Task<JObject> DeleteTicket()
 		{
-			try
+			IDbContextTransaction trans = null;
+			using (trans = _unitOfWork.GetDbTransaction)
 			{
-				var ticketId = int.Parse(_httpContextProxy.GetQueryString("ticketId"));
-				var tickets = _unitOfWork.TicketRepository.Get(x => x.Id == ticketId).FirstOrDefault();
-				if (tickets != null)
+				try
 				{
-					_unitOfWork.TicketRepository.Delete(tickets);
-					_unitOfWork.Save();
+
+					var ticketId = int.Parse(_httpContextProxy.GetQueryString("ticketId"));
+					var tickets = _unitOfWork.TicketRepository.Get(x => x.Id == ticketId).FirstOrDefault();
+					if (tickets != null)
+					{
+						_unitOfWork.TicketRepository.Delete(tickets);
+						_unitOfWork.Save();
+					}
+					await trans.CommitAsync();
+					return _responseBuilder.Success("Tickets updated.");
+
 				}
-
-				return _responseBuilder.Success("Tickets updated.");
-			}
-			catch (Exception ex)
-			{
-
-				_logger.LogError(ex.Message);
-				return _responseBuilder.BadRequest(ex.Message);
+				catch (Exception ex)
+				{
+					await trans.RollbackAsync();
+					_logger.LogError(ex.Message);
+					return _responseBuilder.BadRequest(ex.Message);
+				}
 			}
 		}
 
-		
+		[HttpPost]
+		[Route("AssignTickets")]
+		public async Task<JObject> AssignTickets()
+		{
+			IDbContextTransaction trans = null;
+			using (trans = _unitOfWork.GetDbTransaction)
+			{
+				try
+				{
+
+					var ticketObj = _httpContextProxy.GetRequestBody<TicketAssignedModel>();
+
+					var tickets = _unitOfWork.TicketRepository.Get(x => x.Id == ticketObj.TicketId).FirstOrDefault();
+					if (tickets != null)
+					{
+						tickets.Tkt_AssignedUserId = ticketObj.AssignedUserId;
+						_unitOfWork.TicketRepository.Update(tickets);
+						_unitOfWork.Save();
+					}
+
+					return _responseBuilder.Success("Tickets updated.");
+					await trans.CommitAsync();
+
+				}
+				catch (Exception ex)
+				{
+					await trans.RollbackAsync();
+					_logger.LogError(ex.Message);
+					return _responseBuilder.BadRequest(ex.Message);
+				}
+			}
+		}
+
+
 	}
 }

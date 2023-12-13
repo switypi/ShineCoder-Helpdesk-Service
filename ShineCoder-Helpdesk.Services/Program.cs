@@ -13,6 +13,8 @@ using ShineCoder_Helpdesk.Core.Helpers;
 using ShineCoder_Helpdesk.Infrastructure.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
+using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +28,14 @@ builder.Services.AddVersionedApiExplorer(setup =>
 
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(x=>x.AddSecurityDefinition("Bearer",new OpenApiSecurityScheme 
+{
+	In = ParameterLocation.Header,
+	Description = "Please Enter Authentication Token",
+	Name = "Authorization",
+	Type = SecuritySchemeType.ApiKey
+}));
+
 
 
 builder.Services.AddDbContext<HelpdeskDbContext>(options =>
@@ -47,6 +56,7 @@ builder.Services.AddApiVersioning(config =>
                                                                                         new HeaderApiVersionReader("x-api-version"),
                                                                                         new MediaTypeApiVersionReader("x-api-version"));
 });
+
 
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
     .AddEntityFrameworkStores<HelpdeskDbContext>()
@@ -108,7 +118,13 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddTransient<IValidator, CustomValidator>();
 
-builder.Services.AddAutoMapper(typeof(Program));
+//var mapperConfig = new MapperConfiguration(mc =>
+//{
+//	mc.AddProfile(new MappingProfile());
+//});
+//IMapper mapper = mapperConfig.CreateMapper();
+//services.AddSingleton(mapper);
+builder.Services.AddAutoMapper(typeof(MappingProfile)); ;
 
 var app = builder.Build();
 

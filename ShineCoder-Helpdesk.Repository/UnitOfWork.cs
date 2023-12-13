@@ -172,9 +172,9 @@ namespace ShineCoder_Helpdesk.Repository
 
 		
 
-		public void Save()
+		public async Task<int> Save()
 		{
-			context.SaveChanges();
+		 	return await context.SaveChangesAsync();
 		}
 
 		public void Rollback()

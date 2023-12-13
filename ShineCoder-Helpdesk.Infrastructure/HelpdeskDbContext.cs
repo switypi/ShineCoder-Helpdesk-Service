@@ -8,11 +8,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ShineCoder_Helpdesk.Infrastructure.Models;
 using System.Reflection.Emit;
+using Microsoft.AspNetCore.Http;
+using Azure.Identity;
+using System.Security.Claims;
 
 namespace ShineCoder_Helpdesk.Infrastructure
 {
 	public class HelpdeskDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Int32>, IHelpdeskDbContext
 	{
+		private IHttpContextAccessor _httpContextAccessor;
 		public DbSet<Tickets> Tickets { get; set; }
 		public DbSet<Ticket_Mode> Ticket_Modes { get; set; }
 		public DbSet<Ticket_Priorities> Ticket_Priorities { get; set; }
@@ -24,13 +28,12 @@ namespace ShineCoder_Helpdesk.Infrastructure
 		public DbSet<Location> Locations { get; set; }
 
 		public DbSet<RequestType> RequestTypes { get; set; }
-		public HelpdeskDbContext(DbContextOptions<HelpdeskDbContext> options)
+		public HelpdeskDbContext(DbContextOptions<HelpdeskDbContext> options, IHttpContextAccessor httpContextAccessor)
 		   : base(options)
-		{ }
-		public async Task<int> SaveChanges()
 		{
-			return await base.SaveChangesAsync();
+			_httpContextAccessor = httpContextAccessor;
 		}
+	
 
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
@@ -40,7 +43,7 @@ namespace ShineCoder_Helpdesk.Infrastructure
 			builder.Entity<ApplicationUser>(entity =>
 			{
 				entity.ToTable(name: "User", "Identity");
-				entity.Property(u=>u.Id).HasDefaultValue(1);
+				entity.Property(u => u.Id).HasDefaultValue(1);
 			});
 			builder.Entity<ApplicationRole>(entity =>
 			{
@@ -70,16 +73,23 @@ namespace ShineCoder_Helpdesk.Infrastructure
 			});
 
 			builder.Entity<Ticket_Status>().HasData(
-			new Ticket_Status { Id = 1, Name = "New", CreatedBy = 1, CreatedDate = DateTime.Now },
-			new Ticket_Status { Id = 2, Name = "Open", CreatedBy = 1, CreatedDate = DateTime.Now },
-			new Ticket_Status { Id = 3, Name = "Closed", CreatedBy = 1, CreatedDate = DateTime.Now },
-			new Ticket_Status { Id = 4, Name = "Resolved", CreatedBy = 1, CreatedDate = DateTime.Now },
-			new Ticket_Status { Id = 5, Name = "Assigned", CreatedBy = 1, CreatedDate = DateTime.Now });
+			new Ticket_Status { Id = 1, Name = "New", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now },
+			new Ticket_Status { Id = 2, Name = "Open", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now },
+			new Ticket_Status { Id = 3, Name = "Closed", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now },
+			new Ticket_Status { Id = 4, Name = "Resolved", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now },
+			new Ticket_Status { Id = 5, Name = "Assigned", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now });
 			builder.Entity<Ticket_Priorities>().HasData(
-			new Ticket_Priorities { Id = 1, Name = "Low", CreatedBy = 1, CreatedDate = DateTime.Now },
-			new Ticket_Priorities { Id = 2, Name = "High", CreatedBy = 1, CreatedDate = DateTime.Now },
-			new Ticket_Priorities { Id = 3, Name = "Medium", CreatedBy = 1, CreatedDate = DateTime.Now });
+			new Ticket_Priorities { Id = 1, Name = "Low", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now },
+			new Ticket_Priorities { Id = 2, Name = "High", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now },
+			new Ticket_Priorities { Id = 3, Name = "Medium", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now });
 
+		}
+
+		public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+		{
+			string userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
+			ChangeTracker.SetAuditProperties(userName);
+			return await base.SaveChangesAsync();
 		}
 	}
 }

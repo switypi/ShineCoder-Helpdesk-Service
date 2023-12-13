@@ -12,6 +12,8 @@ namespace ShineCoder_Helpdesk.Core
 		string SessionID { get; }
 		string TransactionId { get; }
 
+		 string UserName { get; }
+
 		string GetFormData(string key);
 		Dictionary<string, string> GetHeaders();
 		string GetHttpMethod();

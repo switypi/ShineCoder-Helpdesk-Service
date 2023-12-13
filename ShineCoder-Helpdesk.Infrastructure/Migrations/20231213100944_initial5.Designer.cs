@@ -12,8 +12,8 @@ using ShineCoder_Helpdesk.Infrastructure;
 namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 {
     [DbContext(typeof(HelpdeskDbContext))]
-    [Migration("20231212135104_initial1")]
-    partial class initial1
+    [Migration("20231213100944_initial5")]
+    partial class initial5
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -257,8 +257,13 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CreatedBy")
-                        .HasColumnType("int");
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -270,8 +275,10 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UpdatedBy")
-                        .HasColumnType("int");
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
@@ -286,8 +293,13 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CreatedBy")
-                        .HasColumnType("int");
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -299,8 +311,10 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UpdatedBy")
-                        .HasColumnType("int");
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
@@ -315,8 +329,13 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CreatedBy")
-                        .HasColumnType("int");
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -328,8 +347,10 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UpdatedBy")
-                        .HasColumnType("int");
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
@@ -344,8 +365,13 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CreatedBy")
-                        .HasColumnType("int");
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -357,8 +383,10 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UpdatedBy")
-                        .HasColumnType("int");
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
@@ -373,11 +401,16 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CreatedBy")
-                        .HasColumnType("int");
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -389,8 +422,10 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UpdatedBy")
-                        .HasColumnType("int");
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
@@ -407,8 +442,13 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CreatedBy")
-                        .HasColumnType("int");
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -420,8 +460,10 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UpdatedBy")
-                        .HasColumnType("int");
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
@@ -436,8 +478,13 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CreatedBy")
-                        .HasColumnType("int");
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -449,8 +496,10 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UpdatedBy")
-                        .HasColumnType("int");
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
@@ -460,26 +509,32 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedBy = 1,
-                            CreatedDate = new DateTime(2023, 12, 12, 19, 21, 4, 95, DateTimeKind.Local).AddTicks(128),
+                            Active = false,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2023, 12, 13, 15, 39, 44, 424, DateTimeKind.Local).AddTicks(1977),
                             ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Low"
+                            Name = "Low",
+                            UpdatedBy = ""
                         },
                         new
                         {
                             Id = 2,
-                            CreatedBy = 1,
-                            CreatedDate = new DateTime(2023, 12, 12, 19, 21, 4, 95, DateTimeKind.Local).AddTicks(131),
+                            Active = false,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2023, 12, 13, 15, 39, 44, 424, DateTimeKind.Local).AddTicks(1981),
                             ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "High"
+                            Name = "High",
+                            UpdatedBy = ""
                         },
                         new
                         {
                             Id = 3,
-                            CreatedBy = 1,
-                            CreatedDate = new DateTime(2023, 12, 12, 19, 21, 4, 95, DateTimeKind.Local).AddTicks(133),
+                            Active = false,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2023, 12, 13, 15, 39, 44, 424, DateTimeKind.Local).AddTicks(1982),
                             ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Medium"
+                            Name = "Medium",
+                            UpdatedBy = ""
                         });
                 });
 
@@ -491,8 +546,13 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CreatedBy")
-                        .HasColumnType("int");
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -500,8 +560,10 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                     b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("UpdatedBy")
-                        .HasColumnType("int");
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<int>("ticketsId")
                         .HasColumnType("int");
@@ -525,8 +587,13 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CreatedBy")
-                        .HasColumnType("int");
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -538,8 +605,10 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UpdatedBy")
-                        .HasColumnType("int");
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
@@ -549,42 +618,52 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedBy = 1,
-                            CreatedDate = new DateTime(2023, 12, 12, 19, 21, 4, 94, DateTimeKind.Local).AddTicks(9903),
+                            Active = false,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2023, 12, 13, 15, 39, 44, 424, DateTimeKind.Local).AddTicks(1770),
                             ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "New"
+                            Name = "New",
+                            UpdatedBy = ""
                         },
                         new
                         {
                             Id = 2,
-                            CreatedBy = 1,
-                            CreatedDate = new DateTime(2023, 12, 12, 19, 21, 4, 94, DateTimeKind.Local).AddTicks(9913),
+                            Active = false,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2023, 12, 13, 15, 39, 44, 424, DateTimeKind.Local).AddTicks(1785),
                             ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Open"
+                            Name = "Open",
+                            UpdatedBy = ""
                         },
                         new
                         {
                             Id = 3,
-                            CreatedBy = 1,
-                            CreatedDate = new DateTime(2023, 12, 12, 19, 21, 4, 94, DateTimeKind.Local).AddTicks(9915),
+                            Active = false,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2023, 12, 13, 15, 39, 44, 424, DateTimeKind.Local).AddTicks(1787),
                             ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Closed"
+                            Name = "Closed",
+                            UpdatedBy = ""
                         },
                         new
                         {
                             Id = 4,
-                            CreatedBy = 1,
-                            CreatedDate = new DateTime(2023, 12, 12, 19, 21, 4, 94, DateTimeKind.Local).AddTicks(9916),
+                            Active = false,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2023, 12, 13, 15, 39, 44, 424, DateTimeKind.Local).AddTicks(1788),
                             ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Resolved"
+                            Name = "Resolved",
+                            UpdatedBy = ""
                         },
                         new
                         {
                             Id = 5,
-                            CreatedBy = 1,
-                            CreatedDate = new DateTime(2023, 12, 12, 19, 21, 4, 94, DateTimeKind.Local).AddTicks(9918),
+                            Active = false,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2023, 12, 13, 15, 39, 44, 424, DateTimeKind.Local).AddTicks(1790),
                             ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Assigned"
+                            Name = "Assigned",
+                            UpdatedBy = ""
                         });
                 });
 
@@ -596,8 +675,13 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CreatedBy")
-                        .HasColumnType("int");
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -614,12 +698,8 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                     b.Property<int>("Ticket_ModeId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Tkt_AssignedUser")
+                    b.Property<int?>("Tkt_AssignedUserId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Tkt_AssignedUserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Tkt_CategoryId")
                         .HasColumnType("int");
@@ -644,12 +724,8 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                     b.Property<int?>("Tkt_RequestTypeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Tkt_RequestUserId")
+                    b.Property<int?>("Tkt_RequestUserId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Tkt_RequestUserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Tkt_SubCategoryId")
                         .HasColumnType("int");
@@ -658,8 +734,10 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UpdatedBy")
-                        .HasColumnType("int");
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
@@ -669,6 +747,8 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
                     b.HasIndex("Ticket_ModeId");
 
+                    b.HasIndex("Tkt_AssignedUserId");
+
                     b.HasIndex("Tkt_CategoryId");
 
                     b.HasIndex("Tkt_DepartmentId");
@@ -676,6 +756,8 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                     b.HasIndex("Tkt_LocationId");
 
                     b.HasIndex("Tkt_RequestTypeId");
+
+                    b.HasIndex("Tkt_RequestUserId");
 
                     b.HasIndex("Tkt_SubCategoryId");
 
@@ -775,6 +857,10 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ShineCoder_Helpdesk.Infrastructure.Models.ApplicationUser", "AssignedUser")
+                        .WithMany()
+                        .HasForeignKey("Tkt_AssignedUserId");
+
                     b.HasOne("ShineCoder_Helpdesk.Infrastructure.Models.Category", "Tkt_Category")
                         .WithMany()
                         .HasForeignKey("Tkt_CategoryId");
@@ -791,9 +877,17 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("Tkt_RequestTypeId");
 
+                    b.HasOne("ShineCoder_Helpdesk.Infrastructure.Models.ApplicationUser", "RequestUser")
+                        .WithMany()
+                        .HasForeignKey("Tkt_RequestUserId");
+
                     b.HasOne("ShineCoder_Helpdesk.Infrastructure.Models.SubCategory", "Tkt_SubCategory")
                         .WithMany()
                         .HasForeignKey("Tkt_SubCategoryId");
+
+                    b.Navigation("AssignedUser");
+
+                    b.Navigation("RequestUser");
 
                     b.Navigation("Ticket_Mode");
 

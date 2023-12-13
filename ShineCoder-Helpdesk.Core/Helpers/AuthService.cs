@@ -120,7 +120,7 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 				Audience = _configuration["JWT:ValidAudience"],
 
 				//Expires = DateTime.UtcNow.AddHours(_TokenExpiryTimeInHour),
-				Expires = DateTime.UtcNow.AddMinutes(1),
+				Expires = DateTime.UtcNow.AddHours(_TokenExpiryTimeInHour),
 				SigningCredentials = new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256),
 				Subject = new ClaimsIdentity(claims)
 			};

@@ -70,18 +70,19 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 		public async Task<JObject> Register()
 		{
 			IDbContextTransaction trans = null;
-			try
+			using (trans = _unitOfWork.GetDbTransaction)
 			{
-
-				var inputModel = _httpContextProxy.GetRequestBody<RegistrationModel>();
-				var listOfErrors = _customerValidator.Validate(inputModel);
-				if (listOfErrors.Count() > 0)
+				try
 				{
-					return _responseBuilder.BadRequest(listOfErrors.ToJArray());
 
-				};
-				using (trans = _unitOfWork.GetDbTransaction)
-				{
+					var inputModel = _httpContextProxy.GetRequestBody<RegistrationModel>();
+					var listOfErrors = _customerValidator.Validate(inputModel);
+					if (listOfErrors.Count() > 0)
+					{
+						return _responseBuilder.BadRequest(listOfErrors.ToJArray());
+
+					};
+
 					var (status, message) = await _authService.Registeration(inputModel, UserRolesValues.User);
 
 					if (status == 0)
@@ -89,15 +90,16 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 						return _responseBuilder.BadRequest(message.ToJObject());
 					}
 					trans.Commit();
-				}
-				return _responseBuilder.Success("User Registered.");
 
-			}
-			catch (Exception ex)
-			{
-				trans.Rollback();
-				_logger.LogError(ex.Message);
-				return _responseBuilder.ServerError(ex.Message);
+					return _responseBuilder.Success("User Registered.");
+
+				}
+				catch (Exception ex)
+				{
+					trans.Rollback();
+					_logger.LogError(ex.Message);
+					return _responseBuilder.ServerError(ex.Message);
+				}
 			}
 		}
 
@@ -107,10 +109,11 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 		{
 
 			IDbContextTransaction trans = null;
-			try
+			using (trans = _unitOfWork.GetDbTransaction)
 			{
-				using (trans = _unitOfWork.GetDbTransaction)
+				try
 				{
+
 					var roleName = _httpContextProxy.GetQueryString("roleName");
 					var (status, message) = await _authService.CreateRole(roleName);
 					if (status == 0)
@@ -119,15 +122,16 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 					}
 					return _responseBuilder.Success(message.ToJObject());
 
+
+				}
+				catch (Exception ex)
+				{
+					trans.Rollback();
+					_logger.LogError(ex.Message);
+					return _responseBuilder.ServerError(ex.Message);
 				}
 			}
-			catch (Exception ex)
-			{
-				trans.Rollback();
-				_logger.LogError(ex.Message);
-				return _responseBuilder.ServerError(ex.Message);
-			}
-			
+
 		}
 
 		[HttpGet]

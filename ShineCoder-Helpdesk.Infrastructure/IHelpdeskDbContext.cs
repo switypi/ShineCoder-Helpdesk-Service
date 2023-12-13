@@ -17,6 +17,6 @@ namespace ShineCoder_Helpdesk.Infrastructure
 
          DbSet<RequestType> RequestTypes { get; set; }
 
-        Task<int> SaveChanges();
+       
 	}
 }

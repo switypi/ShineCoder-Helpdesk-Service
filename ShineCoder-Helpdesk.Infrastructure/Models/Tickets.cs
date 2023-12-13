@@ -14,11 +14,15 @@ namespace ShineCoder_Helpdesk.Infrastructure.Models
 
         public string Tkt_Subject { get; set; }
 
-        public Int32 Tkt_RequestUserId { get; set; }
+		[ForeignKey(nameof(RequestUser))]
+		public Int32? Tkt_RequestUserId { get; set; }
+		public ApplicationUser RequestUser { get; set; }
 
-        public string Tkt_RequestUserName { get; set; }
-        public Int32? Tkt_AssignedUser { get; set; }
-        public string Tkt_AssignedUserName { get; set; }
+
+		[ForeignKey(nameof(AssignedUser))]
+		public Int32? Tkt_AssignedUserId { get; set; }
+		public ApplicationUser AssignedUser { get; set; }
+		
 
         public DateTime? Tkt_DueDate { get; set; }
 

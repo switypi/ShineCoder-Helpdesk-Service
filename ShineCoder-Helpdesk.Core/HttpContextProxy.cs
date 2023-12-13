@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -35,7 +36,13 @@ namespace ShineCoder_Helpdesk.Core
 
 		public string TransactionId => throw new NotImplementedException();
 
-
+		public string UserName
+		{
+			get
+			{
+				return _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
+			}
+		}
 
 
 		public string GetFormData(string key)
@@ -201,6 +208,6 @@ namespace ShineCoder_Helpdesk.Core
 			throw new NotImplementedException();
 		}
 
-		
+
 	}
 }

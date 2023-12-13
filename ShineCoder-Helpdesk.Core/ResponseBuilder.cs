@@ -77,7 +77,7 @@ namespace ShineCoder_Helpdesk.Core
 		}
 		public JObject CreateReponseWithError(ServerResponseCodeEnums code, List<string> errors)
 		{
-			if (code == ServerResponseCodeEnums.SUCCESS || code == ServerResponseCodeEnums._200_OK)
+			if (code == ServerResponseCodeEnums.SUCCESS )
 			{
 				throw new NotSupportedException($"Unsupported response code {code} for error response");
 			}

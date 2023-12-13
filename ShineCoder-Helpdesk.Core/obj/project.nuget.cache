@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "bVLHif85i6ubGF6ZCHzl6Z+5UGIK5hwlMFBRsuZCEPy5J7lW6XA6NlIOxlhh1amhCmCgz+/XnvflupmTT/01GA==",
+  "dgSpecHash": "leZz4KeTxwMvvBD2wjaRRaIuhtp7c5+OKZwxDA4TTZ8aLUr9ld4KpYyqElGl323EhYW4iuz87dXgh+q7rGPdRw==",
   "success": true,
   "projectFilePath": "C:\\Users\\suchakraborty\\source\\repos\\ShineCoder-Helpdesk-API\\ShineCoder-Helpdesk.Core\\ShineCoder-Helpdesk.Core.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\suchakraborty\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\suchakraborty\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\suchakraborty\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
     "C:\\Users\\suchakraborty\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\6.0.25\\microsoft.aspnetcore.authentication.jwtbearer.6.0.25.nupkg.sha512",
@@ -13,7 +14,7 @@
     "C:\\Users\\suchakraborty\\.nuget\\packages\\microsoft.aspnetcore.http.features\\2.2.0\\microsoft.aspnetcore.http.features.2.2.0.nupkg.sha512",
     "C:\\Users\\suchakraborty\\.nuget\\packages\\microsoft.aspnetcore.identity.entityframeworkcore\\7.0.14\\microsoft.aspnetcore.identity.entityframeworkcore.7.0.14.nupkg.sha512",
     "C:\\Users\\suchakraborty\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.1\\microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",
-    "C:\\Users\\suchakraborty\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
+    "C:\\Users\\suchakraborty\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\suchakraborty\\.nuget\\packages\\microsoft.data.sqlclient\\5.1.1\\microsoft.data.sqlclient.5.1.1.nupkg.sha512",
     "C:\\Users\\suchakraborty\\.nuget\\packages\\microsoft.data.sqlclient.sni.runtime\\5.1.0\\microsoft.data.sqlclient.sni.runtime.5.1.0.nupkg.sha512",
     "C:\\Users\\suchakraborty\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.14\\microsoft.entityframeworkcore.7.0.14.nupkg.sha512",
