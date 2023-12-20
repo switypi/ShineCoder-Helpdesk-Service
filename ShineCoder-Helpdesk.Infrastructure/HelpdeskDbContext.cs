@@ -33,7 +33,7 @@ namespace ShineCoder_Helpdesk.Infrastructure
 		{
 			_httpContextAccessor = httpContextAccessor;
 		}
-	
+
 
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
@@ -82,6 +82,12 @@ namespace ShineCoder_Helpdesk.Infrastructure
 			new Ticket_Priorities { Id = 1, Name = "Low", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now },
 			new Ticket_Priorities { Id = 2, Name = "High", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now },
 			new Ticket_Priorities { Id = 3, Name = "Medium", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now });
+
+			builder.Entity<ApplicationRole>().HasData(
+			new ApplicationRole { Id = 1, RoleName = "Admin", Name = "admin", IsActive = true, IsAgent = false, IsClient = false },
+			new ApplicationRole { Id = 2, RoleName = "Client", Name = "Client", IsActive = true, IsAgent = false, IsClient = true },
+			new ApplicationRole { Id = 3, RoleName = "Agent", Name = "Agent", IsActive = true, IsAgent = true, IsClient = false });
+
 
 		}
 

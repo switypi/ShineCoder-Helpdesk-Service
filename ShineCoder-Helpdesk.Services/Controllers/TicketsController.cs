@@ -88,7 +88,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 		{
 			try
 			{
-				var ticketData =await _unitOfWork.TicketRepository.GetAsync(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.Assigned);
+				var ticketData = await _unitOfWork.TicketRepository.GetAsync(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.Assigned);
 				return _responseBuilder.Success(ticketData.ToJArray());
 			}
 			catch (Exception ex)
@@ -105,7 +105,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 		{
 			try
 			{
-				var ticketData =await _unitOfWork.TicketRepository.GetAsync(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.New);
+				var ticketData = await _unitOfWork.TicketRepository.GetAsync(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.New);
 				return _responseBuilder.Success(ticketData.ToJArray());
 			}
 			catch (Exception ex)
@@ -265,7 +265,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 					{
 						return _responseBuilder.Success($"Could not find tickets with ticketId = {ticketObj.TicketId}");
 					}
-					
+
 
 				}
 				catch (Exception ex)
@@ -276,7 +276,6 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 				}
 			}
 		}
-
 
 	}
 }
