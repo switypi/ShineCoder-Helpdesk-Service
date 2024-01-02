@@ -28,7 +28,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 		private readonly IValidator _customerValidator;
 		private readonly IMapper _mapper;
 		public CategoryController(IHttpContextProxy httpContextProxy, IUnitOfWork unitOfWork, IResponseBuilder responseBuilder,
-			ILogger<AuthenticationController> logger, IValidator customerValidator, IMapper mapper)
+			ILogger<CategoryController> logger, IValidator customerValidator, IMapper mapper)
 		{
 			_httpContextProxy = httpContextProxy;
 			_unitOfWork = unitOfWork;

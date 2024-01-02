@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,7 +35,7 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 			_logger = logger;
 
 		}
-		public async Task<(int, HelpDeskResults)> Registeration(RegistrationModel model, string role)
+		public async Task<(int, HelpDeskResults)> RegisterationAsync(RegistrationModel model, string role)
 		{
 			try
 			{
@@ -254,6 +255,31 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 				return (0, new HelpDeskResults { Succeeded = false, Message = ex.Message });
 			}
 		}
+
+		public async Task<IEnumerable<ApplicationUser>> GetAllUsers(Expression<Func<ApplicationUser, bool>> filter = null, Func<IQueryable<ApplicationUser>, IOrderedQueryable<ApplicationUser>> orderBy = null)
+		{
+            IQueryable<ApplicationUser> query =  userManager.Users;
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            //foreach (var includeProperty in includeProperties.Split
+            //    (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            //{
+            //    query = query.Include(includeProperty);
+            //}
+
+            if (orderBy != null)
+            {
+                return await orderBy(query).ToListAsync();
+            }
+            else
+            {
+                return await query.ToListAsync();
+            }
+        }
 
 		public async Task<(int, HelpDeskResults)> GetAllRoles()
 		{

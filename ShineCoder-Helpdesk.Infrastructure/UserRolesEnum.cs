@@ -9,6 +9,6 @@ namespace ShineCoder_Helpdesk.Infrastructure
 	public class UserRolesValues
 	{
 		public const string Admin = "Admin";
-		public const string User = "User";
+		public const string Client = "Client";
 	}
 }

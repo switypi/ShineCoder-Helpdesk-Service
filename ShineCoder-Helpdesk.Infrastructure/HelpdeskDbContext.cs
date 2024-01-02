@@ -43,12 +43,14 @@ namespace ShineCoder_Helpdesk.Infrastructure
 			builder.Entity<ApplicationUser>(entity =>
 			{
 				entity.ToTable(name: "User", "Identity");
-				entity.Property(u => u.Id).HasDefaultValue(1);
+				entity.HasKey(u => u.Id);
+				//entity.Property(u => u.Id).HasDefaultValue(1);
 			});
 			builder.Entity<ApplicationRole>(entity =>
 			{
 				entity.ToTable(name: "Roles", "Identity");
-				entity.Property(u => u.Id).HasDefaultValue(1);
+                entity.HasKey(u => u.Id);
+                //entity.Property(u => u.Id).HasDefaultValue(1);
 
 			});
 			builder.Entity<IdentityUserRole<Int32>>(entity =>
@@ -89,18 +91,20 @@ namespace ShineCoder_Helpdesk.Infrastructure
 			new ApplicationRole { Id = 3, RoleName = "Agent", Name = "Agent", IsActive = true, IsAgent = true, IsClient = false });
 
 
-		}
+        }
 
 		public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 		{
 
-			if (_httpContextAccessor.HttpContext.User.Identity != null) // During User registration Identity is not set.
+
+			if (_httpContextAccessor.HttpContext.User.Identity.Name != null) // During User registration Identity is not set.
 			{
 				string userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
 				ChangeTracker.SetAuditProperties(userName);
-			}
-			
-			return await base.SaveChangesAsync();
-		}
+                
+            }
+
+            return await base.SaveChangesAsync();
+        }
 	}
 }

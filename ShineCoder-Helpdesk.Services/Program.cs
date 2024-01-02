@@ -16,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using AutoMapper;
 
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers().AddNewtonsoftJson();
@@ -28,20 +29,20 @@ builder.Services.AddVersionedApiExplorer(setup =>
 
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(x=>x.AddSecurityDefinition("Bearer",new OpenApiSecurityScheme 
+builder.Services.AddSwaggerGen(x => x.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
 {
-	In = ParameterLocation.Header,
-	Description = "Please Enter Authentication Token",
-	Name = "Authorization",
-	Type = SecuritySchemeType.ApiKey
+    In = ParameterLocation.Header,
+    Description = "Please Enter Authentication Token",
+    Name = "Authorization",
+    Type = SecuritySchemeType.ApiKey
 }));
 
 
 
 builder.Services.AddDbContext<HelpdeskDbContext>(options =>
 options.UseSqlServer(
-					builder.Configuration.GetConnectionString("DefaultConnection"),
-					b => b.MigrationsAssembly(typeof(HelpdeskDbContext).Assembly.FullName)));
+                    builder.Configuration.GetConnectionString("DefaultConnection"),
+                    b => b.MigrationsAssembly(typeof(HelpdeskDbContext).Assembly.FullName)));
 builder.Services.AddScoped<IHelpdeskDbContext>(provider => provider.GetService<HelpdeskDbContext>());
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IResponseBuilder, ResponseBuilder>();
@@ -50,8 +51,8 @@ builder.Services.AddSingleton<IHttpContextProxy, HttpContextProxy>();
 builder.Services.AddLogging();
 builder.Services.AddApiVersioning(config =>
 {
-	config.DefaultApiVersion = new ApiVersion(1, 0);
-	config.AssumeDefaultVersionWhenUnspecified = false;
+    config.DefaultApiVersion = new ApiVersion(1, 0);
+    config.AssumeDefaultVersionWhenUnspecified = false;
     config.ApiVersionReader = ApiVersionReader.Combine(new UrlSegmentApiVersionReader(),
                                                                                         new HeaderApiVersionReader("x-api-version"),
                                                                                         new MediaTypeApiVersionReader("x-api-version"));
@@ -64,31 +65,31 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
 
 builder.Services.Configure<IdentityOptions>(opt =>
 {
-	opt.Password.RequireDigit = true;
-	opt.Password.RequireLowercase = true;
-	opt.Password.RequireNonAlphanumeric = true;
-	opt.Password.RequireUppercase = true;
-	opt.Password.RequiredLength = 4;
-	opt.Password.RequiredUniqueChars = 1;
+    opt.Password.RequireDigit = true;
+    opt.Password.RequireLowercase = true;
+    opt.Password.RequireNonAlphanumeric = true;
+    opt.Password.RequireUppercase = true;
+    opt.Password.RequiredLength = 4;
+    opt.Password.RequiredUniqueChars = 1;
 
-	// Lockout settings 
-	opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-	opt.Lockout.MaxFailedAccessAttempts = 5;
-	opt.Lockout.AllowedForNewUsers = true;
+    // Lockout settings 
+    opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    opt.Lockout.MaxFailedAccessAttempts = 5;
+    opt.Lockout.AllowedForNewUsers = true;
 
-	//Signin option
-	opt.SignIn.RequireConfirmedEmail = false;
+    //Signin option
+    opt.SignIn.RequireConfirmedEmail = false;
 
-	// User settings 
-	opt.User.RequireUniqueEmail = true;
+    // User settings 
+    opt.User.RequireUniqueEmail = true;
 
-	//Token Option
-	//opt.Tokens.AuthenticatorTokenProvider = "Name of AuthenticatorTokenProvider";
+    //Token Option
+    //opt.Tokens.AuthenticatorTokenProvider = "Name of AuthenticatorTokenProvider";
 
 });
 builder.Services.Configure<PasswordHasherOptions>(option =>
 {
-	option.IterationCount = 12000;
+    option.IterationCount = 12000;
 });
 
 
@@ -100,21 +101,25 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
              ValidateAudience = true,
              ValidateLifetime = true,
              ValidateIssuerSigningKey = true,
-             ValidIssuer= builder.Configuration["JWT:ValidIssuer"],
-             ValidAudience= builder.Configuration["JWT:ValidAudience"],
+             ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
+             ValidAudience = builder.Configuration["JWT:ValidAudience"],
 
-			 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])),
+             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])),
              ClockSkew = TimeSpan.Zero
          }
-         
+
 
     );
 builder.Services.AddTransient<IAuthService, AuthService>();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("Open", builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+
+   // options.AddPolicy(name:MyAllowSpecificOrigins, builder => builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod());
+    options.AddPolicy(name:MyAllowSpecificOrigins, builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 });
+
+
 
 builder.Services.AddTransient<IValidator, CustomValidator>();
 
@@ -134,7 +139,7 @@ var apiVersionDescriptionProvider = app.Services.GetRequiredService<IApiVersionD
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-	app.UseSwagger();
+    app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
         foreach (var description in apiVersionDescriptionProvider.ApiVersionDescriptions)
@@ -144,6 +149,8 @@ if (app.Environment.IsDevelopment())
         }
     });
 }
+
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
 

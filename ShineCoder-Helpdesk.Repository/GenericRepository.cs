@@ -20,9 +20,7 @@ namespace ShineCoder_Helpdesk.Repository
 			this.dbSet = context.Set<TEntity>();
 		}
 
-		public async virtual Task<IEnumerable<TEntity>> GetAsync(
-			Expression<Func<TEntity, bool>> filter = null,
-			Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+		public async virtual Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> filter = null,Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
 			string includeProperties = "")
 		{
 			IQueryable<TEntity> query = dbSet;
@@ -78,5 +76,7 @@ namespace ShineCoder_Helpdesk.Repository
 			dbSet.Attach(entityToUpdate);
 			context.Entry(entityToUpdate).State = EntityState.Modified;
 		}
+
+		
 	}
 }
