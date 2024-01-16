@@ -68,8 +68,8 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 				var createUserResult = await userManager.CreateAsync(user, model.Password);
 				if (!createUserResult.Succeeded)
 					return (0, new HelpDeskResults { Succeeded = createUserResult.Succeeded, Message = "", Errors = createUserResult.Errors });
-
-				if (!await roleManager.RoleExistsAsync(role))
+				//var d = await roleManager.FindByNameAsync(role);
+				if (await roleManager.FindByNameAsync(role) == null)
 					await roleManager.CreateAsync(rolee);
 
 				if (await roleManager.RoleExistsAsync(role))
@@ -110,7 +110,7 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 			}
 			string token = GenerateToken(authClaims);
 			return (1, new HelpDeskResults { Succeeded = true, Message = token });
-		} 
+		}
 		private string GenerateToken(IEnumerable<Claim> claims)
 		{
 			var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
@@ -241,7 +241,7 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 
 		}
 
-		public async Task<(int,HelpDeskResults)> GetAllUsers()
+		public async Task<(int, HelpDeskResults)> GetAllUsers()
 		{
 			try
 			{
@@ -258,28 +258,28 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 
 		public async Task<IEnumerable<ApplicationUser>> GetAllUsers(Expression<Func<ApplicationUser, bool>> filter = null, Func<IQueryable<ApplicationUser>, IOrderedQueryable<ApplicationUser>> orderBy = null)
 		{
-            IQueryable<ApplicationUser> query =  userManager.Users;
+			IQueryable<ApplicationUser> query = userManager.Users;
 
-            if (filter != null)
-            {
-                query = query.Where(filter);
-            }
+			if (filter != null)
+			{
+				query = query.Where(filter);
+			}
 
-            //foreach (var includeProperty in includeProperties.Split
-            //    (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-            //{
-            //    query = query.Include(includeProperty);
-            //}
+			//foreach (var includeProperty in includeProperties.Split
+			//    (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+			//{
+			//    query = query.Include(includeProperty);
+			//}
 
-            if (orderBy != null)
-            {
-                return await orderBy(query).ToListAsync();
-            }
-            else
-            {
-                return await query.ToListAsync();
-            }
-        }
+			if (orderBy != null)
+			{
+				return await orderBy(query).ToListAsync();
+			}
+			else
+			{
+				return await query.ToListAsync();
+			}
+		}
 
 		public async Task<(int, HelpDeskResults)> GetAllRoles()
 		{
@@ -292,7 +292,7 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 			{
 
 				_logger.LogError("Error in GetAllRoles");
-				return (0, new HelpDeskResults { Succeeded = false, Message=ex.Message });
+				return (0, new HelpDeskResults { Succeeded = false, Message = ex.Message });
 			}
 		}
 

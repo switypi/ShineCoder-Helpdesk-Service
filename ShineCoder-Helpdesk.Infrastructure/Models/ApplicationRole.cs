@@ -10,9 +10,10 @@ namespace ShineCoder_Helpdesk.Infrastructure.Models
 {
 	public class ApplicationRole : IdentityRole<Int32>
 	{
+
 		
-		public  string RoleName { get; set; }
-		
+		public string RoleName { get; set; }
+
 		public bool IsActive { get; set; }
 		public bool IsClient { get; set; }
 		public bool IsAgent { get; set; }

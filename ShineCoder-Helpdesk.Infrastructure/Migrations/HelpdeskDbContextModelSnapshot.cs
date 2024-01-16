@@ -105,6 +105,13 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("UserRoles", "Identity");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 1,
+                            RoleId = 1
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
@@ -175,7 +182,8 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             IsActive = true,
                             IsAgent = false,
                             IsClient = false,
-                            Name = "admin",
+                            Name = "Admin",
+                            NormalizedName = "Admin",
                             RoleName = "Admin"
                         },
                         new
@@ -185,6 +193,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             IsAgent = false,
                             IsClient = true,
                             Name = "Client",
+                            NormalizedName = "Client",
                             RoleName = "Client"
                         },
                         new
@@ -194,6 +203,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             IsAgent = true,
                             IsClient = false,
                             Name = "Agent",
+                            NormalizedName = "Agent",
                             RoleName = "Agent"
                         });
                 });
@@ -275,6 +285,24 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("User", "Identity");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "0d8a502b-1ac3-4c3b-a266-f052bbf8bd4c",
+                            Email = "admin@gmail.com",
+                            EmailConfirmed = false,
+                            FirstName = "Admin",
+                            LastName = "Admin",
+                            LockoutEnabled = false,
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "d17f3063-dfe8-4d7c-a10b-acc31638e453",
+                            TwoFactorEnabled = false,
+                            UserName = "admin",
+                            UserType = 0
+                        });
                 });
 
             modelBuilder.Entity("ShineCoder_Helpdesk.Infrastructure.Models.Category", b =>
@@ -294,6 +322,13 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsDefault")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
@@ -329,6 +364,13 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsDefault")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
@@ -363,6 +405,13 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsDefault")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
@@ -377,6 +426,47 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Locations", "Dbo");
+                });
+
+            modelBuilder.Entity("ShineCoder_Helpdesk.Infrastructure.Models.Product", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsDefault")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Products", "Dbo");
                 });
 
             modelBuilder.Entity("ShineCoder_Helpdesk.Infrastructure.Models.RequestType", b =>
@@ -396,6 +486,13 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsDefault")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
@@ -452,6 +549,79 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                     b.ToTable("SubCategories", "Dbo");
                 });
 
+            modelBuilder.Entity("ShineCoder_Helpdesk.Infrastructure.Models.Ticket_Impact", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsDefault")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Ticket_Impacts", "Dbo");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Active = true,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2024, 1, 16, 16, 5, 19, 537, DateTimeKind.Local).AddTicks(5378),
+                            Description = "Low impact ticket",
+                            Name = "Low",
+                            UpdatedBy = ""
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Active = true,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2024, 1, 16, 16, 5, 19, 537, DateTimeKind.Local).AddTicks(5381),
+                            Description = "High impact ticket",
+                            Name = "High",
+                            UpdatedBy = ""
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Active = true,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2024, 1, 16, 16, 5, 19, 537, DateTimeKind.Local).AddTicks(5383),
+                            Description = "Normal impact ticket",
+                            Name = "Normal",
+                            UpdatedBy = ""
+                        });
+                });
+
             modelBuilder.Entity("ShineCoder_Helpdesk.Infrastructure.Models.Ticket_Mode", b =>
                 {
                     b.Property<int>("Id")
@@ -504,6 +674,13 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsDefault")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
@@ -523,28 +700,41 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            Active = false,
+                            Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2023, 12, 21, 16, 40, 8, 413, DateTimeKind.Local).AddTicks(795),
+                            CreatedDate = new DateTime(2024, 1, 16, 16, 5, 19, 537, DateTimeKind.Local).AddTicks(5307),
+                            Description = "Low priority ticket",
                             Name = "Low",
                             UpdatedBy = ""
                         },
                         new
                         {
                             Id = 2,
-                            Active = false,
+                            Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2023, 12, 21, 16, 40, 8, 413, DateTimeKind.Local).AddTicks(797),
+                            CreatedDate = new DateTime(2024, 1, 16, 16, 5, 19, 537, DateTimeKind.Local).AddTicks(5310),
+                            Description = "High priority ticket",
                             Name = "High",
                             UpdatedBy = ""
                         },
                         new
                         {
                             Id = 3,
-                            Active = false,
+                            Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2023, 12, 21, 16, 40, 8, 413, DateTimeKind.Local).AddTicks(798),
+                            CreatedDate = new DateTime(2024, 1, 16, 16, 5, 19, 537, DateTimeKind.Local).AddTicks(5313),
+                            Description = "Medium priority ticket",
                             Name = "Medium",
+                            UpdatedBy = ""
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Active = true,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2024, 1, 16, 16, 5, 19, 537, DateTimeKind.Local).AddTicks(5315),
+                            Description = "Normal priority ticket",
+                            Name = "Normal",
                             UpdatedBy = ""
                         });
                 });
@@ -606,6 +796,13 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsDefault")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
@@ -625,46 +822,134 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            Active = false,
+                            Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2023, 12, 21, 16, 40, 8, 413, DateTimeKind.Local).AddTicks(527),
+                            CreatedDate = new DateTime(2024, 1, 16, 16, 5, 19, 537, DateTimeKind.Local).AddTicks(5056),
+                            Description = "New ticket",
                             Name = "New",
                             UpdatedBy = ""
                         },
                         new
                         {
                             Id = 2,
-                            Active = false,
+                            Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2023, 12, 21, 16, 40, 8, 413, DateTimeKind.Local).AddTicks(544),
+                            CreatedDate = new DateTime(2024, 1, 16, 16, 5, 19, 537, DateTimeKind.Local).AddTicks(5071),
+                            Description = "Open ticket",
                             Name = "Open",
                             UpdatedBy = ""
                         },
                         new
                         {
                             Id = 3,
-                            Active = false,
+                            Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2023, 12, 21, 16, 40, 8, 413, DateTimeKind.Local).AddTicks(550),
+                            CreatedDate = new DateTime(2024, 1, 16, 16, 5, 19, 537, DateTimeKind.Local).AddTicks(5073),
+                            Description = "Closed ticket",
                             Name = "Closed",
                             UpdatedBy = ""
                         },
                         new
                         {
                             Id = 4,
-                            Active = false,
+                            Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2023, 12, 21, 16, 40, 8, 413, DateTimeKind.Local).AddTicks(551),
+                            CreatedDate = new DateTime(2024, 1, 16, 16, 5, 19, 537, DateTimeKind.Local).AddTicks(5075),
+                            Description = "Resolved ticket",
                             Name = "Resolved",
                             UpdatedBy = ""
                         },
                         new
                         {
                             Id = 5,
-                            Active = false,
+                            Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2023, 12, 21, 16, 40, 8, 413, DateTimeKind.Local).AddTicks(552),
+                            CreatedDate = new DateTime(2024, 1, 16, 16, 5, 19, 537, DateTimeKind.Local).AddTicks(5077),
+                            Description = "Assigned ticket",
                             Name = "Assigned",
+                            UpdatedBy = ""
+                        });
+                });
+
+            modelBuilder.Entity("ShineCoder_Helpdesk.Infrastructure.Models.Ticket_Urgency", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsDefault")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Ticket_Urgencies", "Dbo");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Active = true,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2024, 1, 16, 16, 5, 19, 537, DateTimeKind.Local).AddTicks(5342),
+                            Description = "Low Urgency",
+                            Name = "Low",
+                            UpdatedBy = ""
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Active = true,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2024, 1, 16, 16, 5, 19, 537, DateTimeKind.Local).AddTicks(5345),
+                            Description = "High urgency",
+                            Name = "High",
+                            UpdatedBy = ""
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Active = true,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2024, 1, 16, 16, 5, 19, 537, DateTimeKind.Local).AddTicks(5347),
+                            Description = "Normal urgency",
+                            Name = "Normal",
+                            UpdatedBy = ""
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Active = true,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2024, 1, 16, 16, 5, 19, 537, DateTimeKind.Local).AddTicks(5350),
+                            Description = "Urgent",
+                            Name = "Urgent",
                             UpdatedBy = ""
                         });
                 });

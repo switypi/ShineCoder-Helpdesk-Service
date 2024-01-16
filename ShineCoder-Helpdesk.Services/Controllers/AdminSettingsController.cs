@@ -19,7 +19,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
     [Produces("application/json")]
     [Route("api/v{version:apiVersion}" + ShineCoder_HelpDeskConstants.ADMIN_SETTING_SERVICE_API_PREFIX)]
     [ApiVersion(ShineCoder_HelpDeskConstants.SHINECODERLMS_VERSION)]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class AdminSettingsController : ControllerBase
     {
         private readonly IHttpContextProxy _httpContextProxy;
@@ -41,7 +41,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 
         [HttpGet]
         [Route("GetRequestTypes")]
-        public async Task<JObject> GetCategoriesAsyn()
+        public async Task<JObject> GetCategoriesAsync()
         {
             try
             {
@@ -55,5 +55,122 @@ namespace ShineCoder_Helpdesk.Services.Controllers
             }
 
         }
-    }
+
+		[HttpGet]
+		[Route("GetPrioritiesAsync")]
+		public async Task<JObject> GetPrioritiesAsync()
+		{
+			try
+			{
+				var data = await _unitOfWork.TicketPrioritiesRepository.GetAsync(x => x.Active == true);
+				return _responseBuilder.Success(data.ToJArray());
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex.Message);
+				return _responseBuilder.BadRequest(ex.Message);
+			}
+
+		}
+
+		[HttpGet]
+		[Route("GetImpactsAsync")]
+		public async Task<JObject> GetImpactsAsync()
+		{
+			try
+			{
+				var data = await _unitOfWork.ImpactRepository.GetAsync(x => x.Active == true);
+				return _responseBuilder.Success(data.ToJArray());
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex.Message);
+				return _responseBuilder.BadRequest(ex.Message);
+			}
+
+		}
+		[HttpGet]
+		[Route("GetStatusAsync")]
+		public async Task<JObject> GetStatusAsync()
+		{
+			try
+			{
+				var data = await _unitOfWork.TicketStatusRepository.GetAsync(x => x.Active == true);
+				return _responseBuilder.Success(data.ToJArray());
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex.Message);
+				return _responseBuilder.BadRequest(ex.Message);
+			}
+
+		}
+
+		[HttpGet]
+		[Route("GetRequestModesAsync")]
+		public async Task<JObject> GetRequestModesAsync()
+		{
+			try
+			{
+				var data = await _unitOfWork.TicketModeRepository.GetAsync(x => x.Active == true);
+				return _responseBuilder.Success(data.ToJArray());
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex.Message);
+				return _responseBuilder.BadRequest(ex.Message);
+			}
+
+		}
+		[HttpGet]
+		[Route("GetUrgencyAsync")]
+		public async Task<JObject> GetUrgencyAsync()
+		{
+			try
+			{
+				var data = await _unitOfWork.UrgencyRepository.GetAsync(x => x.Active == true);
+				return _responseBuilder.Success(data.ToJArray());
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex.Message);
+				return _responseBuilder.BadRequest(ex.Message);
+			}
+
+		}
+
+		[HttpGet]
+		[Route("GetDepartsAsync")]
+		public async Task<JObject> GetDepartsAsync()
+		{
+			try
+			{
+				var data = await _unitOfWork.DepartmentRepository.GetAsync(x => x.Active == true);
+				return _responseBuilder.Success(data.ToJArray());
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex.Message);
+				return _responseBuilder.BadRequest(ex.Message);
+			}
+
+		}
+
+		[HttpGet]
+		[Route("GetProductsAsync")]
+		public async Task<JObject> GetProductsAsync()
+		{
+			try
+			{
+				var data = await _unitOfWork.ProductRepository.GetAsync(x => x.Active == true);
+				return _responseBuilder.Success(data.ToJArray());
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex.Message);
+				return _responseBuilder.BadRequest(ex.Message);
+			}
+
+		}
+	}
 }

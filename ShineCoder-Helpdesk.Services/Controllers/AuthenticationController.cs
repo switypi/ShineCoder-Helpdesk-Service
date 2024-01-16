@@ -202,5 +202,42 @@ namespace ShineCoder_Helpdesk.Services.Controllers
             }
         }
 
-    }
+		[HttpGet]
+		[Route("GetTechnicians")]
+		public async Task<JObject> GetTechnicians()
+		{
+			try
+			{
+				List<UserModel> result = null;
+				var db = _unitOfWork.GetDbContext as HelpdeskDbContext;
+				var userRoles = db.UserRoles;
+
+				var data = (from x in db.Users.Where(x => x.UserType == Infrastructure.Enums.UserTypeEnum.AGENT)
+							join y in userRoles on x.Id equals y.UserId
+							join z in db.Roles on y.RoleId equals z.Id
+
+							select new UserModel
+							{
+								Id = x.Id,
+								DisplayName = x.FirstName,
+								Email = x.Email,
+								PhoneNumber = x.PhoneNumber,
+								RoleName = z.RoleName,
+								UserName = x.UserName
+							}).ToList();
+
+
+				return _responseBuilder.Success(data.ToJArray());
+
+
+			}
+			catch (Exception ex)
+			{
+				//trans.Rollback();
+				_logger.LogError(ex.Message);
+				return _responseBuilder.ServerError(ex.Message);
+			}
+		}
+
+	}
 }

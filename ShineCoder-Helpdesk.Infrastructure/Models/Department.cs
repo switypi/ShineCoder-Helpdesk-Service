@@ -13,6 +13,6 @@ namespace ShineCoder_Helpdesk.Infrastructure.Models
        
         public string Description { get; set; }
 
-        public bool IsDefault { get; set; }
+        public bool? IsDefault { get; set; }
     }
 }
