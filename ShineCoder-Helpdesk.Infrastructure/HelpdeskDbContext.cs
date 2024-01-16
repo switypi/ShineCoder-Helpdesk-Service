@@ -27,8 +27,14 @@ namespace ShineCoder_Helpdesk.Infrastructure
 		public DbSet<Category> Categories { get; set; }
 		public DbSet<Location> Locations { get; set; }
 
-		public DbSet<RequestType> RequestTypes { get; set; }
-		public HelpdeskDbContext(DbContextOptions<HelpdeskDbContext> options, IHttpContextAccessor httpContextAccessor)
+		public DbSet<Product> Products { get; set; }
+
+        public DbSet<Ticket_Impact> Ticket_Impacts { get; set; }
+        public DbSet<Ticket_Urgency> Ticket_Urgencies { get; set; }
+        public DbSet<RequestType> RequestTypes { get; set; }
+
+
+        public HelpdeskDbContext(DbContextOptions<HelpdeskDbContext> options, IHttpContextAccessor httpContextAccessor)
 		   : base(options)
 		{
 			_httpContextAccessor = httpContextAccessor;
@@ -75,17 +81,31 @@ namespace ShineCoder_Helpdesk.Infrastructure
 			});
 
 			builder.Entity<Ticket_Status>().HasData(
-			new Ticket_Status { Id = 1, Name = "New", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now },
-			new Ticket_Status { Id = 2, Name = "Open", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now },
-			new Ticket_Status { Id = 3, Name = "Closed", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now },
-			new Ticket_Status { Id = 4, Name = "Resolved", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now },
-			new Ticket_Status { Id = 5, Name = "Assigned", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now });
+			new Ticket_Status { Id = 1, Name = "New",Description="New ticket", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now },
+			new Ticket_Status { Id = 2, Name = "Open", Description = "Open ticket", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now },
+			new Ticket_Status { Id = 3, Name = "Closed", Description = "Closed ticket", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now },
+			new Ticket_Status { Id = 4, Name = "Resolved", Description = "Resolved ticket", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now },
+			new Ticket_Status { Id = 5, Name = "Assigned", Description = "Assigned ticket", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now });
 			builder.Entity<Ticket_Priorities>().HasData(
-			new Ticket_Priorities { Id = 1, Name = "Low", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now },
-			new Ticket_Priorities { Id = 2, Name = "High", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now },
-			new Ticket_Priorities { Id = 3, Name = "Medium", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now });
+			new Ticket_Priorities { Id = 1, Name = "Low",Description = "Low priority ticket", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now },
+			new Ticket_Priorities { Id = 2, Name = "High", Description = "High priority ticket", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now },
+			new Ticket_Priorities { Id = 3, Name = "Medium", Description = "Medium priority ticket", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now },
+            new Ticket_Priorities { Id = 4, Name = "Normal", Description = "Normal priority ticket", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now });
 
-			builder.Entity<ApplicationRole>().HasData(
+            builder.Entity<Ticket_Urgency>().HasData(
+            new Ticket_Urgency { Id = 1, Name = "Low", Description = "Low Urgency", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now },
+			new Ticket_Urgency { Id = 2, Name = "High", Description = "High urgency", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now },
+			new Ticket_Urgency { Id = 3, Name = "Normal", Description = "Normal urgency", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now },
+            new Ticket_Urgency { Id = 4, Name = "Urgent", Description = "Urgent", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now });
+
+            builder.Entity<Ticket_Impact>().HasData(
+            new Ticket_Urgency { Id = 1, Name = "Low", Description = "Low impact ticket", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now },
+            new Ticket_Urgency { Id = 2, Name = "High", Description = "High impact ticket", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now },
+            new Ticket_Urgency { Id = 3, Name = "Normal", Description = "Normal impact ticket", CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now });
+         
+
+
+            builder.Entity<ApplicationRole>().HasData(
 			new ApplicationRole { Id = 1, RoleName = "Admin", Name = "admin", IsActive = true, IsAgent = false, IsClient = false },
 			new ApplicationRole { Id = 2, RoleName = "Client", Name = "Client", IsActive = true, IsAgent = false, IsClient = true },
 			new ApplicationRole { Id = 3, RoleName = "Agent", Name = "Agent", IsActive = true, IsAgent = true, IsClient = false });

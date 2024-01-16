@@ -182,7 +182,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
                             select new UserModel
                             {
                                 Id = x.Id,
-                                DIsplayName = x.FirstName,
+                                DisplayName = x.FirstName,
                                 Email = x.Email,
                                 PhoneNumber = x.PhoneNumber,
                                 RoleName = z.RoleName,

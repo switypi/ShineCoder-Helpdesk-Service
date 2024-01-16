@@ -47,7 +47,9 @@ namespace ShineCoder_Helpdesk.Repository
         private GenericRepository<Location> locationRepository;
         private GenericRepository<Department> departmentRepository;
         private GenericRepository<RequestType> requesttypeRepository;
-        //private GenericRepository<Ticket_Issues> courseRepository;
+        private GenericRepository<Product> productRepository;
+        private GenericRepository<Ticket_Impact> impactRepository;
+        private GenericRepository<Ticket_Urgency> urgencyRepository;
 
         public GenericRepository<Tickets> TicketRepository
         {
@@ -177,6 +179,43 @@ namespace ShineCoder_Helpdesk.Repository
                     this.ticketModeRepository = new GenericRepository<Ticket_Mode>(context);
                 }
                 return ticketModeRepository;
+            }
+        }
+
+        public GenericRepository<Product> ProductRepository
+        {
+            get
+            {
+
+                if (this.productRepository == null)
+                {
+                    this.productRepository = new GenericRepository<Product>(context);
+                }
+                return productRepository;
+            }
+        }
+        public GenericRepository<Ticket_Impact> ImpactRepository
+        {
+            get
+            {
+
+                if (this.impactRepository == null)
+                {
+                    this.impactRepository = new GenericRepository<Ticket_Impact>(context);
+                }
+                return impactRepository;
+            }
+        }
+        public GenericRepository<Ticket_Urgency> UrgencyRepository
+        {
+            get
+            {
+
+                if (this.urgencyRepository == null)
+                {
+                    this.urgencyRepository = new GenericRepository<Ticket_Urgency>(context);
+                }
+                return urgencyRepository;
             }
         }
 

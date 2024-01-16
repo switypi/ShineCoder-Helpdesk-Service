@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace ShineCoder_Helpdesk.Infrastructure.Models
 {
-    public  class Department:BaseEntity
+    public  class Ticket_Urgency:BaseEntity
     {
         public string Name { get; set; }
-
-       
         public string Description { get; set; }
 
         public bool IsDefault { get; set; }
