@@ -22,6 +22,8 @@ namespace ShineCoder_Helpdesk.Repository
         GenericRepository<Product> ProductRepository { get; }
         GenericRepository<Ticket_Impact> ImpactRepository { get; }
         GenericRepository<Ticket_Urgency> UrgencyRepository { get; }
+        GenericRepository<Ticket_Level> TicketLevelRepository { get; }
+        
 
 
         IDbContextTransaction GetDbTransaction { get; }

@@ -41,7 +41,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 
         [HttpGet]
         [Route("GetRequestTypes")]
-        public async Task<JObject> GetCategoriesAsync()
+        public async Task<JObject> GetRequestTypes()
         {
             try
             {
@@ -172,5 +172,72 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 			}
 
 		}
-	}
+
+        [HttpGet]
+        [Route("GetuserLocationAsync")]
+        public async Task<JObject> GetuserLocationAsync()
+        {
+            try
+            {
+                var data = await _unitOfWork.LocationRepository.GetAsync(x => x.Active == true);
+                return _responseBuilder.Success(data.ToJArray());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return _responseBuilder.BadRequest(ex.Message);
+            }
+
+        }
+        [HttpGet]
+        [Route("GetTicketLevelAsync")]
+        public async Task<JObject> GetTicketLevelAsync()
+        {
+            try
+            {
+                var data = await _unitOfWork.TicketLevelRepository.GetAsync(x => x.Active == true);
+                return _responseBuilder.Success(data.ToJArray());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return _responseBuilder.BadRequest(ex.Message);
+            }
+
+        }
+
+        [HttpGet]
+        [Route("GetCategoriesAsync")]
+        public async Task<JObject> GetCategoriesAsync()
+        {
+            try
+            {
+                var categoryData = await _unitOfWork.CategorysRepository.GetAsync(x => x.Active == true);
+                return _responseBuilder.Success(categoryData.ToJArray());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return _responseBuilder.BadRequest(ex.Message);
+            }
+
+        }
+
+        [HttpGet]
+        [Route("GetDepartmentsAsync")]
+        public async Task<JObject> GetDepartmentsAsync()
+        {
+            try
+            {
+                var categoryData = await _unitOfWork.DepartmentRepository.GetAsync(x => x.Active == true);
+                return _responseBuilder.Success(categoryData.ToJArray());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return _responseBuilder.BadRequest(ex.Message);
+            }
+
+        }
+    }
 }

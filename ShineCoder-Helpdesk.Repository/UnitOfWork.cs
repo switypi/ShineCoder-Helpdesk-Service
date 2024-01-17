@@ -50,7 +50,7 @@ namespace ShineCoder_Helpdesk.Repository
         private GenericRepository<Product> productRepository;
         private GenericRepository<Ticket_Impact> impactRepository;
         private GenericRepository<Ticket_Urgency> urgencyRepository;
-
+        private GenericRepository<Ticket_Level> ticketLevelRepository 
         public GenericRepository<Tickets> TicketRepository
         {
             get
@@ -216,6 +216,19 @@ namespace ShineCoder_Helpdesk.Repository
                     this.urgencyRepository = new GenericRepository<Ticket_Urgency>(context);
                 }
                 return urgencyRepository;
+            }
+        }
+
+        public GenericRepository<Ticket_Level> TicketLevelRepository
+        {
+            get
+            {
+
+                if (this.ticketLevelRepository == null)
+                {
+                    this.ticketLevelRepository = new GenericRepository<Ticket_Level>(context);
+                }
+                return ticketLevelRepository;
             }
         }
 
