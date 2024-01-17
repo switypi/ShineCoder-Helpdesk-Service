@@ -110,7 +110,7 @@ namespace ShineCoder_Helpdesk.Infrastructure
 
             builder.Entity<RequestType>().HasData(new RequestType { Active = true, Id = 1, IsDefault = true, Description = "Service requests", Name = "Service request" });
             builder.Entity<Ticket_Mode>().HasData(
-                new RequestType { Active = true, Id = 1, IsDefault = true, Description = "Website", Name = "WebSite" },
+                new Ticket_Mode { Active = true, Id = 1, IsDefault = true, Description = "Website", Name = "WebSite" },
                 new Ticket_Mode { Active = true, Id = 2, Name = "Email", Description = "Email", IsDefault = true },
                 new Ticket_Mode { Active = true, Id = 3, Name = "Phone", Description = "Phone", IsDefault = true }
             );
@@ -124,11 +124,11 @@ namespace ShineCoder_Helpdesk.Infrastructure
                 new Location
                 {
                     Active = true,
-                    Id = 1,
+                    Id = 2,
                     IsDefault = true,
-                    Description = "Koramangala",
-                    Name = "Koramangala"
-                });
+                    Description = "Bansawadi",
+                    Name = "Bansawadi"
+				});
 
 
             builder.Entity<ApplicationRole>().HasData(

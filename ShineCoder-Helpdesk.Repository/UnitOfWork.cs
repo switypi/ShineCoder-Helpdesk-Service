@@ -50,7 +50,7 @@ namespace ShineCoder_Helpdesk.Repository
         private GenericRepository<Product> productRepository;
         private GenericRepository<Ticket_Impact> impactRepository;
         private GenericRepository<Ticket_Urgency> urgencyRepository;
-        private GenericRepository<Ticket_Level> ticketLevelRepository 
+        private GenericRepository<Ticket_Level> ticketLevelRepository; 
         public GenericRepository<Tickets> TicketRepository
         {
             get
