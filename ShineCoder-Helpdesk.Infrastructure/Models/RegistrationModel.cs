@@ -19,6 +19,8 @@ namespace ShineCoder_Helpdesk.Infrastructure.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
+        public Int32? DepartmentId { get; set; }
+
         [EmailAddress]
         [Required(ErrorMessage = "Email is required")]
         public string Email { get; set; }

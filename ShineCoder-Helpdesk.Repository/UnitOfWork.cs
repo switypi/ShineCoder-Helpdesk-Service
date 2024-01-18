@@ -50,8 +50,23 @@ namespace ShineCoder_Helpdesk.Repository
         private GenericRepository<Product> productRepository;
         private GenericRepository<Ticket_Impact> impactRepository;
         private GenericRepository<Ticket_Urgency> urgencyRepository;
-        private GenericRepository<Ticket_Level> ticketLevelRepository; 
-        public GenericRepository<Tickets> TicketRepository
+        private GenericRepository<Ticket_Level> ticketLevelRepository;
+        private GenericRepository<Ticket_Attachments> ticketAttachmentRepository;
+
+		public GenericRepository<Ticket_Attachments> TicketAttachmentRepository
+		{
+			get
+			{
+
+				if (this.ticketAttachmentRepository == null)
+				{
+					this.ticketAttachmentRepository = new GenericRepository<Ticket_Attachments>(context);
+				}
+				return ticketAttachmentRepository;
+			}
+		}
+
+		public GenericRepository<Tickets> TicketRepository
         {
             get
             {

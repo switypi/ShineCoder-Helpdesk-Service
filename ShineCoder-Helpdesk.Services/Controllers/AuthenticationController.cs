@@ -169,13 +169,18 @@ namespace ShineCoder_Helpdesk.Services.Controllers
         [Route("GetRequestors")]
         public async Task<JObject> GetRequestors()
         {
+           
             try
             {
-                List<UserModel> result = null;
+				var  userType= _httpContextProxy.GetQueryString("_userType");
+                var departmentId= int.Parse(_httpContextProxy.GetQueryString("_departmentId"));
+				List<UserModel> result = null;
                 var db = _unitOfWork.GetDbContext as HelpdeskDbContext;
                 var userRoles = db.UserRoles;
 
-                var data = (from x in db.Users.Where(x => x.UserType == Infrastructure.Enums.UserTypeEnum.CLIENT)
+                var data = (from x in db.Users
+                            .Where(x => userType=="CLIENT"? x.UserType == Infrastructure.Enums.UserTypeEnum.CLIENT: x.UserType == Infrastructure.Enums.UserTypeEnum.AGENT)
+                            .Where(v=> departmentId>0?v.DepartmentId==departmentId:true)
                             join y in userRoles on x.Id equals y.UserId
                             join z in db.Roles on y.RoleId equals z.Id
 

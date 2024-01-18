@@ -23,10 +23,11 @@ namespace ShineCoder_Helpdesk.Repository
         GenericRepository<Ticket_Impact> ImpactRepository { get; }
         GenericRepository<Ticket_Urgency> UrgencyRepository { get; }
         GenericRepository<Ticket_Level> TicketLevelRepository { get; }
-        
+		GenericRepository<Ticket_Attachments> TicketAttachmentRepository { get; }
 
 
-        IDbContextTransaction GetDbTransaction { get; }
+
+		IDbContextTransaction GetDbTransaction { get; }
         IHelpdeskDbContext GetDbContext { get; }
 
         void Dispose();

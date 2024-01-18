@@ -16,7 +16,13 @@ namespace ShineCoder_Helpdesk.Infrastructure
          DbSet<Location> Locations { get; set; }
 
          DbSet<RequestType> RequestTypes { get; set; }
+		 DbSet<Ticket_Level> Ticket_Levels { get; set; }
 
-       
+		 DbSet<Product> Products { get; set; }
+
+		 DbSet<Ticket_Impact> Ticket_Impacts { get; set; }
+		 DbSet<Ticket_Urgency> Ticket_Urgencies { get; set; }
+
+
 	}
 }

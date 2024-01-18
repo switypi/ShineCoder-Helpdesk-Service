@@ -59,11 +59,15 @@ namespace ShineCoder_Helpdesk.Infrastructure.Models
 		public Int32 Ticket_ModeId { get; set; }
 		public Ticket_Mode Ticket_Mode { get; set; }
 
+		[ForeignKey(nameof(Ticket_Level))]
+		public Int32 TicketLevelId { get; set; }
+		public Ticket_Level Ticket_Level { get; set; }
 
+		[ForeignKey(nameof(Ticket_Urgency))]
+		public Int32 TicketUrgencyId { get; set; }
+		public Ticket_Urgency Ticket_Urgency { get; set; }
 
-        
+		public IList<Ticket_Attachments> Ticket_Attachments { get; set;}
 
-
-
-    }
+	}
 }

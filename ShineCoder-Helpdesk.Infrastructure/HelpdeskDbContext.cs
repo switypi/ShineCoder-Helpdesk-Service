@@ -119,7 +119,12 @@ namespace ShineCoder_Helpdesk.Infrastructure
                 new Ticket_Level { Active = true, Id = 2, IsDefault = true, Description = "P2 level", Name = "P2" },
                 new Ticket_Level { Active = true, Id = 3, IsDefault = true, Description = "P3 level", Name = "P3" });
 
-            builder.Entity<Location>().HasData(
+			builder.Entity<Department>().HasData(
+			   new Department { Active = true, Id = 1, IsDefault = true, Description = "Technology ", Name = "Technology" },
+			   new Department { Active = true, Id = 2, IsDefault = true, Description = "Hardware", Name = "Hardware" },
+			   new Department { Active = true, Id = 3, IsDefault = true, Description = "Software", Name = "Software" });
+
+			builder.Entity<Location>().HasData(
                 new Location { Active = true, Id = 1, IsDefault = true, Description = "Koramangala", Name = "Koramangala" },
                 new Location
                 {

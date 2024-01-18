@@ -55,7 +55,8 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 					TwoFactorEnabled = false,
 					LockoutEnabled = false,
 					AccessFailedCount = 0,
-					UserType = Infrastructure.Enums.UserTypeEnum.CLIENT
+					UserType = Infrastructure.Enums.UserTypeEnum.CLIENT,
+					DepartmentId=model.DepartmentId,
 
 				};
 				ApplicationRole rolee = new ApplicationRole();
