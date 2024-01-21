@@ -84,6 +84,7 @@ namespace ShineCoder_Helpdesk.Infrastructure
                 entity.ToTable("UserTokens", "Identity");
             });
 
+            builder.Entity<Tickets>(entity => { entity.Property(c => c.Tkt_Number).HasComputedColumnSql("('SC-'+right(replicate('0',(5))+CONVERT([varchar],[Id]),(5)))"); });
 
             builder.Entity<Ticket_Status>().HasData(
             new Ticket_Status { Id = 1, Name = "New", Description = "New ticket", Active = true, CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now },

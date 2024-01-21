@@ -16,6 +16,7 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 			CreateMap<CategoryModel,Category>().ForMember(x => x.Name, y => y.MapFrom(x => x.Name));
 				
 			CreateMap<Tickets, TicketsModel>();
-		}
+            CreateMap<TicketsModel,Tickets>();
+        }
     }
 }

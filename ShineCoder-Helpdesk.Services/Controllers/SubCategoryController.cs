@@ -17,7 +17,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 	[Produces("application/json")]
 	[Route("api/v{version:apiVersion}" + ShineCoder_HelpDeskConstants.SUBCATEGORY_SERVICE_API_PREFIX)]
 	[ApiVersion(ShineCoder_HelpDeskConstants.SHINECODERLMS_VERSION)]
-	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+	//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 	public class SubCategoryController : ControllerBase
 	{
 		private readonly IHttpContextProxy _httpContextProxy;
@@ -44,7 +44,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 		{
 			try
 			{
-				var id = int.Parse(_httpContextProxy.GetQueryString("CategoryId"));
+				var id = int.Parse(_httpContextProxy.GetQueryString("_categoryId"));
 				var subCategoryData = await _unitOfWork.SubCategorysRepository.GetAsync(x => x.CategoryId == id && x.Active == true);
 				return _responseBuilder.Success(subCategoryData.ToJArray());
 			}

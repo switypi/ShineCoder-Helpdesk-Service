@@ -10,6 +10,8 @@ namespace ShineCoder_Helpdesk.Infrastructure.Models
     public class Tickets : BaseEntity
     {
         public string Tkt_Desc { get; set; }
+
+		[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public string Tkt_Number { get; set; }
 
         public string Tkt_Subject { get; set; }
@@ -63,11 +65,16 @@ namespace ShineCoder_Helpdesk.Infrastructure.Models
 		public Int32 TicketLevelId { get; set; }
 		public Ticket_Level Ticket_Level { get; set; }
 
-		[ForeignKey(nameof(Ticket_Urgency))]
-		public Int32 TicketUrgencyId { get; set; }
-		public Ticket_Urgency Ticket_Urgency { get; set; }
+		//[ForeignKey(nameof(Ticket_Urgency))]
+		//public Int32 TicketUrgencyId { get; set; }
+		//public Ticket_Urgency Ticket_Urgency { get; set; }
 
-		public IList<Ticket_Attachments> Ticket_Attachments { get; set;}
+        [ForeignKey(nameof(Ticket_Impact))]
+        public Int32 Tkt_ImpactId { get; set; }
+        public Ticket_Impact Ticket_Impact { get; set; }
+
+
+        public IList<Ticket_Attachments> Ticket_Attachments { get; set;}
 
 	}
 }
