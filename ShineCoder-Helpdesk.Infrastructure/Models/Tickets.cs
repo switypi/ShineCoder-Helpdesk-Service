@@ -11,7 +11,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Models
     {
         public string Tkt_Desc { get; set; }
 
-		[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+		
         public string Tkt_Number { get; set; }
 
         public string Tkt_Subject { get; set; }

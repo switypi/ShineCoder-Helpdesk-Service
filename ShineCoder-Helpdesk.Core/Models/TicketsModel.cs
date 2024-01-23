@@ -32,18 +32,20 @@ namespace ShineCoder_Helpdesk.Core.Models
         public Int32? Tkt_DepartmentId { get; set; }
         [Required(ErrorMessage = "Category is required.")]
         public Int32? Tkt_CategoryId { get; set; }
-
+		[Required(ErrorMessage = "Sub-Category is required.")]
 		public Int32? Tkt_SubCategoryId { get; set; }
-
+		[Required(ErrorMessage = "Request type is required.")]
 		public Int32? Tkt_RequestTypeId { get; set; }
 		[Required(ErrorMessage = "Ticket mode is required.")]
 		public Int32? Ticket_ModeId { get; set; }
+
         public Int32? TicketLevelId { get; set; }
         
         public Int32? TicketUrgencyId { get; set; }
+		[Required(ErrorMessage = "Imapct is required.")]
 
-        public Int32? Tkt_ImpactId { get; set; }
-        [Required(ErrorMessage = "Attachment is required.")]
+		public Int32? Tkt_ImpactId { get; set; }
+       
 
 		public string Tkt_Requester { get; set; }
 		public string Tkt_AssignedUser { get; set; }
@@ -57,7 +59,10 @@ namespace ShineCoder_Helpdesk.Core.Models
         public string Tkt_Priority { get; set; }
         public string Tkt_Mode { get; set; }
         public string Tkt_location { get; set; }
+        public DateTime Tkt_CreatedDate { get; set; }
+        public string Tkt_Status { get; set; }
 
-        public IList<Ticket_Attachments> Ticket_Attachments { get; set; }
+		
+		public IList<Ticket_Attachments> Ticket_Attachments { get; set; }
     }
 }
