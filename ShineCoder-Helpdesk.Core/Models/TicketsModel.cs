@@ -11,6 +11,7 @@ namespace ShineCoder_Helpdesk.Core.Models
 {
 	public class TicketsModel
 	{
+		public Int32 Id { get; set; }
         public string Tkt_Number { get; set; }
         [Required(ErrorMessage = "Ticket description is required.")]
 		public string Tkt_Desc { get; set; }
@@ -18,7 +19,9 @@ namespace ShineCoder_Helpdesk.Core.Models
 		public string Tkt_Subject { get; set; }
 		[Required(ErrorMessage = "Ticket requestor is required.")]
 		public Int32 Tkt_RequestUserId { get; set; }
-		public DateTime? Tkt_DueDate { get; set; }
+
+        public Int32? Tkt_AssignedUserId { get; set; }
+        public DateTime? Tkt_DueDate { get; set; }
 		[Required(ErrorMessage = "Ticket status is required.")]
 		public Int32 TicketStatusId { get; set; }
 		[Required(ErrorMessage = "Ticket priority is required.")]
@@ -41,6 +44,20 @@ namespace ShineCoder_Helpdesk.Core.Models
 
         public Int32? Tkt_ImpactId { get; set; }
         [Required(ErrorMessage = "Attachment is required.")]
+
+		public string Tkt_Requester { get; set; }
+		public string Tkt_AssignedUser { get; set; }
+
+        public string Tkt_Department { get; set; }
+        public string Tkt_RequestType { get; set; }
+        public string Tkt_Category { get; set; }
+        public string Tkt_Subcategory    { get; set; }
+        public string Tkt_Level { get; set; }
+        public string Tkt_Imapct { get; set; }
+        public string Tkt_Priority { get; set; }
+        public string Tkt_Mode { get; set; }
+        public string Tkt_location { get; set; }
+
         public IList<Ticket_Attachments> Ticket_Attachments { get; set; }
     }
 }
