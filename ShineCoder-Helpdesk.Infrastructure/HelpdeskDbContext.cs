@@ -35,7 +35,8 @@ namespace ShineCoder_Helpdesk.Infrastructure
 		public DbSet<Ticket_Impact> Ticket_Impacts { get; set; }
 		public DbSet<Ticket_Urgency> Ticket_Urgencies { get; set; }
 		public DbSet<RequestType> RequestTypes { get; set; }
-
+		public DbSet<Ticket_Attachments> Attachments { get; set; }
+		
 
 		public HelpdeskDbContext(DbContextOptions<HelpdeskDbContext> options, IHttpContextAccessor httpContextAccessor)
 		   : base(options)

@@ -304,6 +304,23 @@ namespace ShineCoder_Helpdesk.Services.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("GetImage")]
+        public async Task<JObject> GetImage()
+        {
+            try
+            {
+                var id = int.Parse(_httpContextProxy.GetQueryString("Id"));
+                var ticketData = await _unitOfWork.TicketAttachmentRepository.GetAsync(x => x.Active == true && x.Id ==id);
+                return _responseBuilder.Success( ticketData.FirstOrDefault().ImageBytes);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return _responseBuilder.BadRequest(ex.Message);
+            }
+        }
+
         private List<TicketsModel> GetTicketDetails(Int32? Tkt_Id = null)
         {
             try
@@ -318,59 +335,66 @@ namespace ShineCoder_Helpdesk.Services.Controllers
                     tksQuery = db.Tickets.Where(x => x.Active == true);
 
 
-                var data = from x in tksQuery
-                           join y in db.Categories on x.Tkt_CategoryId equals y.Id
-                           join y1 in db.SubCategories on x.Tkt_CategoryId equals y1.Id
-                           join z in db.Ticket_Status on x.TicketStatusId equals z.Id
-                           join v in db.Departments on x.Tkt_DepartmentId equals v.Id
-                           join w in db.Locations on x.Tkt_LocationId equals w.Id
-                           join q in db.Ticket_Impacts on x.Tkt_ImpactId equals q.Id
-                           join r in db.Ticket_Priorities on x.TicketPriorityId equals r.Id
-                           join s in db.RequestTypes on x.Tkt_RequestTypeId equals s.Id
-                           join t in db.Ticket_Modes on x.Ticket_ModeId equals t.Id
-                           join u in db.Ticket_Levels on x.TicketLevelId equals u.Id
-                           join o in db.Users on x.Tkt_RequestUserId equals o.Id
-                           from p in db.Users.Where(m => m.Id == x.Tkt_AssignedUserId).DefaultIfEmpty()
+                var data = (from x in tksQuery
+                            join y in db.Categories on x.Tkt_CategoryId equals y.Id
+                            join y1 in db.SubCategories on x.Tkt_SubCategoryId equals y1.Id
+                            join z in db.Ticket_Status on x.TicketStatusId equals z.Id
+                            join v in db.Departments on x.Tkt_DepartmentId equals v.Id
+                            join w in db.Locations on x.Tkt_LocationId equals w.Id
+                            join q in db.Ticket_Impacts on x.Tkt_ImpactId equals q.Id
+                            join r in db.Ticket_Priorities on x.TicketPriorityId equals r.Id
+                            join s in db.RequestTypes on x.Tkt_RequestTypeId equals s.Id
+                            join t in db.Ticket_Modes on x.Ticket_ModeId equals t.Id
+                            join u in db.Ticket_Levels on x.TicketLevelId equals u.Id
+                            join o in db.Users on x.Tkt_RequestUserId equals o.Id
+                            from p in db.Users.Where(m => m.Id == x.Tkt_AssignedUserId).DefaultIfEmpty()
+                                // from ta in db.Attachments.Where(cv=>cv.TicketId==x.Id).DefaultIfEmpty()
 
-                           select new TicketsModel
-                           {
-                               Id = x.Id,
-                               TicketLevelId = x.TicketLevelId,
-                               TicketPriorityId = x.TicketPriorityId,
-                               TicketStatusId = x.TicketStatusId,
-                               Ticket_ModeId = x.Ticket_ModeId,
-                               Tkt_CategoryId = x.Tkt_CategoryId,
-                               Tkt_DepartmentId = x.Tkt_DepartmentId,
-                               Tkt_Desc = x.Tkt_Desc,
-                               Tkt_ImpactId = x.Tkt_ImpactId,
-                               Tkt_DueDate = x.Tkt_DueDate,
-                               Tkt_LocationId = x.Tkt_LocationId,
-                               Tkt_Number = x.Tkt_Number,
-                               Tkt_RequestTypeId = x.Tkt_RequestTypeId,
-                               Tkt_RequestUserId = o.Id,
-                               Tkt_AssignedUserId = p.Id,
-                               Tkt_SubCategoryId = x.Tkt_SubCategoryId,
+                            select new TicketsModel
+                            {
+                                Id = x.Id,
+                                TicketLevelId = x.TicketLevelId,
+                                TicketPriorityId = x.TicketPriorityId,
+                                TicketStatusId = x.TicketStatusId,
+                                Ticket_ModeId = x.Ticket_ModeId,
+                                Tkt_CategoryId = x.Tkt_CategoryId,
+                                Tkt_DepartmentId = x.Tkt_DepartmentId,
+                                Tkt_Desc = x.Tkt_Desc,
+                                Tkt_ImpactId = x.Tkt_ImpactId,
+                                Tkt_DueDate = x.Tkt_DueDate,
+                                Tkt_LocationId = x.Tkt_LocationId,
+                                Tkt_Number = x.Tkt_Number,
+                                Tkt_RequestTypeId = x.Tkt_RequestTypeId,
+                                Tkt_RequestUserId = x.Tkt_RequestUserId.Value,
+                                Tkt_AssignedUserId =x.Tkt_AssignedUserId,
+                                Tkt_SubCategoryId = x.Tkt_SubCategoryId,
 
-                               Tkt_RequestType = s.Name,
-                               Tkt_Priority = r.Name,
-                               Tkt_Department = v.Name,
-                               Tkt_Category = y.Name,
-                               Tkt_Imapct = q.Name,
-                               Tkt_Level = u.Name,
-                               Tkt_Mode = t.Name,
-                               Tkt_Requester = o.FirstName + o.LastName,
-                               Tkt_Subcategory = y1.Name,
-                               Tkt_Subject = u.Name,
-                               Tkt_AssignedUser = p == null ? null : p.FirstName + p.LastName,
-                               Tkt_location = w.Name,
-                               Tkt_CreatedDate = x.CreatedDate.Value,
-                               Tkt_Status = z.Name,
+                                Tkt_RequestType = s.Name,
+                                Tkt_Priority = r.Name,
+                                Tkt_Department = v.Name,
+                                Tkt_Category = y.Name,
+                                Tkt_Imapct = q.Name,
+                                Tkt_Level = u.Name,
+                                Tkt_Mode = t.Name,
+                                Tkt_Requester = o.FirstName + o.LastName,
+                                Tkt_Subcategory = y1.Name,
+                                Tkt_Subject = u.Name,
+                                Tkt_AssignedUser = p == null ? null : p.FirstName + p.LastName,
+                                Tkt_location = w.Name,
+                                Tkt_CreatedDate = x.CreatedDate.Value,
+                                Tkt_Status = z.Name,
+                                //Ticket_Attachments = ,//  new List<Ticket_Attachments> { new Ticket_Attachments { Id = 1, Name = "1" } },
 
 
 
-                           };
-              
+                            }).ToList();
 
+                var atch = (from x in db.Attachments.AsEnumerable()
+                            join y in data on x.TicketId equals y.Id
+
+                            select new Ticket_Attachments { Id = x.Id, TicketId = x.TicketId, Name = x.Name }).ToList();
+
+                data.ForEach(x => { x.Ticket_Attachments = atch.Where(c => c.TicketId == x.Id).ToList(); });
 
                 return data.ToList();
 
