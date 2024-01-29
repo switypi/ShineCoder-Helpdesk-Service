@@ -389,7 +389,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 
                             }).ToList();
 
-                var atch = (from x in db.Attachments.AsEnumerable()
+                var atch = (from x in db.Ticket_Attachments.AsEnumerable()
                             join y in data on x.TicketId equals y.Id
 
                             select new Ticket_Attachments { Id = x.Id, TicketId = x.TicketId, Name = x.Name }).ToList();
