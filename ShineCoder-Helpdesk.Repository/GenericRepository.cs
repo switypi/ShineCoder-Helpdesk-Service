@@ -68,7 +68,8 @@ namespace ShineCoder_Helpdesk.Repository
 			{
 				dbSet.Attach(entityToDelete);
 			}
-			dbSet.Remove(entityToDelete);
+			context.Entry(entityToDelete).State = EntityState.Deleted;
+			//dbSet.Remove(entityToDelete);
 		}
 
 		public async virtual void UpdateAsync(TEntity entityToUpdate)

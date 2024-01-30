@@ -34,6 +34,41 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 			_mapper = mapper;
 		}
 
-		
+		[HttpDelete]
+		[Route("DeleteAttachment")]
+		public async Task<JObject> DeleteAttachment()
+		{
+			IDbContextTransaction trans = null;
+			using (trans = _unitOfWork.GetDbTransaction)
+			{
+				try
+				{
+					
+					var attachmentId = int.Parse(_httpContextProxy.GetQueryString("_id"));
+					//var attachment = _unitOfWork.TicketAttachmentRepository.GetAsync(x => x.Id == attachmentId).Result.FirstOrDefault();
+					if (attachmentId != null || attachmentId > 0)
+					{
+						_unitOfWork.TicketAttachmentRepository.DeleteAsync(attachmentId);
+						await _unitOfWork.SaveAsync();
+						await trans.CommitAsync();
+						return _responseBuilder.Success("Tickets updated.");
+					}
+					else
+					{
+						return _responseBuilder.Success($"Could not delete attachment with Id = {attachmentId}");
+					}
+
+
+				}
+				catch (Exception ex)
+				{
+					await trans.RollbackAsync();
+					_logger.LogError(ex.Message);
+					return _responseBuilder.BadRequest(ex.Message);
+				}
+			}
+		}
+
+
 	}
 }

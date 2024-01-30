@@ -15,7 +15,11 @@ namespace ShineCoder_Helpdesk.Core.Enums
 		Open=2,
 		Closed=3,
 		Resolved=4,
-		Assigned=5
+		Assigned=5,
+		OverDue=6,
+		DueToday=7,
+		UnAssigned=8,
+		Pending=9
 
 	}
 
