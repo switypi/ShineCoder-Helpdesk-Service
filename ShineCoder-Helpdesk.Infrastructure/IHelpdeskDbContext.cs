@@ -22,7 +22,8 @@ namespace ShineCoder_Helpdesk.Infrastructure
 
 		 DbSet<Ticket_Impact> Ticket_Impacts { get; set; }
 		 DbSet<Ticket_Urgency> Ticket_Urgencies { get; set; }
+        DbSet<Ticket_Attachments> Ticket_Attachments { get; set; }
 
 
-	}
+    }
 }
