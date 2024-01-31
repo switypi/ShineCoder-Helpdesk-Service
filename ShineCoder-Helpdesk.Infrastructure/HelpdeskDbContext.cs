@@ -91,8 +91,8 @@ namespace ShineCoder_Helpdesk.Infrastructure
 			new Ticket_Status { Id = 1, Name = "New", Description = "New ticket", Active = true, CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now },
 			new Ticket_Status { Id = 2, Name = "Open", Description = "Open ticket", Active = true, CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now },
 			new Ticket_Status { Id = 3, Name = "Closed", Description = "Closed ticket", Active = true, CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now },
-			new Ticket_Status { Id = 4, Name = "Resolved", Description = "Resolved ticket", Active = true, CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now },
-			new Ticket_Status { Id = 5, Name = "Assigned", Description = "Assigned ticket", Active = true, CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now });
+			new Ticket_Status { Id = 4, Name = "Resolved", Description = "Resolved ticket", Active = true, CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now });
+			//new Ticket_Status { Id = 5, Name = "Assigned", Description = "Assigned ticket", Active = true, CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now });
 			builder.Entity<Ticket_Priorities>().HasData(
 			new Ticket_Priorities { Id = 1, Name = "Low", Description = "Low priority ticket", Active = true, CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now },
 			new Ticket_Priorities { Id = 2, Name = "High", Description = "High priority ticket", Active = true, CreatedBy = "admin", UpdatedBy = "", CreatedDate = DateTime.Now },

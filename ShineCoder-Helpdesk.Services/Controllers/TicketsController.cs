@@ -349,6 +349,48 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 			}
 		}
 
+		[HttpPost]
+		[Route("AssignTicket")]
+		public  async Task<JObject> AssignTicket()
+		{
+			IDbContextTransaction trans = null;
+			using (trans = _unitOfWork.GetDbTransaction)
+			{
+				try
+				{
+					var inputModel = _httpContextProxy.GetRequestBody<TicketsModel>();
+					var listOfErrors = _customerValidator.Validate(inputModel);
+					if (listOfErrors.Count() > 0)
+					{
+						return _responseBuilder.BadRequest(listOfErrors.ToJArray());
+
+					};
+					var tickets = _unitOfWork.TicketRepository.GetAsync(x => x.Id == inputModel.Id).Result.FirstOrDefault();
+
+					if (tickets != null)
+					{
+						
+						tickets.TicketStatusId =(int) TicketStatusEnum.Open;
+						tickets.Tkt_AssignedUserId = inputModel.Tkt_AssignedUserId;
+					
+						_unitOfWork.TicketRepository.UpdateAsync(tickets);
+						await _unitOfWork.SaveAsync();
+						await trans.CommitAsync();
+					}
+
+					return _responseBuilder.Success("Tickets updated.");
+				}
+				catch (Exception ex)
+				{
+					await trans.RollbackAsync();
+					_logger.LogError(ex.Message);
+					return _responseBuilder.BadRequest(ex.Message);
+				}
+			}
+		}
+
+
+
 		private List<TicketsModel> GetTicketDetails(Int32? Tkt_Id = null, string status = null)
 		{
 			try
@@ -361,24 +403,18 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 					tksQuery = db.Tickets.Where(x => x.Active == true && x.Id == Tkt_Id);
 				else
 				{
-					if (status == Enum.GetName(typeof(TicketStatusEnum), TicketStatusEnum.Open))
-						tksQuery = db.Tickets.Where(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.Open);
-					else if (status == Enum.GetName(typeof(TicketStatusEnum), TicketStatusEnum.New))
+					if (status == Enum.GetName(typeof(TicketStatusEnum), TicketStatusEnum.New))
 						tksQuery = db.Tickets.Where(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.New);
 					else if (status == Enum.GetName(typeof(TicketStatusEnum), TicketStatusEnum.Assigned))
-						tksQuery = db.Tickets.Where(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.Assigned);
+						tksQuery = db.Tickets.Where(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.Open );
 					else if (status == Enum.GetName(typeof(TicketStatusEnum), TicketStatusEnum.Resolved))
 						tksQuery = db.Tickets.Where(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.Resolved);
 					else if (status == Enum.GetName(typeof(TicketStatusEnum), TicketStatusEnum.Closed))
 						tksQuery = db.Tickets.Where(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.Closed);
 					else if (status == Enum.GetName(typeof(TicketStatusEnum), TicketStatusEnum.OverDue))
-						tksQuery = db.Tickets.Where(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.New && x.Tkt_DueDate > DateTime.Today);
+						tksQuery = db.Tickets.Where(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.Open && x.Tkt_DueDate < DateTime.Today);
 					else if (status == Enum.GetName(typeof(TicketStatusEnum), TicketStatusEnum.DueToday))
-						tksQuery = db.Tickets.Where(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.New && x.Tkt_DueDate== DateTime.Today);
-					else if (status == Enum.GetName(typeof(TicketStatusEnum), TicketStatusEnum.UnAssigned))
-						tksQuery = db.Tickets.Where(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.New && x.Tkt_AssignedUserId==null);
-					else if (status == Enum.GetName(typeof(TicketStatusEnum), TicketStatusEnum.Pending))
-						tksQuery = db.Tickets.Where(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.Open && x.Tkt_AssignedUserId != null);
+						tksQuery = db.Tickets.Where(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.Open && x.Tkt_DueDate== DateTime.Today);
 					else 
 						tksQuery = db.Tickets.Where(x => x.Active == true);
 				}
