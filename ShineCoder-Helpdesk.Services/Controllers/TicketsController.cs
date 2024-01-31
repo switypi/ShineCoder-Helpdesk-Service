@@ -407,8 +407,8 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 						tksQuery = db.Tickets.Where(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.New);
 					else if (status == Enum.GetName(typeof(TicketStatusEnum), TicketStatusEnum.Assigned))
 						tksQuery = db.Tickets.Where(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.Open );
-					else if (status == Enum.GetName(typeof(TicketStatusEnum), TicketStatusEnum.Resolved))
-						tksQuery = db.Tickets.Where(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.Resolved);
+					else if (status == Enum.GetName(typeof(TicketStatusEnum), TicketStatusEnum.Pending))
+						tksQuery = db.Tickets.Where(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.Open);
 					else if (status == Enum.GetName(typeof(TicketStatusEnum), TicketStatusEnum.Closed))
 						tksQuery = db.Tickets.Where(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.Closed);
 					else if (status == Enum.GetName(typeof(TicketStatusEnum), TicketStatusEnum.OverDue))
