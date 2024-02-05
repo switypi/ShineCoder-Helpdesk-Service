@@ -56,6 +56,23 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 
 		}
 		[HttpGet]
+		[Route("GetSubCategories")]
+		public async Task<JObject> GetSubCategories()
+		{
+			try
+			{
+				
+				var subCategoryData = await _unitOfWork.SubCategorysRepository.GetAsync();
+				return _responseBuilder.Success(subCategoryData.ToJArray());
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex.Message);
+				return _responseBuilder.BadRequest(ex.Message);
+			}
+
+		}
+		[HttpGet]
 		[Route("CreateSubCategoryAsync")]
 		public async Task<JObject> CreateSubCategoryAsync()
 		{
