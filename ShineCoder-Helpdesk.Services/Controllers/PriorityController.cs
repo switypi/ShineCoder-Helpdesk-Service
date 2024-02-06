@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using AutoMapper;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -16,10 +13,9 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 {
 	[ApiController]
 	[Produces("application/json")]
-	[Route("api/v{version:apiVersion}" + ShineCoder_HelpDeskConstants.CATEGORY_SERVICE_API_PREFIX)]
+	[Route("api/v{version:apiVersion}" + ShineCoder_HelpDeskConstants.PRIORITY_SERVICE_API_PREFIX)]
 	[ApiVersion(ShineCoder_HelpDeskConstants.SHINECODERLMS_VERSION)]
-	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-	public class CategoryController : ControllerBase
+	public class PriorityController : ControllerBase
 	{
 		private readonly IHttpContextProxy _httpContextProxy;
 		private readonly IUnitOfWork _unitOfWork;
@@ -27,8 +23,8 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 		private readonly ILogger _logger;
 		private readonly IValidator _customerValidator;
 		private readonly IMapper _mapper;
-		public CategoryController(IHttpContextProxy httpContextProxy, IUnitOfWork unitOfWork, IResponseBuilder responseBuilder,
-			ILogger<CategoryController> logger, IValidator customerValidator, IMapper mapper)
+		public PriorityController(IHttpContextProxy httpContextProxy, IUnitOfWork unitOfWork, IResponseBuilder responseBuilder,
+			ILogger<PriorityController> logger, IValidator customerValidator, IMapper mapper)
 		{
 			_httpContextProxy = httpContextProxy;
 			_unitOfWork = unitOfWork;
@@ -39,13 +35,13 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 		}
 
 		[HttpGet]
-		[Route("GetCategories")]
-		public async  Task<JObject> GetCategoriesAsyn()
+		[Route("GetPrioritiesAsync")]
+		public async Task<JObject> GetPrioritiesAsync()
 		{
 			try
 			{
-				var categoryData =await _unitOfWork.CategorysRepository.GetAsync(x => x.Active == true);
-				return _responseBuilder.Success(categoryData.ToJArray());
+				var data = await _unitOfWork.CategorysRepository.GetAsync();
+				return _responseBuilder.Success(data.ToJArray());
 			}
 			catch (Exception ex)
 			{
@@ -56,14 +52,14 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 		}
 
 		[HttpGet]
-		[Route("GetCategoryByIdAsyn")]
-		public async Task<JObject> GetCategoryByIdAsyn()
+		[Route("GetPriorityBuIdAsync")]
+		public async Task<JObject> GetPriorityBuIdAsync()
 		{
 			try
 			{
 				var id = int.Parse(_httpContextProxy.GetQueryString("_Id"));
 
-				var data = _unitOfWork.CategorysRepository.GetAsync(x => x.Id == id);
+				var data = _unitOfWork.TicketPrioritiesRepository.GetAsync(x => x.Id == id);
 
 				return _responseBuilder.Success(data.ToJObject());
 			}
@@ -76,47 +72,48 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 		}
 
 		[HttpPost]
-		[Route("CreateCategory")]
-		public async Task<JObject> CreateCategoryAsyn()
+		[Route("CreatePriorityAsync")]
+		public async Task<JObject> CreatePriorityAsync()
 		{
 			IDbContextTransaction trans = null;
 			using (trans = _unitOfWork.GetDbTransaction)
 			{
 				try
 				{
-					var inputData = _httpContextProxy.GetRequestBody<CategoryModel>();
-					var outputModel = _mapper.Map<Category>(inputData);
-					_unitOfWork.CategorysRepository.InsertAsyn(outputModel);
+					var inputData = _httpContextProxy.GetRequestBody<PriorityModel>();
+					var outputModel = _mapper.Map<Ticket_Priorities>(inputData);
+					_unitOfWork.TicketPrioritiesRepository.InsertAsyn(outputModel);
 					await _unitOfWork.SaveAsync();
 					await trans.CommitAsync();
-					return _responseBuilder.Success("Category created.");
+					return _responseBuilder.Success("Priority created.");
 				}
 				catch (Exception ex)
 				{
 					await trans.RollbackAsync();
 					_logger.LogError(ex.Message);
-					return _responseBuilder.BadRequest(ex.Message);
+					return _responseBuilder.ServerError(ex.Message);
 				}
 			}
 
 		}
 
+
 		[HttpPost]
-		[Route("DeleteCategorytAsyn")]
-		public async Task<JObject> DeleteCategoryAsyn()
+		[Route("DeletePriorityAsyn")]
+		public async Task<JObject> DeletePriorityAsyn()
 		{
 			IDbContextTransaction trans = null;
 			using (trans = _unitOfWork.GetDbTransaction)
 			{
 				try
 				{
-					var inputData = _httpContextProxy.GetRequestBody<CategoryModel>();
-					var outputModel = _mapper.Map<Category>(inputData);
+					var inputData = _httpContextProxy.GetRequestBody<PriorityModel>();
+					var outputModel = _mapper.Map<Ticket_Priorities>(inputData);
 
-					_unitOfWork.CategorysRepository.DeleteAsync(outputModel.Id);
+					_unitOfWork.TicketPrioritiesRepository.DeleteAsync(outputModel.Id);
 					await _unitOfWork.SaveAsync();
 					await trans.CommitAsync();
-					return _responseBuilder.Success("Category deleted.");
+					return _responseBuilder.Success("Priority deleted.");
 				}
 				catch (Exception ex)
 				{
@@ -129,21 +126,21 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 		}
 
 		[HttpPost]
-		[Route("UpdateCategoryAsyn")]
-		public async Task<JObject> UpdateCategoryAsyn()
+		[Route("UpdatePriorityAsyn")]
+		public async Task<JObject> UpdatePriorityAsyn()
 		{
 			IDbContextTransaction trans = null;
 			using (trans = _unitOfWork.GetDbTransaction)
 			{
 				try
 				{
-					var inputData = _httpContextProxy.GetRequestBody<CategoryModel>();
-					var outputModel = _mapper.Map<Category>(inputData);
+					var inputData = _httpContextProxy.GetRequestBody<PriorityModel>();
+					var outputModel = _mapper.Map<Ticket_Priorities>(inputData);
 
-					_unitOfWork.CategorysRepository.UpdateAsync(outputModel);
+					_unitOfWork.TicketPrioritiesRepository.UpdateAsync(outputModel);
 					await _unitOfWork.SaveAsync();
 					await trans.CommitAsync();
-					return _responseBuilder.Success("Category updated.");
+					return _responseBuilder.Success("Priority updated.");
 				}
 				catch (Exception ex)
 				{

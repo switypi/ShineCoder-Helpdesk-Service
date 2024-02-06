@@ -8,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using ShineCoder_Helpdesk.Core;
 using ShineCoder_Helpdesk.Core.Helpers;
 using ShineCoder_Helpdesk.Core.Models;
+using ShineCoder_Helpdesk.Infrastructure;
 using ShineCoder_Helpdesk.Infrastructure.Models;
 using ShineCoder_Helpdesk.Repository;
 
@@ -61,8 +62,21 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 		{
 			try
 			{
-				
-				var subCategoryData = await _unitOfWork.SubCategorysRepository.GetAsync();
+				var db = _unitOfWork.GetDbContext as HelpdeskDbContext;
+				var subCategoryData = (from item in db.SubCategories
+									   join item2 in db.Categories on item.CategoryId equals item2.Id
+									   select new SubCategoryModel()
+									   {
+										   Id = item.Id,
+										   Active = item.Active,
+										   CategoryId = item.CategoryId,
+										   Description = item.Description,
+										   IsDefault = item.IsDefault
+									   ,
+										   Name = item.Name,
+										   Category = item2.Name
+									   }).ToList();
+
 				return _responseBuilder.Success(subCategoryData.ToJArray());
 			}
 			catch (Exception ex)
@@ -72,6 +86,27 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 			}
 
 		}
+
+		[HttpGet]
+		[Route("GetSubCategoriesById")]
+		public async Task<JObject> GetSubCategoriesById()
+		{
+			try
+			{
+				var id = int.Parse(_httpContextProxy.GetQueryString("_Id"));
+				var db = _unitOfWork.GetDbContext as HelpdeskDbContext;
+				var subCategoryData = _unitOfWork.SubCategorysRepository.GetAsync(x => x.Id == id);
+
+				return _responseBuilder.Success(subCategoryData.ToJObject());
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex.Message);
+				return _responseBuilder.BadRequest(ex.Message);
+			}
+
+		}
+
 		[HttpGet]
 		[Route("CreateSubCategoryAsync")]
 		public async Task<JObject> CreateSubCategoryAsync()
@@ -92,6 +127,61 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 					await trans.RollbackAsync();
 					_logger.LogError(ex.Message);
 					return _responseBuilder.BadRequest(ex.Message);
+				}
+			}
+
+		}
+
+
+		[HttpPost]
+		[Route("DeleteSubCategoryAsyn")]
+		public async Task<JObject> DeleteSubCategoryAsyn()
+		{
+			IDbContextTransaction trans = null;
+			using (trans = _unitOfWork.GetDbTransaction)
+			{
+				try
+				{
+					var inputData = _httpContextProxy.GetRequestBody<SubCategoryModel>();
+					var outputModel = _mapper.Map<SubCategory>(inputData);
+
+					_unitOfWork.SubCategorysRepository.DeleteAsync(outputModel.Id);
+					await _unitOfWork.SaveAsync();
+					await trans.CommitAsync();
+					return _responseBuilder.Success("Sub-Category deleted.");
+				}
+				catch (Exception ex)
+				{
+					await trans.RollbackAsync();
+					_logger.LogError(ex.Message);
+					return _responseBuilder.ServerError(ex.Message);
+				}
+			}
+
+		}
+
+		[HttpPost]
+		[Route("UpdateSubCategoryAsyn")]
+		public async Task<JObject> UpdateSubCategoryAsyn()
+		{
+			IDbContextTransaction trans = null;
+			using (trans = _unitOfWork.GetDbTransaction)
+			{
+				try
+				{
+					var inputData = _httpContextProxy.GetRequestBody<SubCategoryModel>();
+					var outputModel = _mapper.Map<SubCategory>(inputData);
+
+					_unitOfWork.SubCategorysRepository.UpdateAsync(outputModel);
+					await _unitOfWork.SaveAsync();
+					await trans.CommitAsync();
+					return _responseBuilder.Success("Sub-Category updated.");
+				}
+				catch (Exception ex)
+				{
+					await trans.RollbackAsync();
+					_logger.LogError(ex.Message);
+					return _responseBuilder.ServerError(ex.Message);
 				}
 			}
 

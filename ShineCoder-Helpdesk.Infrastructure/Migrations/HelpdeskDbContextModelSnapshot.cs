@@ -296,14 +296,14 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "1d525114-5258-43e2-b0b2-aeaa6c1d05e7",
+                            ConcurrencyStamp = "a70ff2ba-c630-4424-ad4a-e3ade1d72f8f",
                             Email = "admin@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Admin",
                             LastName = "Admin",
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "695b6b8f-7208-4b88-9659-821340200da7",
+                            SecurityStamp = "b567c199-2466-4a19-89c1-fa072dbc748a",
                             TwoFactorEnabled = false,
                             UserName = "admin",
                             UserType = 0
@@ -616,6 +616,13 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsDefault")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
@@ -727,7 +734,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 1,
                             Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2024, 1, 30, 16, 16, 34, 574, DateTimeKind.Local).AddTicks(7480),
+                            CreatedDate = new DateTime(2024, 2, 6, 13, 40, 37, 591, DateTimeKind.Local).AddTicks(9390),
                             Description = "Low impact ticket",
                             Name = "Low",
                             UpdatedBy = ""
@@ -737,7 +744,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 2,
                             Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2024, 1, 30, 16, 16, 34, 574, DateTimeKind.Local).AddTicks(7483),
+                            CreatedDate = new DateTime(2024, 2, 6, 13, 40, 37, 591, DateTimeKind.Local).AddTicks(9393),
                             Description = "High impact ticket",
                             Name = "High",
                             UpdatedBy = ""
@@ -747,7 +754,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 3,
                             Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2024, 1, 30, 16, 16, 34, 574, DateTimeKind.Local).AddTicks(7555),
+                            CreatedDate = new DateTime(2024, 2, 6, 13, 40, 37, 591, DateTimeKind.Local).AddTicks(9396),
                             Description = "Normal impact ticket",
                             Name = "Normal",
                             UpdatedBy = ""
@@ -934,7 +941,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 1,
                             Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2024, 1, 30, 16, 16, 34, 574, DateTimeKind.Local).AddTicks(7413),
+                            CreatedDate = new DateTime(2024, 2, 6, 13, 40, 37, 591, DateTimeKind.Local).AddTicks(9322),
                             Description = "Low priority ticket",
                             Name = "Low",
                             UpdatedBy = ""
@@ -944,7 +951,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 2,
                             Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2024, 1, 30, 16, 16, 34, 574, DateTimeKind.Local).AddTicks(7417),
+                            CreatedDate = new DateTime(2024, 2, 6, 13, 40, 37, 591, DateTimeKind.Local).AddTicks(9326),
                             Description = "High priority ticket",
                             Name = "High",
                             UpdatedBy = ""
@@ -954,7 +961,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 3,
                             Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2024, 1, 30, 16, 16, 34, 574, DateTimeKind.Local).AddTicks(7419),
+                            CreatedDate = new DateTime(2024, 2, 6, 13, 40, 37, 591, DateTimeKind.Local).AddTicks(9328),
                             Description = "Medium priority ticket",
                             Name = "Medium",
                             UpdatedBy = ""
@@ -964,7 +971,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 4,
                             Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2024, 1, 30, 16, 16, 34, 574, DateTimeKind.Local).AddTicks(7421),
+                            CreatedDate = new DateTime(2024, 2, 6, 13, 40, 37, 591, DateTimeKind.Local).AddTicks(9330),
                             Description = "Normal priority ticket",
                             Name = "Normal",
                             UpdatedBy = ""
@@ -1056,7 +1063,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 1,
                             Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2024, 1, 30, 16, 16, 34, 574, DateTimeKind.Local).AddTicks(7013),
+                            CreatedDate = new DateTime(2024, 2, 6, 13, 40, 37, 591, DateTimeKind.Local).AddTicks(9044),
                             Description = "New ticket",
                             Name = "New",
                             UpdatedBy = ""
@@ -1066,7 +1073,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 2,
                             Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2024, 1, 30, 16, 16, 34, 574, DateTimeKind.Local).AddTicks(7026),
+                            CreatedDate = new DateTime(2024, 2, 6, 13, 40, 37, 591, DateTimeKind.Local).AddTicks(9058),
                             Description = "Open ticket",
                             Name = "Open",
                             UpdatedBy = ""
@@ -1076,7 +1083,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 3,
                             Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2024, 1, 30, 16, 16, 34, 574, DateTimeKind.Local).AddTicks(7028),
+                            CreatedDate = new DateTime(2024, 2, 6, 13, 40, 37, 591, DateTimeKind.Local).AddTicks(9060),
                             Description = "Closed ticket",
                             Name = "Closed",
                             UpdatedBy = ""
@@ -1086,19 +1093,9 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 4,
                             Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2024, 1, 30, 16, 16, 34, 574, DateTimeKind.Local).AddTicks(7030),
+                            CreatedDate = new DateTime(2024, 2, 6, 13, 40, 37, 591, DateTimeKind.Local).AddTicks(9063),
                             Description = "Resolved ticket",
                             Name = "Resolved",
-                            UpdatedBy = ""
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Active = true,
-                            CreatedBy = "admin",
-                            CreatedDate = new DateTime(2024, 1, 30, 16, 16, 34, 574, DateTimeKind.Local).AddTicks(7032),
-                            Description = "Assigned ticket",
-                            Name = "Assigned",
                             UpdatedBy = ""
                         });
                 });
@@ -1149,7 +1146,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 1,
                             Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2024, 1, 30, 16, 16, 34, 574, DateTimeKind.Local).AddTicks(7449),
+                            CreatedDate = new DateTime(2024, 2, 6, 13, 40, 37, 591, DateTimeKind.Local).AddTicks(9359),
                             Description = "Low Urgency",
                             Name = "Low",
                             UpdatedBy = ""
@@ -1159,7 +1156,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 2,
                             Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2024, 1, 30, 16, 16, 34, 574, DateTimeKind.Local).AddTicks(7451),
+                            CreatedDate = new DateTime(2024, 2, 6, 13, 40, 37, 591, DateTimeKind.Local).AddTicks(9362),
                             Description = "High urgency",
                             Name = "High",
                             UpdatedBy = ""
@@ -1169,7 +1166,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 3,
                             Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2024, 1, 30, 16, 16, 34, 574, DateTimeKind.Local).AddTicks(7453),
+                            CreatedDate = new DateTime(2024, 2, 6, 13, 40, 37, 591, DateTimeKind.Local).AddTicks(9364),
                             Description = "Normal urgency",
                             Name = "Normal",
                             UpdatedBy = ""
@@ -1179,7 +1176,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 4,
                             Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2024, 1, 30, 16, 16, 34, 574, DateTimeKind.Local).AddTicks(7455),
+                            CreatedDate = new DateTime(2024, 2, 6, 13, 40, 37, 591, DateTimeKind.Local).AddTicks(9367),
                             Description = "Urgent",
                             Name = "Urgent",
                             UpdatedBy = ""

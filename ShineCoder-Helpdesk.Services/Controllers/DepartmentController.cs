@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using AutoMapper;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -9,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using ShineCoder_Helpdesk.Core;
 using ShineCoder_Helpdesk.Core.Helpers;
 using ShineCoder_Helpdesk.Core.Models;
+using ShineCoder_Helpdesk.Infrastructure;
 using ShineCoder_Helpdesk.Infrastructure.Models;
 using ShineCoder_Helpdesk.Repository;
 
@@ -16,10 +14,9 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 {
 	[ApiController]
 	[Produces("application/json")]
-	[Route("api/v{version:apiVersion}" + ShineCoder_HelpDeskConstants.CATEGORY_SERVICE_API_PREFIX)]
+	[Route("api/v{version:apiVersion}" + ShineCoder_HelpDeskConstants.RDEPARTMENT_SERVICE_API_PREFIX)]
 	[ApiVersion(ShineCoder_HelpDeskConstants.SHINECODERLMS_VERSION)]
-	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-	public class CategoryController : ControllerBase
+	public class DepartmentController : ControllerBase
 	{
 		private readonly IHttpContextProxy _httpContextProxy;
 		private readonly IUnitOfWork _unitOfWork;
@@ -27,8 +24,8 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 		private readonly ILogger _logger;
 		private readonly IValidator _customerValidator;
 		private readonly IMapper _mapper;
-		public CategoryController(IHttpContextProxy httpContextProxy, IUnitOfWork unitOfWork, IResponseBuilder responseBuilder,
-			ILogger<CategoryController> logger, IValidator customerValidator, IMapper mapper)
+		public DepartmentController(IHttpContextProxy httpContextProxy, IUnitOfWork unitOfWork, IResponseBuilder responseBuilder,
+			ILogger<DepartmentController> logger, IValidator customerValidator, IMapper mapper)
 		{
 			_httpContextProxy = httpContextProxy;
 			_unitOfWork = unitOfWork;
@@ -37,15 +34,14 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 			_customerValidator = customerValidator;
 			_mapper = mapper;
 		}
-
 		[HttpGet]
-		[Route("GetCategories")]
-		public async  Task<JObject> GetCategoriesAsyn()
+		[Route("GetDepartmentsAsyn")]
+		public async Task<JObject> GetDepartmentsAsyn()
 		{
 			try
 			{
-				var categoryData =await _unitOfWork.CategorysRepository.GetAsync(x => x.Active == true);
-				return _responseBuilder.Success(categoryData.ToJArray());
+				var data = await _unitOfWork.DepartmentRepository.GetAsync();
+				return _responseBuilder.Success(data.ToJArray());
 			}
 			catch (Exception ex)
 			{
@@ -54,16 +50,15 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 			}
 
 		}
-
 		[HttpGet]
-		[Route("GetCategoryByIdAsyn")]
-		public async Task<JObject> GetCategoryByIdAsyn()
+		[Route("GetDepartmentByIdAsync")]
+		public async Task<JObject> GetDepartmentByIdAsync()
 		{
 			try
 			{
 				var id = int.Parse(_httpContextProxy.GetQueryString("_Id"));
-
-				var data = _unitOfWork.CategorysRepository.GetAsync(x => x.Id == id);
+				
+				var data = _unitOfWork.DepartmentRepository.GetAsync(x => x.Id == id);
 
 				return _responseBuilder.Success(data.ToJObject());
 			}
@@ -76,47 +71,20 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 		}
 
 		[HttpPost]
-		[Route("CreateCategory")]
-		public async Task<JObject> CreateCategoryAsyn()
+		[Route("CreateDepartmentAsyn")]
+		public async Task<JObject> CreateDepartmentAsyn()
 		{
 			IDbContextTransaction trans = null;
 			using (trans = _unitOfWork.GetDbTransaction)
 			{
 				try
 				{
-					var inputData = _httpContextProxy.GetRequestBody<CategoryModel>();
-					var outputModel = _mapper.Map<Category>(inputData);
-					_unitOfWork.CategorysRepository.InsertAsyn(outputModel);
+					var inputData = _httpContextProxy.GetRequestBody<DepartmentModel>();
+					var outputModel = _mapper.Map<Department>(inputData);
+					_unitOfWork.DepartmentRepository.InsertAsyn(outputModel);
 					await _unitOfWork.SaveAsync();
 					await trans.CommitAsync();
-					return _responseBuilder.Success("Category created.");
-				}
-				catch (Exception ex)
-				{
-					await trans.RollbackAsync();
-					_logger.LogError(ex.Message);
-					return _responseBuilder.BadRequest(ex.Message);
-				}
-			}
-
-		}
-
-		[HttpPost]
-		[Route("DeleteCategorytAsyn")]
-		public async Task<JObject> DeleteCategoryAsyn()
-		{
-			IDbContextTransaction trans = null;
-			using (trans = _unitOfWork.GetDbTransaction)
-			{
-				try
-				{
-					var inputData = _httpContextProxy.GetRequestBody<CategoryModel>();
-					var outputModel = _mapper.Map<Category>(inputData);
-
-					_unitOfWork.CategorysRepository.DeleteAsync(outputModel.Id);
-					await _unitOfWork.SaveAsync();
-					await trans.CommitAsync();
-					return _responseBuilder.Success("Category deleted.");
+					return _responseBuilder.Success("Department created.");
 				}
 				catch (Exception ex)
 				{
@@ -129,21 +97,48 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 		}
 
 		[HttpPost]
-		[Route("UpdateCategoryAsyn")]
-		public async Task<JObject> UpdateCategoryAsyn()
+		[Route("DeleteDepartmentAsyn")]
+		public async Task<JObject> DeleteDepartmentAsyn()
 		{
 			IDbContextTransaction trans = null;
 			using (trans = _unitOfWork.GetDbTransaction)
 			{
 				try
 				{
-					var inputData = _httpContextProxy.GetRequestBody<CategoryModel>();
-					var outputModel = _mapper.Map<Category>(inputData);
+					var inputData = _httpContextProxy.GetRequestBody<DepartmentModel>();
+					var outputModel = _mapper.Map<Department>(inputData);
 
-					_unitOfWork.CategorysRepository.UpdateAsync(outputModel);
+					_unitOfWork.DepartmentRepository.DeleteAsync(outputModel.Id);
 					await _unitOfWork.SaveAsync();
 					await trans.CommitAsync();
-					return _responseBuilder.Success("Category updated.");
+					return _responseBuilder.Success("Department deleted.");
+				}
+				catch (Exception ex)
+				{
+					await trans.RollbackAsync();
+					_logger.LogError(ex.Message);
+					return _responseBuilder.ServerError(ex.Message);
+				}
+			}
+
+		}
+
+		[HttpPost]
+		[Route("UpdateDepartmentAsyn")]
+		public async Task<JObject> UpdateDepartmentAsyn()
+		{
+			IDbContextTransaction trans = null;
+			using (trans = _unitOfWork.GetDbTransaction)
+			{
+				try
+				{
+					var inputData = _httpContextProxy.GetRequestBody<DepartmentModel>();
+					var outputModel = _mapper.Map<Department>(inputData);
+
+					_unitOfWork.DepartmentRepository.UpdateAsync(outputModel);
+					await _unitOfWork.SaveAsync();
+					await trans.CommitAsync();
+					return _responseBuilder.Success("Department updated.");
 				}
 				catch (Exception ex)
 				{

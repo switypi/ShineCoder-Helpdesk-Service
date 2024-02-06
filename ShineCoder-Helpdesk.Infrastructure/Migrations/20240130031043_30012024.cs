@@ -11,33 +11,33 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Attachments_Tickets_TicketId",
-                schema: "Dbo",
-                table: "Attachments");
+            //migrationBuilder.DropForeignKey(
+            //    name: "FK_Attachments_Tickets_TicketId",
+            //    schema: "Dbo",
+            //    table: "Attachments");
 
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_Attachments",
-                schema: "Dbo",
-                table: "Attachments");
+            //migrationBuilder.DropPrimaryKey(
+            //    name: "PK_Attachments",
+            //    schema: "Dbo",
+            //    table: "Attachments");
 
-            migrationBuilder.RenameTable(
-                name: "Attachments",
-                schema: "Dbo",
-                newName: "Ticket_Attachments",
-                newSchema: "Dbo");
+            //migrationBuilder.RenameTable(
+            //    name: "Attachments",
+            //    schema: "Dbo",
+            //    newName: "Ticket_Attachments",
+            //    newSchema: "Dbo");
 
-            migrationBuilder.RenameIndex(
-                name: "IX_Attachments_TicketId",
-                schema: "Dbo",
-                table: "Ticket_Attachments",
-                newName: "IX_Ticket_Attachments_TicketId");
+            //migrationBuilder.RenameIndex(
+            //    name: "IX_Attachments_TicketId",
+            //    schema: "Dbo",
+            //    table: "Ticket_Attachments",
+            //    newName: "IX_Ticket_Attachments_TicketId");
 
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_Ticket_Attachments",
-                schema: "Dbo",
-                table: "Ticket_Attachments",
-                column: "Id");
+            //migrationBuilder.AddPrimaryKey(
+            //    name: "PK_Ticket_Attachments",
+            //    schema: "Dbo",
+            //    table: "Ticket_Attachments",
+            //    column: "Id");
 
             migrationBuilder.UpdateData(
                 schema: "Dbo",
@@ -175,14 +175,14 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
                 values: new object[] { "8e308dad-4157-43b7-bd2f-4ade2da5537d", "6f5318ff-95be-426b-90a1-67809d423c46" });
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Ticket_Attachments_Tickets_TicketId",
-                schema: "Dbo",
-                table: "Ticket_Attachments",
-                column: "TicketId",
-                principalSchema: "Dbo",
-                principalTable: "Tickets",
-                principalColumn: "Id");
+            //migrationBuilder.AddForeignKey(
+            //    name: "FK_Ticket_Attachments_Tickets_TicketId",
+            //    schema: "Dbo",
+            //    table: "Ticket_Attachments",
+            //    column: "TicketId",
+            //    principalSchema: "Dbo",
+            //    principalTable: "Tickets",
+            //    principalColumn: "Id");
         }
 
         /// <inheritdoc />

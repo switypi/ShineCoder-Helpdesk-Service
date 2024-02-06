@@ -11,10 +11,10 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Attachments_Tickets_TicketId",
-                schema: "Dbo",
-                table: "Attachments");
+            //migrationBuilder.DropForeignKey(
+            //    name: "FK_Attachments_Tickets_TicketId",
+            //    schema: "Dbo",
+            //    table: "Attachments");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_Tickets_Ticket_Impacts_Tkt_ImpactId",
