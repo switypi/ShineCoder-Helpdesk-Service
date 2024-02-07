@@ -68,7 +68,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 									   select new SubCategoryModel()
 									   {
 										   Id = item.Id,
-										   Active = item.Active,
+										   Active = item.Active.Value,
 										   CategoryId = item.CategoryId,
 										   Description = item.Description,
 										   IsDefault = item.IsDefault
@@ -95,9 +95,9 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 			{
 				var id = int.Parse(_httpContextProxy.GetQueryString("_Id"));
 				var db = _unitOfWork.GetDbContext as HelpdeskDbContext;
-				var subCategoryData = _unitOfWork.SubCategorysRepository.GetAsync(x => x.Id == id);
+				var subCategoryData =await _unitOfWork.SubCategorysRepository.GetAsync(x => x.Id == id);
 
-				return _responseBuilder.Success(subCategoryData.ToJObject());
+				return _responseBuilder.Success(subCategoryData.ToJArray());
 			}
 			catch (Exception ex)
 			{
@@ -107,7 +107,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 
 		}
 
-		[HttpGet]
+		[HttpPost]
 		[Route("CreateSubCategoryAsync")]
 		public async Task<JObject> CreateSubCategoryAsync()
 		{
@@ -117,8 +117,16 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 				try
 				{
 					var subCategoryModel = _httpContextProxy.GetRequestBody<SubCategoryModel>();
+					var listOfErrors = _customerValidator.Validate(subCategoryModel);
+
+					if (listOfErrors.Count() > 0)
+					{
+						return _responseBuilder.BadRequest(listOfErrors.ToJArray());
+
+					};
 					var subCategoryData = _mapper.Map<SubCategory>(subCategoryModel);
 					_unitOfWork.SubCategorysRepository.InsertAsyn(subCategoryData);
+					await _unitOfWork.SaveAsync();
 					await trans.CommitAsync();
 					return _responseBuilder.Success("Sub-Category create successfully.");
 				}

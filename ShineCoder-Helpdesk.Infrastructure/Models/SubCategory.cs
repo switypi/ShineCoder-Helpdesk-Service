@@ -15,6 +15,6 @@ namespace ShineCoder_Helpdesk.Infrastructure.Models
 		public bool? IsDefault { get; set; }
 		[ForeignKey(nameof(Category))]
 		public Int32 CategoryId { get; set; }
-		public Category Category { get; set; }
+		public Category? Category { get; set; }
     }
 }

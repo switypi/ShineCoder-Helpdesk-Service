@@ -17,6 +17,14 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 				
 			CreateMap<Tickets, TicketsModel>();
             CreateMap<TicketsModel,Tickets>();
-        }
+
+			CreateMap<SubCategoryModel, SubCategory>();
+			CreateMap<DepartmentModel, Department>();
+			CreateMap<RequestTypeModel, RequestType>();
+			CreateMap<PriorityModel, Ticket_Priorities>();
+			CreateMap<ImpactModel, Ticket_Impact>();
+			CreateMap<StatusModel, Ticket_Status>();
+			CreateMap<TicketsModel, Ticket_Mode>();
+		}
     }
 }

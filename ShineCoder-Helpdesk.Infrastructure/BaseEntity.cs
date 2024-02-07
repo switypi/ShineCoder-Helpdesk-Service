@@ -19,6 +19,6 @@ namespace ShineCoder_Helpdesk.Infrastructure
 		public string? CreatedBy { get; set; }
 		[MaxLength(256)]
 		public string? UpdatedBy { get; set; }
-		public bool Active { get; set; }
+		public bool? Active { get; set; }
 	}
 }
