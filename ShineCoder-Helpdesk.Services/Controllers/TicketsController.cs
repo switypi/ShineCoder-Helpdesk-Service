@@ -138,6 +138,36 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 
 		}
 
+		[HttpGet]
+		[Route("GetChartData")]
+		public async Task<JObject> GetChartData()
+		{
+			try
+			{
+				//var ticketData = await _unitOfWork.TicketRepository.GetAsync();
+				var db = _unitOfWork.GetDbContext as HelpdeskDbContext;
+				var grpdata = (from item in db.Tickets
+							  join item2 in db.Ticket_Status on item.TicketStatusId equals item2.Id
+							  select new
+							  {
+								  Status = item2.Name,
+								  StatusId=item.TicketStatusId,
+								  TicketId = item.Id,
+								  DueDate = item.Tkt_DueDate
+							  }).ToList();
+				var compData=grpdata.GroupBy(x=>x.Status).Select(v=> new ChartModelData { Status=v.Key,Count=v.Count()});
+				
+
+				//ticketData.GroupBy(x => x.TicketStatusId).Select(y => new { StatusName = y.ke, Count = y.Count() }).OrderBy(x=>x.StatusName).ToList();
+				return _responseBuilder.Success(compData.ToJArray());
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex.Message);
+				return _responseBuilder.BadRequest(ex.Message);
+			}
+		}
+
 		// GET api/<TicketsController>/5
 		[HttpPost]
 		[Route("CreateTickets")]
