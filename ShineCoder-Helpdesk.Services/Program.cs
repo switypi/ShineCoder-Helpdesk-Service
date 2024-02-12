@@ -138,8 +138,8 @@ var apiVersionDescriptionProvider = app.Services.GetRequiredService<IApiVersionD
 
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
 	app.UseSwagger();
 	app.UseSwaggerUI(options =>
 	{
@@ -149,7 +149,7 @@ if (app.Environment.IsDevelopment())
 				description.GroupName.ToUpperInvariant());
 		}
 	});
-}
+//}
 
 app.UseCors(MyAllowSpecificOrigins);
 

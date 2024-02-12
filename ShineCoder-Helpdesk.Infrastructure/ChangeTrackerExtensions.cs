@@ -36,6 +36,7 @@ namespace ShineCoder_Helpdesk.Infrastructure
 						case EntityState.Added:
 							entity.CreatedDate = timestamp;
 							entity.CreatedBy = user;
+						
 							entity.Active = true;
 							//entity.ModifiedDate = timestamp;
 							//entity.UpdatedBy = user;

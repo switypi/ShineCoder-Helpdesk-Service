@@ -15,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Linq;
 using ShineCoder_Helpdesk.Core.Enums;
+using ShineCoder_Helpdesk.Core.Models;
 using ShineCoder_Helpdesk.Infrastructure.Enums;
 using ShineCoder_Helpdesk.Infrastructure.Models;
 
@@ -35,11 +36,11 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 			_logger = logger;
 
 		}
-		public async Task<(int, HelpDeskResults)> RegisterationAsync(RegistrationModel model, string role)
+		public async Task<(int, HelpDeskResults)> RegisterationAsync(UserModel model, string role)
 		{
 			try
 			{
-				var userExists = await userManager.FindByNameAsync(model.Username);
+				var userExists = await userManager.FindByNameAsync(model.UserName);
 				if (userExists != null)
 					return (0, new HelpDeskResults(true, "User exists."));
 
@@ -47,7 +48,7 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 				{
 					Email = model.Email,
 					SecurityStamp = Guid.NewGuid().ToString(),
-					UserName = model.Username,
+					UserName = model.UserName,
 					FirstName = model.FirstName,
 					LastName = model.LastName,
 					EmailConfirmed = false,
@@ -55,8 +56,9 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 					TwoFactorEnabled = false,
 					LockoutEnabled = false,
 					AccessFailedCount = 0,
-					UserType = Infrastructure.Enums.UserTypeEnum.CLIENT,
-					DepartmentId=model.DepartmentId,
+					UserType = role == "CLIENT" ? Infrastructure.Enums.UserTypeEnum.CLIENT : Infrastructure.Enums.UserTypeEnum.AGENT,
+					DepartmentId = model.DepartmentId,
+				PasswordHash
 
 				};
 				ApplicationRole rolee = new ApplicationRole();

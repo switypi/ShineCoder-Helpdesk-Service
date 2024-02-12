@@ -144,10 +144,11 @@ namespace ShineCoder_Helpdesk.Infrastructure
 
 
 			builder.Entity<ApplicationRole>().HasData(
-			   new ApplicationRole { Id = 1, NormalizedName = "Admin", RoleName = "Admin", Name = "Admin", IsActive = true, IsAgent = false, IsClient = false },
-			   new ApplicationRole { Id = 2, NormalizedName = "Client", RoleName = "Client", Name = "Client", IsActive = true, IsAgent = false, IsClient = true },
-			   new ApplicationRole { Id = 3, NormalizedName = "Agent", RoleName = "Agent", Name = "Agent", IsActive = true, IsAgent = true, IsClient = false });
+			   new ApplicationRole { Id = 1, NormalizedName = "ADMIN", RoleName = "ADMIN", Name = "ADMIN", IsActive = true, IsAgent = false, IsClient = false },
+			   new ApplicationRole { Id = 2, NormalizedName = "CLIENT", RoleName = "CLIENT", Name = "CLIENT", IsActive = true, IsAgent = false, IsClient = true },
+			   new ApplicationRole { Id = 3, NormalizedName = "AGENT", RoleName = "AGENT", Name = "AGENT", IsActive = true, IsAgent = true, IsClient = false });
 
+			var hasher = new PasswordHasher<ApplicationUser>();
 			var user = new ApplicationUser
 			{
 				Id = 1,
@@ -161,7 +162,8 @@ namespace ShineCoder_Helpdesk.Infrastructure
 				TwoFactorEnabled = false,
 				LockoutEnabled = false,
 				AccessFailedCount = 0,
-				UserType = Infrastructure.Enums.UserTypeEnum.ADMIN
+				UserType = Infrastructure.Enums.UserTypeEnum.ADMIN,
+				PasswordHash = hasher.HashPassword(null, "Abc@123"),
 			};
 			builder.Entity<ApplicationUser>().HasData(user);
 
