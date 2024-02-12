@@ -41,7 +41,6 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 
         [HttpPost]
         [Route("Login")]
-
         public async Task<JObject> Login()
         {
             try

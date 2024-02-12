@@ -14,9 +14,9 @@ namespace ShineCoder_Helpdesk.Core.Models
 		public Int32 Id { get; set; }
         public string Tkt_Number { get; set; }
         [Required(ErrorMessage = "Ticket description is required.")]
-		public string Tkt_Desc { get; set; }
+		public string Ticket_Desc { get; set; }
 		[Required(ErrorMessage = "Ticket subject is required.")]
-		public string Tkt_Subject { get; set; }
+		public string Ticket_Subject { get; set; }
 		[Required(ErrorMessage = "Ticket requestor is required.")]
 		public Int32? Tkt_RequestUserId { get; set; }
 

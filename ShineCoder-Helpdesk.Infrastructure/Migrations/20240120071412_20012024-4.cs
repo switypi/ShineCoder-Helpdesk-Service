@@ -35,15 +35,15 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                 nullable: false,
                 defaultValue: 0);
 
-            migrationBuilder.AlterColumn<string>(
-                name: "Tkt_Number",
-                schema: "Dbo",
-                table: "Tickets",
-                type: "nvarchar(max)",
-                nullable: false,
-                computedColumnSql: "dbo.Fn_CreateTicketNumber('SNC-', CAST(1000 as nvarchar(10)),4,'0')",
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
+            //migrationBuilder.AlterColumn<string>(
+            //    name: "Tkt_Number",
+            //    schema: "Dbo",
+            //    table: "Tickets",
+            //    type: "nvarchar(max)",
+            //    nullable: false,
+            //    computedColumnSql: "dbo.Fn_CreateTicketNumber('SNC-', CAST(1000 as nvarchar(10)),4,'0')",
+            //    oldClrType: typeof(string),
+            //    oldType: "nvarchar(max)");
 
             migrationBuilder.CreateTable(
                 name: "Ticket_Attachments",

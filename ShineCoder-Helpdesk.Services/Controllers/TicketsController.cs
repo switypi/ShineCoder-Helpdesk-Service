@@ -201,7 +201,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 				{
 					await trans.RollbackAsync();
 					_logger.LogError(ex.Message);
-					return _responseBuilder.BadRequest(ex.Message);
+					return _responseBuilder.ServerError(ex.Message);
 				}
 			}
 		}
@@ -232,9 +232,9 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 						tickets.TicketLevelId = inputModel.TicketLevelId;
 						tickets.TicketPriorityId = inputModel.TicketPriorityId;
 						tickets.TicketStatusId = inputModel.TicketStatusId;
-						tickets.Ticket_Desc = inputModel.Tkt_Desc;
+						tickets.Ticket_Desc = inputModel.Ticket_Desc;
 						tickets.Ticket_ModeId = inputModel.Ticket_ModeId;
-						tickets.Ticket_Subject = inputModel.Tkt_Subject;
+						tickets.Ticket_Subject = inputModel.Ticket_Subject;
 						tickets.Tkt_AssignedUserId = inputModel.Tkt_AssignedUserId;
 						tickets.Tkt_CategoryId = inputModel.Tkt_CategoryId;
 						tickets.Tkt_DepartmentId = inputModel.Tkt_DepartmentId;
@@ -474,7 +474,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 								Ticket_ModeId = x.Ticket_ModeId,
 								Tkt_CategoryId = x.Tkt_CategoryId,
 								Tkt_DepartmentId = x.Tkt_DepartmentId,
-								Tkt_Desc = x.Ticket_Desc,
+								Ticket_Desc = x.Ticket_Desc,
 								Tkt_ImpactId = x.Tkt_ImpactId,
 								Tkt_DueDate = x.Tkt_DueDate,
 								Tkt_LocationId = x.Tkt_LocationId,
@@ -493,7 +493,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 								Tkt_Mode = t.Name,
 								Tkt_Requester = o.FirstName + " " + o.LastName,
 								Tkt_Subcategory = y1.Name,
-								Tkt_Subject = u.Name,
+								Ticket_Subject = u.Name,
 								Tkt_AssignedUser = p == null ? null : p.FirstName + " " + p.LastName,
 								Tkt_location = w.Name,
 								Tkt_CreatedDate = x.CreatedDate.Value,
