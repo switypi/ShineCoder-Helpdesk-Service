@@ -58,7 +58,7 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 					AccessFailedCount = 0,
 					UserType = role == "CLIENT" ? Infrastructure.Enums.UserTypeEnum.CLIENT : Infrastructure.Enums.UserTypeEnum.AGENT,
 					DepartmentId = model.DepartmentId,
-				PasswordHash
+					
 
 				};
 				ApplicationRole rolee = new ApplicationRole();

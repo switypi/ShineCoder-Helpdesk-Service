@@ -38,6 +38,7 @@ namespace ShineCoder_Helpdesk.Core.Models
 		public string State { get; set; }
 		[Required(ErrorMessage = "Address is required.")]
 		public string Address { get; set; }
+		public byte[] ImageBytes { get; set; }
 
 		public bool Active { get; set; }
 	}

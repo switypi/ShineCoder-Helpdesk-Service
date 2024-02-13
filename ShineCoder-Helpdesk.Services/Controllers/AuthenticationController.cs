@@ -55,10 +55,10 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 
 				};
 
-				var (status, message) = await _authService.Login(inputModel);
+				var (status, data) = await _authService.Login(inputModel);
 				if (status == 0)
-					return _responseBuilder.BadRequest(message.ToJObject());
-				return _responseBuilder.Success(message.ToJObject());
+					return _responseBuilder.BadRequest(data.ToJObject());
+				return _responseBuilder.Success(data.ToJObject());
 			}
 			catch (Exception ex)
 			{
@@ -86,11 +86,11 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 
 					};
 
-					var (status, message) = await _authService.RegisterationAsync(inputModel, inputModel.RoleName == "AGENT" ? UserRolesValues.Agent : UserRolesValues.Client);
+					var (status, data) = await _authService.RegisterationAsync(inputModel, inputModel.RoleName == "AGENT" ? UserRolesValues.Agent : UserRolesValues.Client);
 
 					if (status == 0)
 					{
-						return _responseBuilder.BadRequest(message.ToJObject());
+						return _responseBuilder.BadRequest(data.ToJObject());
 					}
 					await trans.CommitAsync();
 
@@ -118,14 +118,14 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 				{
 
 					var roleName = _httpContextProxy.GetQueryString("roleName");
-					var (status, message) = await _authService.CreateRole(roleName);
+					var (status, data) = await _authService.CreateRole(roleName);
 
 					if (status == 0)
 					{
-						return _responseBuilder.BadRequest(message.ToJObject());
+						return _responseBuilder.BadRequest(data.ToJObject());
 					}
 					await trans.CommitAsync();
-					return _responseBuilder.Success(message.ToJObject());
+					return _responseBuilder.Success(data.ToJObject());
 
 
 				}
@@ -148,12 +148,12 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 			try
 			{
 
-				var (status, message) = await _authService.GetAllRoles();
+				var (status, data) = await _authService.GetAllRoles();
 				if (status == 0)
 				{
-					return _responseBuilder.BadRequest(message.ToJObject());
+					return _responseBuilder.BadRequest(data.ToJObject());
 				}
-				return _responseBuilder.Success(message.ToJObject());
+				return _responseBuilder.Success(data.ToJObject());
 
 
 			}
@@ -200,6 +200,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 								JobTitle = x.JobTitle,
 								State = x.State,
 								Active = x.Active,
+								ImageBytes=x.ImageBytes
 
 							}).ToList();
 

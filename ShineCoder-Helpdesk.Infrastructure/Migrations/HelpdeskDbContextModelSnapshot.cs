@@ -182,9 +182,9 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             IsActive = true,
                             IsAgent = false,
                             IsClient = false,
-                            Name = "Admin",
-                            NormalizedName = "Admin",
-                            RoleName = "Admin"
+                            Name = "ADMIN",
+                            NormalizedName = "ADMIN",
+                            RoleName = "ADMIN"
                         },
                         new
                         {
@@ -192,9 +192,9 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             IsActive = true,
                             IsAgent = false,
                             IsClient = true,
-                            Name = "Client",
-                            NormalizedName = "Client",
-                            RoleName = "Client"
+                            Name = "CLIENT",
+                            NormalizedName = "CLIENT",
+                            RoleName = "CLIENT"
                         },
                         new
                         {
@@ -202,9 +202,9 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             IsActive = true,
                             IsAgent = true,
                             IsClient = false,
-                            Name = "Agent",
-                            NormalizedName = "Agent",
-                            RoleName = "Agent"
+                            Name = "AGENT",
+                            NormalizedName = "AGENT",
+                            RoleName = "AGENT"
                         });
                 });
 
@@ -218,6 +218,17 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("City")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -235,11 +246,20 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<byte[]>("ImageBytes")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("JobTitle")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -266,6 +286,10 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("State")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -296,14 +320,16 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a70ff2ba-c630-4424-ad4a-e3ade1d72f8f",
+                            Active = false,
+                            ConcurrencyStamp = "03efb590-a76a-4757-91e1-9b2211970aca",
                             Email = "admin@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Admin",
                             LastName = "Admin",
                             LockoutEnabled = false,
+                            PasswordHash = "AQAAAAIAAYagAAAAEMRq17yUGfOG/7I/1QSOiam2yzauEpcMFIXuonELAmU9DlJEGUuB5NAHPe7cKQCWxg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "b567c199-2466-4a19-89c1-fa072dbc748a",
+                            SecurityStamp = "97100062-a1a7-44e9-ba15-ef2a36a24041",
                             TwoFactorEnabled = false,
                             UserName = "admin",
                             UserType = 0
@@ -318,7 +344,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("Active")
+                    b.Property<bool?>("Active")
                         .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")
@@ -385,7 +411,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("Active")
+                    b.Property<bool?>("Active")
                         .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")
@@ -452,7 +478,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("Active")
+                    b.Property<bool?>("Active")
                         .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")
@@ -511,7 +537,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("Active")
+                    b.Property<bool?>("Active")
                         .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")
@@ -552,7 +578,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("Active")
+                    b.Property<bool?>("Active")
                         .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")
@@ -603,7 +629,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("Active")
+                    b.Property<bool?>("Active")
                         .HasColumnType("bit");
 
                     b.Property<int>("CategoryId")
@@ -649,7 +675,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("Active")
+                    b.Property<bool?>("Active")
                         .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")
@@ -696,7 +722,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("Active")
+                    b.Property<bool?>("Active")
                         .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")
@@ -734,7 +760,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 1,
                             Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2024, 2, 6, 13, 40, 37, 591, DateTimeKind.Local).AddTicks(9390),
+                            CreatedDate = new DateTime(2024, 2, 13, 16, 22, 52, 553, DateTimeKind.Local).AddTicks(7857),
                             Description = "Low impact ticket",
                             Name = "Low",
                             UpdatedBy = ""
@@ -744,7 +770,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 2,
                             Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2024, 2, 6, 13, 40, 37, 591, DateTimeKind.Local).AddTicks(9393),
+                            CreatedDate = new DateTime(2024, 2, 13, 16, 22, 52, 553, DateTimeKind.Local).AddTicks(7860),
                             Description = "High impact ticket",
                             Name = "High",
                             UpdatedBy = ""
@@ -754,7 +780,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 3,
                             Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2024, 2, 6, 13, 40, 37, 591, DateTimeKind.Local).AddTicks(9396),
+                            CreatedDate = new DateTime(2024, 2, 13, 16, 22, 52, 553, DateTimeKind.Local).AddTicks(7862),
                             Description = "Normal impact ticket",
                             Name = "Normal",
                             UpdatedBy = ""
@@ -769,7 +795,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("Active")
+                    b.Property<bool?>("Active")
                         .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")
@@ -836,7 +862,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("Active")
+                    b.Property<bool?>("Active")
                         .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")
@@ -903,7 +929,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("Active")
+                    b.Property<bool?>("Active")
                         .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")
@@ -941,7 +967,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 1,
                             Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2024, 2, 6, 13, 40, 37, 591, DateTimeKind.Local).AddTicks(9322),
+                            CreatedDate = new DateTime(2024, 2, 13, 16, 22, 52, 553, DateTimeKind.Local).AddTicks(7784),
                             Description = "Low priority ticket",
                             Name = "Low",
                             UpdatedBy = ""
@@ -951,7 +977,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 2,
                             Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2024, 2, 6, 13, 40, 37, 591, DateTimeKind.Local).AddTicks(9326),
+                            CreatedDate = new DateTime(2024, 2, 13, 16, 22, 52, 553, DateTimeKind.Local).AddTicks(7788),
                             Description = "High priority ticket",
                             Name = "High",
                             UpdatedBy = ""
@@ -961,7 +987,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 3,
                             Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2024, 2, 6, 13, 40, 37, 591, DateTimeKind.Local).AddTicks(9328),
+                            CreatedDate = new DateTime(2024, 2, 13, 16, 22, 52, 553, DateTimeKind.Local).AddTicks(7791),
                             Description = "Medium priority ticket",
                             Name = "Medium",
                             UpdatedBy = ""
@@ -971,7 +997,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 4,
                             Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2024, 2, 6, 13, 40, 37, 591, DateTimeKind.Local).AddTicks(9330),
+                            CreatedDate = new DateTime(2024, 2, 13, 16, 22, 52, 553, DateTimeKind.Local).AddTicks(7793),
                             Description = "Normal priority ticket",
                             Name = "Normal",
                             UpdatedBy = ""
@@ -986,7 +1012,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("Active")
+                    b.Property<bool?>("Active")
                         .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")
@@ -1025,7 +1051,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("Active")
+                    b.Property<bool?>("Active")
                         .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")
@@ -1063,7 +1089,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 1,
                             Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2024, 2, 6, 13, 40, 37, 591, DateTimeKind.Local).AddTicks(9044),
+                            CreatedDate = new DateTime(2024, 2, 13, 16, 22, 52, 553, DateTimeKind.Local).AddTicks(7426),
                             Description = "New ticket",
                             Name = "New",
                             UpdatedBy = ""
@@ -1073,7 +1099,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 2,
                             Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2024, 2, 6, 13, 40, 37, 591, DateTimeKind.Local).AddTicks(9058),
+                            CreatedDate = new DateTime(2024, 2, 13, 16, 22, 52, 553, DateTimeKind.Local).AddTicks(7440),
                             Description = "Open ticket",
                             Name = "Open",
                             UpdatedBy = ""
@@ -1083,7 +1109,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 3,
                             Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2024, 2, 6, 13, 40, 37, 591, DateTimeKind.Local).AddTicks(9060),
+                            CreatedDate = new DateTime(2024, 2, 13, 16, 22, 52, 553, DateTimeKind.Local).AddTicks(7443),
                             Description = "Closed ticket",
                             Name = "Closed",
                             UpdatedBy = ""
@@ -1093,7 +1119,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 4,
                             Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2024, 2, 6, 13, 40, 37, 591, DateTimeKind.Local).AddTicks(9063),
+                            CreatedDate = new DateTime(2024, 2, 13, 16, 22, 52, 553, DateTimeKind.Local).AddTicks(7445),
                             Description = "Resolved ticket",
                             Name = "Resolved",
                             UpdatedBy = ""
@@ -1108,7 +1134,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("Active")
+                    b.Property<bool?>("Active")
                         .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")
@@ -1146,7 +1172,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 1,
                             Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2024, 2, 6, 13, 40, 37, 591, DateTimeKind.Local).AddTicks(9359),
+                            CreatedDate = new DateTime(2024, 2, 13, 16, 22, 52, 553, DateTimeKind.Local).AddTicks(7825),
                             Description = "Low Urgency",
                             Name = "Low",
                             UpdatedBy = ""
@@ -1156,7 +1182,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 2,
                             Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2024, 2, 6, 13, 40, 37, 591, DateTimeKind.Local).AddTicks(9362),
+                            CreatedDate = new DateTime(2024, 2, 13, 16, 22, 52, 553, DateTimeKind.Local).AddTicks(7828),
                             Description = "High urgency",
                             Name = "High",
                             UpdatedBy = ""
@@ -1166,7 +1192,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 3,
                             Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2024, 2, 6, 13, 40, 37, 591, DateTimeKind.Local).AddTicks(9364),
+                            CreatedDate = new DateTime(2024, 2, 13, 16, 22, 52, 553, DateTimeKind.Local).AddTicks(7830),
                             Description = "Normal urgency",
                             Name = "Normal",
                             UpdatedBy = ""
@@ -1176,7 +1202,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
                             Id = 4,
                             Active = true,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2024, 2, 6, 13, 40, 37, 591, DateTimeKind.Local).AddTicks(9367),
+                            CreatedDate = new DateTime(2024, 2, 13, 16, 22, 52, 553, DateTimeKind.Local).AddTicks(7833),
                             Description = "Urgent",
                             Name = "Urgent",
                             UpdatedBy = ""
@@ -1191,7 +1217,7 @@ namespace ShineCoder_Helpdesk.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("Active")
+                    b.Property<bool?>("Active")
                         .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")

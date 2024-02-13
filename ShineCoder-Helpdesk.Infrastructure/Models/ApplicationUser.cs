@@ -21,13 +21,15 @@ namespace ShineCoder_Helpdesk.Infrastructure.Models
 		public Int32? DepartmentId { get; set; }
 		public Department? Department { get; set; }
 		[MaxLength(100)]
-		public string JobTitle { get; set; }
+		public string? JobTitle { get; set; }
 		[MaxLength(50)]
-		public string City { get; set; }
+		public string? City { get; set; }
 		[MaxLength(50)]
-		public string State { get; set; }
+		public string? State { get; set; }
 		[MaxLength(250)]
-		public string Address { get; set; }
+		public string? Address { get; set; }
+
+		public  byte[]? ImageBytes { get; set; }
 
 		public bool Active { get; set; }
 	}
