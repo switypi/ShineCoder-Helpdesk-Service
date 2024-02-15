@@ -14,6 +14,7 @@ using ShineCoder_Helpdesk.Core.Models;
 using ShineCoder_Helpdesk.Infrastructure;
 using ShineCoder_Helpdesk.Infrastructure.Models;
 using ShineCoder_Helpdesk.Repository;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ShineCoder_Helpdesk.Services.Controllers
 {
@@ -190,10 +191,11 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 							select new UserModel
 							{
 								Id = x.Id,
-								DisplayName = x.FirstName,
+								DisplayName = x.FirstName+" "+x.LastName,
 								Email = x.Email,
 								PhoneNumber = x.PhoneNumber,
 								RoleName = z.RoleName,
+								
 								UserName = x.UserName,
 								Address = x.Address,
 								City = x.City,
@@ -216,8 +218,26 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 				return _responseBuilder.ServerError(ex.Message);
 			}
 		}
-
 		[HttpGet]
+        [Route("GetUser")]
+        public async Task<JObject> GetUser()
+		{
+			try
+			{
+                var id = _httpContextProxy.GetQueryString("_Id");
+                var db = _unitOfWork.GetDbContext as HelpdeskDbContext;
+				var userDetails = db.Users.Where(x=>x.UserName==id).FirstOrDefault();
+                return _responseBuilder.Success(userDetails.ImageBytes);
+
+            }
+			catch (Exception ex)
+			{
+                _logger.LogError(ex.Message);
+                return _responseBuilder.ServerError(ex.Message); 
+			}
+		}
+
+        [HttpGet]
 		[Route("GetTechnicians")]
 		public async Task<JObject> GetTechniciansById()
 		{

@@ -62,7 +62,12 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 					UserType = role == "CLIENT" ? Infrastructure.Enums.UserTypeEnum.CLIENT : Infrastructure.Enums.UserTypeEnum.AGENT,
 					DepartmentId = model.DepartmentId,
 					ImageBytes = model.ImageBytes,
-
+					PhoneNumber = model.PhoneNumber,
+					JobTitle = model.JobTitle,
+					Address = model.Address,
+					City = model.City,
+					State = model.State,
+					Active = false
 
 				};
 				ApplicationRole rolee = new ApplicationRole();
@@ -99,7 +104,9 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 		public async Task<(int, HelpDeskResults)> Login(LoginModel model)
 		{
 			var user = await userManager.FindByNameAsync(model.Username);
-			if (user == null)
+			if(user !=null && user.Active==false)
+                return (0, new HelpDeskResults { Succeeded = false, Message = "Un-Athorized login.Please contact support." });
+            if (user == null)
 				return (0, new HelpDeskResults { Succeeded = false, Message = "Invalid username" });
 			if (!await userManager.CheckPasswordAsync(user, model.Password))
 				return (0, new HelpDeskResults { Succeeded = false, Message = "Invalid password" });
