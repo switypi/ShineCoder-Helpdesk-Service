@@ -162,6 +162,9 @@ namespace ShineCoder_Helpdesk.Infrastructure
 				TwoFactorEnabled = false,
 				LockoutEnabled = false,
 				AccessFailedCount = 0,
+				Active = true,
+				NormalizedUserName="admin",
+				NormalizedEmail="admin@gmail.com",
 				UserType = Infrastructure.Enums.UserTypeEnum.ADMIN,
 				PasswordHash = hasher.HashPassword(null, "Abc@123"),
 			};
