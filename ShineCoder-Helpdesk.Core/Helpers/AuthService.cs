@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics.Eventing.Reader;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Linq.Expressions;
@@ -27,8 +28,10 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 		private readonly UserManager<ApplicationUser> userManager;
 		private readonly RoleManager<ApplicationRole> roleManager;
 		private readonly IConfiguration _configuration;
+		
 		private readonly ILogger _logger;
-		public AuthService(ILogger<AuthService> logger, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, IConfiguration configuration)
+		public AuthService(ILogger<AuthService> logger, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, 
+			IConfiguration configuration)
 		{
 			this.userManager = userManager;
 			this.roleManager = roleManager;
@@ -58,7 +61,8 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 					AccessFailedCount = 0,
 					UserType = role == "CLIENT" ? Infrastructure.Enums.UserTypeEnum.CLIENT : Infrastructure.Enums.UserTypeEnum.AGENT,
 					DepartmentId = model.DepartmentId,
-					
+					ImageBytes = model.ImageBytes,
+
 
 				};
 				ApplicationRole rolee = new ApplicationRole();
@@ -297,6 +301,37 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 				_logger.LogError("Error in GetAllRoles");
 				return (0, new HelpDeskResults { Succeeded = false, Message = ex.Message });
 			}
+		}
+
+		public async Task<(int, HelpDeskResults)> UpdateUser(UserModel userModel)
+		{
+			var user = await userManager.FindByIdAsync(userModel.Id.ToString());
+
+			if (userModel.OperationContext == OperationContextEnum.RESETPASSWORD)
+			{
+				user.PasswordHash = userManager.PasswordHasher.HashPassword(user, "Abc@123");
+				var res = await userManager.UpdateAsync(user);
+				if (!res.Succeeded)
+					return (0, new HelpDeskResults { Succeeded = res.Succeeded, Message = "", Errors = res.Errors });
+			}
+			else if (userModel.OperationContext == OperationContextEnum.ACTIVATEDEACTIVATEUSER)
+			{
+				user.Active =  userModel.Active;
+				var res=await userManager.UpdateAsync(user);
+				if (!res.Succeeded)
+					return (0, new HelpDeskResults { Succeeded = res.Succeeded, Message = "", Errors = res.Errors });
+			}
+			else if (userModel.OperationContext == OperationContextEnum.DELETEUSER)
+			{
+				
+				var isDeleted = await userManager.DeleteAsync(user);
+
+				if (!isDeleted.Succeeded)
+					return (0, new HelpDeskResults { Succeeded = isDeleted.Succeeded, Message = "", Errors = isDeleted.Errors });
+
+			}
+
+			return (1, new HelpDeskResults { Succeeded = true, Message = "User updated successfully!" });
 		}
 
 	}

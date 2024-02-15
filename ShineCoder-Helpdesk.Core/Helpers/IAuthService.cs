@@ -14,5 +14,6 @@ namespace ShineCoder_Helpdesk.Core.Helpers
         Task<IEnumerable<ApplicationUser>> GetAllUsers(Expression<Func<ApplicationUser, bool>> filter = null, Func<IQueryable<ApplicationUser>, IOrderedQueryable<ApplicationUser>> orderBy = null);
         Task<(int, HelpDeskResults)> GetAllRoles();
         Task<(int, HelpDeskResults)> GetUserRoles(string email);
+		 Task<(int, HelpDeskResults)> UpdateUser(UserModel userModel);
 	}
 }

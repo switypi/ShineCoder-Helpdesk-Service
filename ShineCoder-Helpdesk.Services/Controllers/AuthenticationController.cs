@@ -200,7 +200,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 								JobTitle = x.JobTitle,
 								State = x.State,
 								Active = x.Active,
-								ImageBytes=x.ImageBytes
+								ImageBytes = x.ImageBytes
 
 							}).ToList();
 
@@ -258,6 +258,51 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 				//trans.Rollback();
 				_logger.LogError(ex.Message);
 				return _responseBuilder.ServerError(ex.Message);
+			}
+		}
+
+		[HttpPost]
+		[Route("UpdateUser")]
+		public async Task<JObject> UpdateUser()
+		{
+			IDbContextTransaction trans = null;
+			using (trans = _unitOfWork.GetDbTransaction)
+			{
+				try
+				{
+					var inputModel = _httpContextProxy.GetRequestBody<UserModel>();
+					//var listOfErrors = _customerValidator.Validate(inputModel);
+					//if (listOfErrors.Count() > 0)
+					//{
+					//	return _responseBuilder.BadRequest(listOfErrors.ToJArray());
+
+					//};
+
+					if(inputModel.OperationContext==OperationContextEnum.DELETEUSER)
+					{
+						var tckts = await _unitOfWork.TicketRepository.GetAsync(x => x.Tkt_RequestUserId == inputModel.Id || x.Tkt_AssignedUserId==inputModel.Id);
+						if (tckts != null)
+						{
+							return _responseBuilder.BadRequest("User has tickets associated.Cannot delete user.",null);
+						}
+					}
+					var (status, data) = await _authService.UpdateUser(inputModel);
+
+					if (status == 0)
+					{
+						return _responseBuilder.BadRequest(data.ToJObject());
+					}
+					await trans.CommitAsync();
+
+					return _responseBuilder.Success("User updated.");
+				}
+				catch (Exception ex)
+				{
+
+					await trans.RollbackAsync();
+					_logger.LogError(ex.Message);
+					return _responseBuilder.ServerError(ex.Message);
+				}
 			}
 		}
 

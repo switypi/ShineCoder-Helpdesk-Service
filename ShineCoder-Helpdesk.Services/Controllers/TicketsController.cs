@@ -82,7 +82,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 			catch (Exception ex)
 			{
 				_logger.LogError(ex.Message);
-				return _responseBuilder.BadRequest(ex.Message);
+				return _responseBuilder.BadRequest(ex.Message,null);
 			}
 
 		}
@@ -99,7 +99,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 			catch (Exception ex)
 			{
 				_logger.LogError(ex.Message);
-				return _responseBuilder.BadRequest(ex.Message);
+				return _responseBuilder.BadRequest(ex.Message,null);
 			}
 
 		}
@@ -116,7 +116,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 			catch (Exception ex)
 			{
 				_logger.LogError(ex.Message);
-				return _responseBuilder.BadRequest(ex.Message);
+				return _responseBuilder.BadRequest(ex.Message,null);
 			}
 
 		}
@@ -133,7 +133,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 			catch (Exception ex)
 			{
 				_logger.LogError(ex.Message);
-				return _responseBuilder.BadRequest(ex.Message);
+				return _responseBuilder.BadRequest(ex.Message,null);
 			}
 
 		}
@@ -164,7 +164,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 			catch (Exception ex)
 			{
 				_logger.LogError(ex.Message);
-				return _responseBuilder.BadRequest(ex.Message);
+				return _responseBuilder.BadRequest(ex.Message,null);
 			}
 		}
 
@@ -261,7 +261,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 				{
 					await trans.RollbackAsync();
 					_logger.LogError(ex.Message);
-					return _responseBuilder.BadRequest(ex.Message);
+					return _responseBuilder.BadRequest(ex.Message,null);
 				}
 			}
 		}
@@ -297,7 +297,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 				{
 					await trans.RollbackAsync();
 					_logger.LogError(ex.Message);
-					return _responseBuilder.BadRequest(ex.Message);
+					return _responseBuilder.BadRequest(ex.Message,null);
 				}
 			}
 		}
@@ -334,7 +334,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 				{
 					await trans.RollbackAsync();
 					_logger.LogError(ex.Message);
-					return _responseBuilder.BadRequest(ex.Message);
+					return _responseBuilder.BadRequest(ex.Message,null);
 				}
 			}
 		}
@@ -375,7 +375,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 			catch (Exception ex)
 			{
 				_logger.LogError(ex.Message);
-				return _responseBuilder.BadRequest(ex.Message);
+				return _responseBuilder.BadRequest(ex.Message,null);
 			}
 		}
 
@@ -414,7 +414,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 				{
 					await trans.RollbackAsync();
 					_logger.LogError(ex.Message);
-					return _responseBuilder.BadRequest(ex.Message);
+					return _responseBuilder.BadRequest(ex.Message,null);
 				}
 			}
 		}

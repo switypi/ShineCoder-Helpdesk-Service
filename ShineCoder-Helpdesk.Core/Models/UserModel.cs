@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ShineCoder_Helpdesk.Core.Enums;
 
 namespace ShineCoder_Helpdesk.Core.Models
 {
@@ -41,5 +42,7 @@ namespace ShineCoder_Helpdesk.Core.Models
 		public byte[] ImageBytes { get; set; }
 
 		public bool Active { get; set; }
+
+		public OperationContextEnum OperationContext { get; set; }
 	}
 }
