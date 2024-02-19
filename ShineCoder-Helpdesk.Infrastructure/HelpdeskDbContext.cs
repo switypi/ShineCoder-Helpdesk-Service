@@ -171,6 +171,7 @@ namespace ShineCoder_Helpdesk.Infrastructure
 			builder.Entity<ApplicationUser>().HasData(user);
 
 			builder.Entity<IdentityUserRole<Int32>>().HasData(new IdentityUserRole<Int32>() { RoleId = 1, UserId = 1 });
+			builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32>() {Id=1, RoleId = 1,ClaimType= "FULLACCESS",ClaimValue="True" });
 
 		}
 
