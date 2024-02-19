@@ -42,6 +42,7 @@ namespace ShineCoder_Helpdesk.Core.Models
 		public byte[] ImageBytes { get; set; }
 
 		public bool Active { get; set; }
+		public int UserType { get; set; }
 
 		public OperationContextEnum OperationContext { get; set; }
 	}
