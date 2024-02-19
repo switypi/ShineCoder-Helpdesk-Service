@@ -65,7 +65,8 @@ namespace ShineCoder_Helpdesk.Core
 				if (code == ServerResponseCodeEnums.SUCCESS)
 				{
 					response[CommonField.HTTP_RESPONE_DATA] = data;
-				}
+                    response[CommonField.HTTP_RESPONE_MESSAGE] = data;
+                }
 				else
 				{
 					response[CommonField.HTTP_RESPONE_MESSAGE] = data;

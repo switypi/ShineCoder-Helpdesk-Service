@@ -116,10 +116,10 @@ namespace ShineCoder_Helpdesk.Infrastructure
 				new Ticket_Mode { Active = true, Id = 2, Name = "Email", Description = "Email", IsDefault = true },
 				new Ticket_Mode { Active = true, Id = 3, Name = "Phone", Description = "Phone", IsDefault = true }
 			);
-			builder.Entity<Ticket_Level>().HasData(
-				new Ticket_Level { Active = true, Id = 1, IsDefault = true, Description = "P1 level", Name = "P1" },
-				new Ticket_Level { Active = true, Id = 2, IsDefault = true, Description = "P2 level", Name = "P2" },
-				new Ticket_Level { Active = true, Id = 3, IsDefault = true, Description = "P3 level", Name = "P3" });
+			//builder.Entity<Ticket_Level>().HasData(
+			//	new Ticket_Level { Active = true, Id = 1, IsDefault = true, Description = "P1 level", Name = "P1" },
+			//	new Ticket_Level { Active = true, Id = 2, IsDefault = true, Description = "P2 level", Name = "P2" },
+			//	new Ticket_Level { Active = true, Id = 3, IsDefault = true, Description = "P3 level", Name = "P3" });
 
 			builder.Entity<Department>().HasData(
 			   new Department { Active = true, Id = 1, IsDefault = true, Description = "Technology ", Name = "Technology" },
@@ -144,11 +144,16 @@ namespace ShineCoder_Helpdesk.Infrastructure
 
 
 			builder.Entity<ApplicationRole>().HasData(
-			   new ApplicationRole { Id = 1, NormalizedName = "ADMIN", RoleName = "ADMIN", Name = "ADMIN", IsActive = true, IsAgent = false, IsClient = false },
-			   new ApplicationRole { Id = 2, NormalizedName = "CLIENT", RoleName = "CLIENT", Name = "CLIENT", IsActive = true, IsAgent = false, IsClient = true },
-			   new ApplicationRole { Id = 3, NormalizedName = "AGENT", RoleName = "AGENT", Name = "AGENT", IsActive = true, IsAgent = true, IsClient = false });
+			   new ApplicationRole { Id = 1, NormalizedName = "Admin", RoleName = "Admin", Name = "ADMIN", IsActive = true, IsAgent = false, IsClient = false },
+			   new ApplicationRole { Id = 2, NormalizedName = "Default", RoleName = "Default", Name = "Default", IsActive = true, IsAgent = false, IsClient = false });
+			//new ApplicationRole { Id = 3, NormalizedName = "AGENT", RoleName = "AGENT", Name = "AGENT", IsActive = true, IsAgent = true, IsClient = false });
 
-			var hasher = new PasswordHasher<ApplicationUser>();
+			builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32> { Id = 1, RoleId = 1, ClaimType = "FULLACCESS", ClaimValue = "True" });
+            builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32> { Id = 2, RoleId = 1, ClaimType = "EDIT", ClaimValue = "True" });
+            builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32> { Id = 3, RoleId = 1, ClaimType = "ADD", ClaimValue = "True" });
+            builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32> { Id = 4, RoleId = 1, ClaimType = "VIEW", ClaimValue = "True" });
+
+            var hasher = new PasswordHasher<ApplicationUser>();
 			var user = new ApplicationUser
 			{
 				Id = 1,

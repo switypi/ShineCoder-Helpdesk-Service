@@ -11,7 +11,6 @@ namespace ShineCoder_Helpdesk.Infrastructure.Models
 	public class ApplicationRole : IdentityRole<Int32>
 	{
 
-		
 		public string RoleName { get; set; }
 
 		public bool IsActive { get; set; }

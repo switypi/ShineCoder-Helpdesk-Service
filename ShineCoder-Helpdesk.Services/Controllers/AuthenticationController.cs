@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using Azure;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage;
 using Newtonsoft.Json;
@@ -18,316 +19,477 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ShineCoder_Helpdesk.Services.Controllers
 {
-	[Produces("application/json")]
-	[Route("api/v{version:apiVersion}" + ShineCoder_HelpDeskConstants.AUTHENTICATION_SERVICE_API_PREFIX)]
-	[ApiVersion(ShineCoder_HelpDeskConstants.SHINECODERLMS_VERSION)]
-	[ApiController]
-	public class AuthenticationController : ControllerBase
-	{
-		private readonly IHttpContextProxy _httpContextProxy;
-		private readonly IUnitOfWork _unitOfWork;
-		protected readonly IResponseBuilder _responseBuilder;
-		private readonly IAuthService _authService;
-		private readonly ILogger _logger;
-		private readonly IValidator _customerValidator;
+    [Produces("application/json")]
+    [Route("api/v{version:apiVersion}" + ShineCoder_HelpDeskConstants.AUTHENTICATION_SERVICE_API_PREFIX)]
+    [ApiVersion(ShineCoder_HelpDeskConstants.SHINECODERLMS_VERSION)]
+    [ApiController]
+    public class AuthenticationController : ControllerBase
+    {
+        private readonly IHttpContextProxy _httpContextProxy;
+        private readonly IUnitOfWork _unitOfWork;
+        protected readonly IResponseBuilder _responseBuilder;
+        private readonly IAuthService _authService;
+        private readonly ILogger _logger;
+        private readonly IValidator _customerValidator;
 
-		public AuthenticationController(IAuthService authService, IHttpContextProxy httpContextProxy, IUnitOfWork unitOfWork,
-			IResponseBuilder responseBuilder, ILogger<AuthenticationController> logger, IValidator customerValidator)
-		{
-			_httpContextProxy = httpContextProxy;
-			_unitOfWork = unitOfWork;
-			_responseBuilder = responseBuilder;
-			_authService = authService;
-			_logger = logger;
-			_customerValidator = customerValidator;
-		}
+        public AuthenticationController(IAuthService authService, IHttpContextProxy httpContextProxy, IUnitOfWork unitOfWork,
+            IResponseBuilder responseBuilder, ILogger<AuthenticationController> logger, IValidator customerValidator)
+        {
+            _httpContextProxy = httpContextProxy;
+            _unitOfWork = unitOfWork;
+            _responseBuilder = responseBuilder;
+            _authService = authService;
+            _logger = logger;
+            _customerValidator = customerValidator;
+        }
 
-		[HttpPost]
-		[Route("Login")]
-		public async Task<JObject> Login()
-		{
-			try
-			{
-				var inputModel = _httpContextProxy.GetRequestBody<LoginModel>();
-				var listOfErrors = _customerValidator.Validate(inputModel);
-				if (listOfErrors.Count() > 0)
-				{
-					return _responseBuilder.BadRequest(listOfErrors.ToJArray());
+        [HttpPost]
+        [Route("Login")]
+        public async Task<JObject> Login()
+        {
+            try
+            {
+                var inputModel = _httpContextProxy.GetRequestBody<LoginModel>();
+                var listOfErrors = _customerValidator.Validate(inputModel);
+                if (listOfErrors.Count() > 0)
+                {
+                    return _responseBuilder.BadRequest(listOfErrors.ToJArray());
 
-				};
+                };
 
-				var (status, data) = await _authService.Login(inputModel);
-				if (status == 0)
-					return _responseBuilder.BadRequest(data.ToJObject());
-				return _responseBuilder.Success(data.ToJObject());
-			}
-			catch (Exception ex)
-			{
-				_logger.LogError(ex.Message);
-				return _responseBuilder.ServerError(ex.Message);
-			}
-		}
+                var (status, data) = await _authService.Login(inputModel);
+                if (status == 0)
+                    return _responseBuilder.BadRequest(data.ToJObject());
+                return _responseBuilder.Success(data.ToJObject());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return _responseBuilder.ServerError(ex.Message);
+            }
+        }
 
-		[HttpPost]
-		[Route("Register")]
-		[ProducesResponseType(StatusCodes.Status200OK)]
-		public async Task<JObject> Register()
-		{
-			IDbContextTransaction trans = null;
-			using (trans = _unitOfWork.GetDbTransaction)
-			{
-				try
-				{
+        [HttpPost]
+        [Route("Register")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<JObject> Register()
+        {
+            IDbContextTransaction trans = null;
+            using (trans = _unitOfWork.GetDbTransaction)
+            {
+                try
+                {
 
-					var inputModel = _httpContextProxy.GetRequestBody<UserModel>();
-					var listOfErrors = _customerValidator.Validate(inputModel);
-					if (listOfErrors.Count() > 0)
-					{
-						return _responseBuilder.BadRequest(listOfErrors.ToJArray());
+                    var inputModel = _httpContextProxy.GetRequestBody<UserModel>();
+                    var listOfErrors = _customerValidator.Validate(inputModel);
+                    if (listOfErrors.Count() > 0)
+                    {
+                        return _responseBuilder.BadRequest(listOfErrors.ToJArray());
 
-					};
+                    };
 
-					var (status, data) = await _authService.RegisterationAsync(inputModel, inputModel.RoleName == "AGENT" ? UserRolesValues.Agent : UserRolesValues.Client);
+                    var (status, data) = await _authService.RegisterationAsync(inputModel);
 
-					if (status == 0)
-					{
-						return _responseBuilder.BadRequest(data.ToJObject());
-					}
-					await trans.CommitAsync();
+                    if (status == 0)
+                    {
+                        return _responseBuilder.BadRequest(data.ToJObject());
+                    }
+                    await trans.CommitAsync();
 
-					return _responseBuilder.Success("User Registered.");
+                    return _responseBuilder.Success("User Registered.");
 
-				}
-				catch (Exception ex)
-				{
-					await trans.RollbackAsync();
-					_logger.LogError(ex.Message);
-					return _responseBuilder.ServerError(ex.Message);
-				}
-			}
-		}
+                }
+                catch (Exception ex)
+                {
+                    await trans.RollbackAsync();
+                    _logger.LogError(ex.Message);
+                    return _responseBuilder.ServerError(ex.Message);
+                }
+            }
+        }
 
-		[HttpPost]
-		[Route("CreateRole")]
-		public async Task<JObject> CreateRole()
-		{
+        [HttpPost]
+        [Route("CreateRole")]
+        public async Task<JObject> CreateRole()
+        {
 
-			IDbContextTransaction trans = null;
-			using (trans = _unitOfWork.GetDbTransaction)
-			{
-				try
-				{
+            IDbContextTransaction trans = null;
+            using (trans = _unitOfWork.GetDbTransaction)
+            {
+                try
+                {
 
-					var roleName = _httpContextProxy.GetQueryString("roleName");
-					var (status, data) = await _authService.CreateRole(roleName);
+                    RoleModel roleData = _httpContextProxy.GetRequestBody<RoleModel>();
+                    var isExists = await _authService.IsRoleExists(roleData.Name);
+                    if (!isExists)
+                    {
+                        var (status, data) = await _authService.CreateRole(roleData);
 
-					if (status == 0)
-					{
-						return _responseBuilder.BadRequest(data.ToJObject());
-					}
-					await trans.CommitAsync();
-					return _responseBuilder.Success(data.ToJObject());
-
-
-				}
-				catch (Exception ex)
-				{
-					await trans.RollbackAsync();
-					_logger.LogError(ex.Message);
-					return _responseBuilder.ServerError(ex.Message);
-				}
-			}
-
-		}
-
-		[HttpGet]
-		[Route("GetAllRoles")]
-		public async Task<JObject> GetAllRoles()
-		{
-
-			//IDbContextTransaction trans = null;
-			try
-			{
-
-				var (status, data) = await _authService.GetAllRoles();
-				if (status == 0)
-				{
-					return _responseBuilder.BadRequest(data.ToJObject());
-				}
-				return _responseBuilder.Success(data.ToJObject());
+                        if (status == 0)
+                        {
+                            return _responseBuilder.BadRequest(data.ToJObject(), null);
+                        }
+                        await trans.CommitAsync();
+                        return _responseBuilder.Success(data.ToJObject(), null);
+                    }
+                    else
+                        return _responseBuilder.BadRequest("Role exists.Please use different name.", null);
 
 
-			}
-			catch (Exception ex)
-			{
-				//trans.Rollback();
-				_logger.LogError(ex.Message);
-				return _responseBuilder.ServerError(ex.Message);
-			}
+                }
+                catch (Exception ex)
+                {
+                    await trans.RollbackAsync();
+                    _logger.LogError(ex.Message);
+                    return _responseBuilder.ServerError(ex.Message);
+                }
+            }
 
-		}
+        }
 
-		[HttpGet]
-		[Route("GetRequestors")]
-		public async Task<JObject> GetRequestors()
-		{
+        [HttpGet]
+        [Route("GetAllRoles")]
+        public async Task<JObject> GetAllRoles()
+        {
 
-			try
-			{
-				var userType = _httpContextProxy.GetQueryString("_userType");
-				var dpt = _httpContextProxy.GetQueryString("_departmentId") != null ? _httpContextProxy.GetQueryString("_departmentId") : "0";
+            //IDbContextTransaction trans = null;
+            try
+            {
 
-				var departmentId = int.Parse(dpt);
-				List<UserModel> result = null;
-				var db = _unitOfWork.GetDbContext as HelpdeskDbContext;
-				var userRoles = db.UserRoles;
-
-				var data = (from x in db.Users
-							.Where(x => userType == "CLIENT" ? x.UserType == Infrastructure.Enums.UserTypeEnum.CLIENT : x.UserType == Infrastructure.Enums.UserTypeEnum.AGENT)
-							.Where(v => departmentId > 0 ? v.DepartmentId == departmentId : true)
-							join y in userRoles on x.Id equals y.UserId
-							join z in db.Roles on y.RoleId equals z.Id
-
-							select new UserModel
-							{
-								Id = x.Id,
-								DisplayName = x.FirstName+" "+x.LastName,
-								Email = x.Email,
-								PhoneNumber = x.PhoneNumber,
-								RoleName = z.RoleName,
-								
-								UserName = x.UserName,
-								Address = x.Address,
-								City = x.City,
-								JobTitle = x.JobTitle,
-								State = x.State,
-								Active = x.Active,
-								ImageBytes = x.ImageBytes
-
-							}).ToList();
+                var roles = await _authService.GetAllRoles();
+                if (roles == null)
+                {
+                    return _responseBuilder.BadRequest("Roles does not exists.");
+                }
+                return _responseBuilder.Success(roles.ToJArray());
 
 
-				return _responseBuilder.Success(data.ToJArray());
+            }
+            catch (Exception ex)
+            {
+                //trans.Rollback();
+                _logger.LogError(ex.Message);
+                return _responseBuilder.ServerError(ex.Message);
+            }
+
+        }
+
+        [HttpPost]
+        [Route("UpdateRoleAsync")]
+        public async Task<JObject> UpdateRoleAsync()
+        {
+
+            //IDbContextTransaction trans = null;
+            try
+            {
+                var roleObj = _httpContextProxy.GetRequestBody<RoleModel>();
+
+                ApplicationRole role = new ApplicationRole();
+                role.IsActive = roleObj.IsActive;
+                role.Name = roleObj.Name;
+                role.Id=roleObj.Id;
+                role.IsAgent = roleObj.IsAgent;
+                role.IsClient = roleObj.IsClient;
+                role.NormalizedName = roleObj.Name;
+
+                var (status,data) = await _authService.UpdateRole(role);
+                if (status==0)
+                {
+                    return _responseBuilder.BadRequest("Roles does not exists.",null);
+                }
+                return _responseBuilder.Success(data.Message);
 
 
-			}
-			catch (Exception ex)
-			{
-				//trans.Rollback();
-				_logger.LogError(ex.Message);
-				return _responseBuilder.ServerError(ex.Message);
-			}
-		}
-		[HttpGet]
+            }
+            catch (Exception ex)
+            {
+                //trans.Rollback();
+                _logger.LogError(ex.Message);
+                return _responseBuilder.ServerError(ex.Message);
+            }
+
+        }
+
+        [HttpDelete]
+        [Route("DeleteRole")]
+        public async Task<JObject> DeleteRole()
+        {
+
+            IDbContextTransaction trans = null;
+            using (trans = _unitOfWork.GetDbTransaction)
+            {
+                try
+                {
+
+                    var roleId = int.Parse(_httpContextProxy.GetQueryString("_id"));
+                    var res=await _authService.DeleteRole(roleId);
+                    //var attachment = _unitOfWork.TicketAttachmentRepository.GetAsync(x => x.Id == attachmentId).Result.FirstOrDefault();
+                    if (res)
+                    {
+                        return _responseBuilder.Success("Tickets updated.",null);
+                    }
+                    else
+                    {
+                        return _responseBuilder.BadRequest($"Could not delete role. ",null);
+                    }
+
+
+                }
+                catch (Exception ex)
+                {
+                    await trans.RollbackAsync();
+                    _logger.LogError(ex.Message);
+                    return _responseBuilder.BadRequest(ex.Message, null);
+                }
+            }
+
+        }
+
+        [HttpGet]
+        [Route("GetAllRolesById")]
+        public async Task<JObject> GetAllRolesById()
+        {
+
+            //IDbContextTransaction trans = null;
+            try
+            {
+                var id = int.Parse(_httpContextProxy.GetQueryString("_id"));
+                var (status, data) = await _authService.GetRolesById(id);
+                if (status == 0)
+                {
+                    return _responseBuilder.BadRequest(data.Message);
+                }
+                return _responseBuilder.Success(data.Result);
+
+
+            }
+            catch (Exception ex)
+            {
+                //trans.Rollback();
+                _logger.LogError(ex.Message);
+                return _responseBuilder.ServerError(ex.Message);
+            }
+
+        }
+
+        [HttpGet]
+        [Route("GetRequestors")]
+        public async Task<JObject> GetRequestors()
+        {
+
+            try
+            {
+                var userType = _httpContextProxy.GetQueryString("_userType");
+                var dpt = _httpContextProxy.GetQueryString("_departmentId") != null ? _httpContextProxy.GetQueryString("_departmentId") : "0";
+
+                var departmentId = int.Parse(dpt);
+                List<UserModel> result = null;
+                var db = _unitOfWork.GetDbContext as HelpdeskDbContext;
+                var userRoles = db.UserRoles;
+
+                var data = (from x in db.Users
+                            .Where(x => userType == "CLIENT" ? x.UserType == Infrastructure.Enums.UserTypeEnum.CLIENT : x.UserType == Infrastructure.Enums.UserTypeEnum.AGENT)
+                            .Where(v => departmentId > 0 ? v.DepartmentId == departmentId : true)
+                            join y in userRoles on x.Id equals y.UserId
+                            join z in db.Roles on y.RoleId equals z.Id
+
+                            select new UserModel
+                            {
+                                Id = x.Id,
+                                DisplayName = x.FirstName + " " + x.LastName,
+                                Email = x.Email,
+                                PhoneNumber = x.PhoneNumber,
+                                RoleName = z.RoleName,
+
+                                UserName = x.UserName,
+                                Address = x.Address,
+                                City = x.City,
+                                JobTitle = x.JobTitle,
+                                State = x.State,
+                                Active = x.Active,
+                                ImageBytes = x.ImageBytes
+
+                            }).ToList();
+
+
+                return _responseBuilder.Success(data.ToJArray());
+
+
+            }
+            catch (Exception ex)
+            {
+                //trans.Rollback();
+                _logger.LogError(ex.Message);
+                return _responseBuilder.ServerError(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("GetRequestorsByIdAsync")]
+        public async Task<JObject> GetRequestorsByIdAsync()
+        {
+
+            try
+            {
+                var userType = _httpContextProxy.GetQueryString("_userType");
+                var id = int.Parse(_httpContextProxy.GetQueryString("_Id"));
+                //var dpt = _httpContextProxy.GetQueryString("_departmentId") != null ? _httpContextProxy.GetQueryString("_departmentId") : "0";
+
+                // var departmentId = int.Parse(dpt);
+                List<UserModel> result = null;
+                var db = _unitOfWork.GetDbContext as HelpdeskDbContext;
+                var userRoles = db.UserRoles;
+
+                var data = (from x in db.Users
+                            .Where(x => userType == "CLIENT" ? x.UserType == Infrastructure.Enums.UserTypeEnum.CLIENT : x.UserType == Infrastructure.Enums.UserTypeEnum.AGENT)
+                            .Where(v => v.Id == id)
+                            join y in userRoles on x.Id equals y.UserId
+                            join z in db.Roles on y.RoleId equals z.Id
+
+                            select new UserModel
+                            {
+                                Id = x.Id,
+                                DisplayName = x.FirstName + " " + x.LastName,
+                                FirstName = x.FirstName,
+                                LastName = x.LastName,
+                                Email = x.Email,
+                                PhoneNumber = x.PhoneNumber,
+                                RoleName = z.RoleName,
+
+                                UserName = x.UserName,
+                                Address = x.Address,
+                                City = x.City,
+                                JobTitle = x.JobTitle,
+                                State = x.State,
+                                Active = x.Active,
+                                ImageBytes = x.ImageBytes
+
+                            }).ToList();
+
+
+                return _responseBuilder.Success(data.ToJArray());
+
+
+            }
+            catch (Exception ex)
+            {
+                //trans.Rollback();
+                _logger.LogError(ex.Message);
+                return _responseBuilder.ServerError(ex.Message);
+            }
+        }
+
+        [HttpGet]
         [Route("GetUser")]
         public async Task<JObject> GetUser()
-		{
-			try
-			{
+        {
+            try
+            {
                 var id = _httpContextProxy.GetQueryString("_Id");
                 var db = _unitOfWork.GetDbContext as HelpdeskDbContext;
-				var userDetails = db.Users.Where(x=>x.UserName==id).FirstOrDefault();
+                var userDetails = db.Users.Where(x => x.UserName == id).FirstOrDefault();
                 return _responseBuilder.Success(userDetails.ImageBytes);
 
             }
-			catch (Exception ex)
-			{
+            catch (Exception ex)
+            {
                 _logger.LogError(ex.Message);
-                return _responseBuilder.ServerError(ex.Message); 
-			}
-		}
+                return _responseBuilder.ServerError(ex.Message);
+            }
+        }
+
 
         [HttpGet]
-		[Route("GetTechnicians")]
-		public async Task<JObject> GetTechniciansById()
-		{
-			try
-			{
-				List<UserModel> result = null;
+        [Route("GetTechnicians")]
+        public async Task<JObject> GetTechniciansById()
+        {
+            try
+            {
+                List<UserModel> result = null;
 
-				var id = int.Parse(_httpContextProxy.GetQueryString("_Id"));
-				var db = _unitOfWork.GetDbContext as HelpdeskDbContext;
-				var userRoles = db.UserRoles;
+                var id = int.Parse(_httpContextProxy.GetQueryString("_Id"));
+                var db = _unitOfWork.GetDbContext as HelpdeskDbContext;
+                var userRoles = db.UserRoles;
 
-				var data = (from x in db.Users.Where(x => x.UserType == Infrastructure.Enums.UserTypeEnum.AGENT && x.Id == id)
-							join y in userRoles on x.Id equals y.UserId
-							join z in db.Roles on y.RoleId equals z.Id
+                var data = (from x in db.Users.Where(x => x.UserType == Infrastructure.Enums.UserTypeEnum.AGENT && x.Id == id)
+                            join y in userRoles on x.Id equals y.UserId
+                            join z in db.Roles on y.RoleId equals z.Id
 
-							select new UserModel
-							{
-								Id = x.Id,
-								DisplayName = x.FirstName,
-								Email = x.Email,
-								PhoneNumber = x.PhoneNumber,
-								RoleName = z.RoleName,
-								UserName = x.UserName,
-								Address = x.Address,
-								City = x.City,
-								JobTitle = x.JobTitle,
-								State = x.State,
-								Active = x.Active,
-							}).ToList();
-
-
-				return _responseBuilder.Success(data.ToJArray());
+                            select new UserModel
+                            {
+                                Id = x.Id,
+                                DisplayName = x.FirstName,
+                                Email = x.Email,
+                                PhoneNumber = x.PhoneNumber,
+                                RoleName = z.RoleName,
+                                UserName = x.UserName,
+                                Address = x.Address,
+                                City = x.City,
+                                JobTitle = x.JobTitle,
+                                State = x.State,
+                                Active = x.Active,
+                            }).ToList();
 
 
-			}
-			catch (Exception ex)
-			{
-				//trans.Rollback();
-				_logger.LogError(ex.Message);
-				return _responseBuilder.ServerError(ex.Message);
-			}
-		}
-
-		[HttpPost]
-		[Route("UpdateUser")]
-		public async Task<JObject> UpdateUser()
-		{
-			IDbContextTransaction trans = null;
-			using (trans = _unitOfWork.GetDbTransaction)
-			{
-				try
-				{
-					var inputModel = _httpContextProxy.GetRequestBody<UserModel>();
-					//var listOfErrors = _customerValidator.Validate(inputModel);
-					//if (listOfErrors.Count() > 0)
-					//{
-					//	return _responseBuilder.BadRequest(listOfErrors.ToJArray());
-
-					//};
-
-					if(inputModel.OperationContext==OperationContextEnum.DELETEUSER)
-					{
-						var tckts = await _unitOfWork.TicketRepository.GetAsync(x => x.Tkt_RequestUserId == inputModel.Id || x.Tkt_AssignedUserId==inputModel.Id);
-						if (tckts != null)
-						{
-							return _responseBuilder.BadRequest("User has tickets associated.Cannot delete user.",null);
-						}
-					}
-					var (status, data) = await _authService.UpdateUser(inputModel);
-
-					if (status == 0)
-					{
-						return _responseBuilder.BadRequest(data.ToJObject());
-					}
-					await trans.CommitAsync();
-
-					return _responseBuilder.Success("User updated.");
-				}
-				catch (Exception ex)
-				{
-
-					await trans.RollbackAsync();
-					_logger.LogError(ex.Message);
-					return _responseBuilder.ServerError(ex.Message);
-				}
-			}
-		}
+                return _responseBuilder.Success(data.ToJArray());
 
 
+            }
+            catch (Exception ex)
+            {
+                //trans.Rollback();
+                _logger.LogError(ex.Message);
+                return _responseBuilder.ServerError(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("UpdateUser")]
+        public async Task<JObject> UpdateUser()
+        {
+            IDbContextTransaction trans = null;
+            using (trans = _unitOfWork.GetDbTransaction)
+            {
+                try
+                {
+                    var inputModel = _httpContextProxy.GetRequestBody<UserModel>();
+                    //var listOfErrors = _customerValidator.Validate(inputModel);
+                    //if (listOfErrors.Count() > 0)
+                    //{
+                    //	return _responseBuilder.BadRequest(listOfErrors.ToJArray());
+
+                    //};
+
+                    if (inputModel.OperationContext == OperationContextEnum.DELETEUSER)
+                    {
+                        var tckts = await _unitOfWork.TicketRepository.GetAsync(x => x.Tkt_RequestUserId == inputModel.Id || x.Tkt_AssignedUserId == inputModel.Id);
+                        if (tckts != null)
+                        {
+                            return _responseBuilder.BadRequest("User has tickets associated.Cannot delete user.", null);
+                        }
+                    }
+                    var (status, data) = await _authService.UpdateUser(inputModel);
+
+                    if (status == 0)
+                    {
+                        return _responseBuilder.BadRequest(data.ToJObject());
+                    }
+                    await trans.CommitAsync();
+
+                    return _responseBuilder.Success(data.Message, null);
+                }
+                catch (Exception ex)
+                {
+
+                    await trans.RollbackAsync();
+                    _logger.LogError(ex.Message);
+                    return _responseBuilder.ServerError(ex.Message);
+                }
+            }
+        }
 
 
-	}
+
+
+    }
 }

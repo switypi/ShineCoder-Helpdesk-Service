@@ -10,6 +10,7 @@ namespace ShineCoder_Helpdesk.Core.Enums
 	{
 		RESETPASSWORD = 0,
 		DELETEUSER = 1,
-		ACTIVATEDEACTIVATEUSER = 2
+		ACTIVATEDEACTIVATEUSER = 2,
+		UPDATE=3,
 	}
 }
