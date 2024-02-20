@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using Azure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -187,15 +188,15 @@ namespace ShineCoder_Helpdesk.Services.Controllers
                 ApplicationRole role = new ApplicationRole();
                 role.IsActive = roleObj.IsActive;
                 role.Name = roleObj.Name;
-                role.Id=roleObj.Id;
+                role.Id = roleObj.Id;
                 role.IsAgent = roleObj.IsAgent;
                 role.IsClient = roleObj.IsClient;
                 role.NormalizedName = roleObj.Name;
 
-                var (status,data) = await _authService.UpdateRole(role);
-                if (status==0)
+                var (status, data) = await _authService.UpdateRole(role);
+                if (status == 0)
                 {
-                    return _responseBuilder.BadRequest("Roles does not exists.",null);
+                    return _responseBuilder.BadRequest("Roles does not exists.", null);
                 }
                 return _responseBuilder.Success(data.Message);
 
@@ -222,15 +223,15 @@ namespace ShineCoder_Helpdesk.Services.Controllers
                 {
 
                     var roleId = int.Parse(_httpContextProxy.GetQueryString("_id"));
-                    var res=await _authService.DeleteRole(roleId);
+                    var res = await _authService.DeleteRole(roleId);
                     //var attachment = _unitOfWork.TicketAttachmentRepository.GetAsync(x => x.Id == attachmentId).Result.FirstOrDefault();
                     if (res)
                     {
-                        return _responseBuilder.Success("Tickets updated.",null);
+                        return _responseBuilder.Success("Tickets updated.", null);
                     }
                     else
                     {
-                        return _responseBuilder.BadRequest($"Could not delete role. ",null);
+                        return _responseBuilder.BadRequest($"Could not delete role. ", null);
                     }
 
 
@@ -453,12 +454,6 @@ namespace ShineCoder_Helpdesk.Services.Controllers
                 try
                 {
                     var inputModel = _httpContextProxy.GetRequestBody<UserModel>();
-                    //var listOfErrors = _customerValidator.Validate(inputModel);
-                    //if (listOfErrors.Count() > 0)
-                    //{
-                    //	return _responseBuilder.BadRequest(listOfErrors.ToJArray());
-
-                    //};
 
                     if (inputModel.OperationContext == OperationContextEnum.DELETEUSER)
                     {
@@ -488,6 +483,74 @@ namespace ShineCoder_Helpdesk.Services.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("UpdateClaims")]
+        public async Task<JObject> UpdateClaims()
+        {
+            IDbContextTransaction trans = null;
+            var db = _unitOfWork.GetDbContext as HelpdeskDbContext;
+            Dictionary<string, string> claims = new Dictionary<string, string>();
+            using (trans = _unitOfWork.GetDbTransaction)
+            {
+                try
+                {
+                    var inputModel = _httpContextProxy.GetRequestBody<UserRolePermissionModel>();
+                    var user = db.Users.Where(x => x.Id == inputModel.UserId).FirstOrDefault();
+                    
+                    foreach(var item in inputModel.RoleIds)
+                    {
+                        var role= db.Roles.Where(x=>x.Id==item && x.IsActive==true);
+                        if (role != null)
+                        {
+                            claims.Add(nameof( ClaimEnum.FULLACCESS),inputModel.IsFullAccess.ToString());
+                            claims.Add(nameof(ClaimEnum.VIEW), inputModel.IsViewAccess.ToString());
+                            claims.Add(nameof(ClaimEnum.EDIT), inputModel.IsEditAccess.ToString());
+                            claims.Add(nameof(ClaimEnum.ADD), inputModel.IsAddAccess.ToString());
+
+                            var(status, data)= await _authService.UpdateUserClaim(role,user, claims);
+                            if (status == 0)
+                            {
+                                return _responseBuilder.ServerError(data.ToJObject());
+                            }
+                           
+                        }
+                    }
+                    await trans.CommitAsync();
+
+                    return _responseBuilder.Success("User role permission updated.", null);
+
+                }
+                catch (Exception ex)
+                {
+
+                    await trans.RollbackAsync();
+                    _logger.LogError(ex.Message);
+                    return _responseBuilder.ServerError(ex.Message);
+                }
+            }
+        }
+
+        [HttpPost]
+        [Route("GetUserRoleClaims")]
+        public async Task<object> GetUserRoleClaims()
+        {
+            try
+            {
+                var inputModel = _httpContextProxy.GetRequestBody<UserRoleModel>();
+
+                
+
+                return _responseBuilder.Success("User role permission updated.", null);
+
+            }
+            catch (Exception ex)
+            {
+
+                
+                _logger.LogError(ex.Message);
+                return _responseBuilder.ServerError(ex.Message);
+            }
+        }
 
 
 
