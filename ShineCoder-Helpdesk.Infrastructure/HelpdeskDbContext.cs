@@ -144,14 +144,14 @@ namespace ShineCoder_Helpdesk.Infrastructure
 
 
 			builder.Entity<ApplicationRole>().HasData(
-			   new ApplicationRole { Id = 1, NormalizedName = "Admin", RoleName = "Admin", Name = "ADMIN", IsActive = true, IsAgent = false, IsClient = false },
-			   new ApplicationRole { Id = 2, NormalizedName = "Default", RoleName = "Default", Name = "Default", IsActive = true, IsAgent = false, IsClient = false });
+			   new ApplicationRole { Id = 1, NormalizedName = "Admin", RoleName = "Admin", Name = "ADMIN", IsActive = true, IsAgent = false, IsClient = false });
+			  // new ApplicationRole { Id = 2, NormalizedName = "Default", RoleName = "Default", Name = "Default", IsActive = true, IsAgent = false, IsClient = false });
 			//new ApplicationRole { Id = 3, NormalizedName = "AGENT", RoleName = "AGENT", Name = "AGENT", IsActive = true, IsAgent = true, IsClient = false });
 
-			builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32> { Id = 1, RoleId = 1, ClaimType = "FULLACCESS", ClaimValue = "True" });
-            builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32> { Id = 2, RoleId = 1, ClaimType = "EDIT", ClaimValue = "True" });
-            builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32> { Id = 3, RoleId = 1, ClaimType = "ADD", ClaimValue = "True" });
-            builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32> { Id = 4, RoleId = 1, ClaimType = "VIEW", ClaimValue = "True" });
+			//builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32> { Id = 1, RoleId = 1, ClaimType = "FULLACCESS", ClaimValue = "True" });
+   //         builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32> { Id = 2, RoleId = 1, ClaimType = "EDIT", ClaimValue = "True" });
+   //         builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32> { Id = 3, RoleId = 1, ClaimType = "ADD", ClaimValue = "True" });
+   //         builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32> { Id = 4, RoleId = 1, ClaimType = "VIEW", ClaimValue = "True" });
 
             var hasher = new PasswordHasher<ApplicationUser>();
 			var user = new ApplicationUser

@@ -512,7 +512,7 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 		}
 
 
-        public async Task<(int, HelpDeskResults)> GetUserROleClaims(ApplicationUser user)
+        public async Task<(int, HelpDeskResults)> GetUserRoleClaims(ApplicationUser user)
         {
 
             List<UserRoleClaimModel> returnObjList = new List<UserRoleClaimModel>();
@@ -524,26 +524,32 @@ namespace ShineCoder_Helpdesk.Core.Helpers
                 {
                     var roleObject = await roleManager.Roles.Where(x => x.Name == role).FirstOrDefaultAsync();
                     var claims=await roleManager.GetClaimsAsync(roleObject);
-                    foreach(var cl in claims)
+                    UserRoleClaimModel obj = new UserRoleClaimModel();
+                    obj.RoleId = roleObject.Id;
+					foreach (var cl in claims)
                     {
                        switch (cl.Type)
                         {
                             case nameof(ClaimEnum.FULLACCESS):
-
+                                obj.IsFullAccess =bool.Parse(cl.Value);
                                 break;
                             case nameof(ClaimEnum.VIEW):
-                                break;
+								obj.IsViewAccess = bool.Parse(cl.Value);
+								break;
                             case nameof(ClaimEnum.ADD):
-                                break;
+								obj.IsAddAccess = bool.Parse(cl.Value);
+								break;
                             case nameof(ClaimEnum.EDIT):
-                                break;
+								obj.IsEditAccess = bool.Parse(cl.Value);
+								break;
                         }
+                        returnObjList.Add(obj);
                     }
 
                 }
                 
             }
-            return (1, new HelpDeskResults { Succeeded = true, Message = "User updated successfully!" });
+            return (1, new HelpDeskResults { Succeeded = true, Result= returnObjList.ToJArray() });
         }
 
     }

@@ -21,6 +21,6 @@ namespace ShineCoder_Helpdesk.Core.Helpers
         Task<bool> DeleteRole(int id);
         Task<(int, HelpDeskResults)> UpdateRole(ApplicationRole role);
         Task<(int, HelpDeskResults)> UpdateUserClaim(IEnumerable<ApplicationRole> roles,ApplicationUser user, Dictionary<string, string> claims);
-        Task<(int, HelpDeskResults)> GetUserROleClaims(ApplicationUser user)
+        Task<(int, HelpDeskResults)> GetUserRoleClaims(ApplicationUser user);
     }
 }
