@@ -176,7 +176,10 @@ namespace ShineCoder_Helpdesk.Infrastructure
 			builder.Entity<ApplicationUser>().HasData(user);
 
 			builder.Entity<IdentityUserRole<Int32>>().HasData(new IdentityUserRole<Int32>() { RoleId = 1, UserId = 1 });
-			builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32>() {Id=1, RoleId = 1,ClaimType= "FULLACCESS",ClaimValue="True" });
+			builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32>() {Id=1, RoleId = 1,ClaimType= "VIEWACCESS",ClaimValue="True" });
+			builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32>() { Id = 2, RoleId = 1, ClaimType = "ADDACCESS", ClaimValue = "True" });
+			builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32>() { Id = 3, RoleId = 1, ClaimType = "EDITACCESS", ClaimValue = "True" });
+			builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32>() { Id = 4, RoleId = 1, ClaimType = "DELETEACCESS", ClaimValue = "True" });
 
 		}
 

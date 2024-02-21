@@ -494,18 +494,25 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 			{
 				try
 				{
-					var inputModel = _httpContextProxy.GetRequestBody<UserRolePermissionModel>();
-					var user = db.Users.Where(x => x.Id == inputModel.UserId).FirstOrDefault();
-
-					foreach (var item in inputModel.RoleIds)
+					var inputModel = _httpContextProxy.GetRequestBody<List<UserRolePermissionModel>>();
+					if(inputModel ==null)
 					{
-						var role = db.Roles.Where(x => x.Id == item && x.IsActive == true);
+						return _responseBuilder.BadRequest("No input .", null);
+					}
+
+					var user = db.Users.Where(x => x.Id == inputModel.FirstOrDefault().UserId).FirstOrDefault();
+
+					foreach (var item in inputModel)
+					{
+						var role = db.Roles.Where(x => x.Id == item.RoleId && x.IsActive == true).FirstOrDefault();
 						if (role != null)
 						{
-							claims.Add(nameof(ClaimEnum.FULLACCESS), inputModel.IsFullAccess.ToString());
-							claims.Add(nameof(ClaimEnum.VIEW), inputModel.IsViewAccess.ToString());
-							claims.Add(nameof(ClaimEnum.EDIT), inputModel.IsEditAccess.ToString());
-							claims.Add(nameof(ClaimEnum.ADD), inputModel.IsAddAccess.ToString());
+
+							claims.Add(nameof(ClaimEnum.FULLACCESS), item.IsFullAccess.ToString()==""?"false": item.IsFullAccess.ToString());
+							claims.Add(nameof(ClaimEnum.VIEW), item.IsViewAccess.ToString() == "" ? "false" : item.IsViewAccess.ToString());
+							claims.Add(nameof(ClaimEnum.EDIT), item.IsEditAccess.ToString() == "" ? "false" : item.IsEditAccess.ToString());
+							claims.Add(nameof(ClaimEnum.ADD), item.IsAddAccess.ToString() == "" ? "false" : item.IsAddAccess.ToString());
+							claims.Add(nameof(ClaimEnum.DELETE), item.IsDeleteAccess.ToString() == "" ? "false" : item.IsDeleteAccess.ToString());
 
 							var (status, data) = await _authService.UpdateUserClaim(role, user, claims);
 							if (status == 0)
