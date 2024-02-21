@@ -8,9 +8,11 @@ namespace ShineCoder_Helpdesk.Infrastructure.Enums
 {
 	public enum UserTypeEnum
 	{
-		ADMIN,
-		AGENT,
-		CLIENT
+		ADMIN=0,
+        CLIENT=1,
+
+        AGENT=2
+		
 
 	}
 }

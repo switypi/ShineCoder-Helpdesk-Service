@@ -9,6 +9,7 @@ namespace ShineCoder_Helpdesk.Core.Models
     public class UserRoleClaimModel
     {
         public int RoleId { get; set; }
+        public string RoleName { get; set; }
         public bool IsFullAccess { get; set; }
         public bool IsAddAccess { get; set; }
         public bool IsEditAccess { get; set; }

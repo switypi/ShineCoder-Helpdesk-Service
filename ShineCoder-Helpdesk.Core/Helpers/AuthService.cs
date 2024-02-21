@@ -17,7 +17,7 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Linq;
 using ShineCoder_Helpdesk.Core.Enums;
 using ShineCoder_Helpdesk.Core.Models;
-using ShineCoder_Helpdesk.Infrastructure.Enums;
+
 using ShineCoder_Helpdesk.Infrastructure.Models;
 
 
@@ -85,7 +85,7 @@ namespace ShineCoder_Helpdesk.Core.Helpers
                 //    await roleManager.CreateAsync(rolee);
 
                 //if (await roleManager.RoleExistsAsync(role))
-               
+
 
                 //await userManager.AddClaimAsync(user, new Claim(Enum.GetName(typeof(ClaimEnum), ClaimEnum.FULLACCESS), "False"));
                 //await userManager.AddClaimAsync(user, new Claim(Enum.GetName(typeof(ClaimEnum), ClaimEnum.EDIT), "False"));
@@ -202,22 +202,22 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 
         }
 
-        public async Task<(int, HelpDeskResults)> UpdateUserClaim(IEnumerable<ApplicationRole> roles,ApplicationUser user, Dictionary<string, string> claims)
+        public async Task<(int, HelpDeskResults)> UpdateUserClaim(IEnumerable<ApplicationRole> roles, ApplicationUser user, Dictionary<string, string> claims)
         {
             try
             {
                 List<Claim> clms = new List<Claim>();
                 bool isSuccess = true;
-                IEnumerable<IdentityError> errors=null;
+                IEnumerable<IdentityError> errors = null;
 
 
                 var roleAssigned = await userManager.GetRolesAsync(user);
                 var issRoleremoved = await userManager.RemoveFromRolesAsync(user, roleAssigned);
 
-                if(!issRoleremoved.Succeeded)
+                if (!issRoleremoved.Succeeded)
                     return (0, new HelpDeskResults { Succeeded = false, Message = "Server error occured." });
 
-                var IsrolesAdded=await userManager.AddToRolesAsync(user,roles.Select(x=>x.Name));
+                var IsrolesAdded = await userManager.AddToRolesAsync(user, roles.Select(x => x.Name));
 
                 if (!IsrolesAdded.Succeeded)
                     return (0, new HelpDeskResults { Succeeded = false, Message = "Server error occured." });
@@ -448,108 +448,123 @@ namespace ShineCoder_Helpdesk.Core.Helpers
             return (1, new HelpDeskResults { Succeeded = true, Message = "User updated successfully!" });
         }
 
-		public async Task<(int, HelpDeskResults)> UpdateRolePermissions(UserRolePermissionModel model)
-		{
+        public async Task<(int, HelpDeskResults)> UpdateRolePermissions(UserRolePermissionModel model)
+        {
 
             foreach (var item in model.RoleNames)
             {
-				var roleModel = roleManager.Roles.Where(x => x.Name == item).FirstOrDefault();
-				var usersInRole =await  userManager.GetUsersInRoleAsync(item).ContinueWith(x=>x.Result.Where(v=>v.Id==model.UserId));
-				if(usersInRole != null)
-				{
-					var userRoleClaims =await roleManager.GetClaimsAsync(roleModel);
+                var roleModel = roleManager.Roles.Where(x => x.Name == item).FirstOrDefault();
+                var usersInRole = await userManager.GetUsersInRoleAsync(item).ContinueWith(x => x.Result.Where(v => v.Id == model.UserId));
+                if (usersInRole != null)
+                {
+                    var userRoleClaims = await roleManager.GetClaimsAsync(roleModel);
 
-					foreach(var userClaim in userRoleClaims)
-					{
-						switch (userClaim.Type)
-						{
-							case nameof(ClaimEnum.FULLACCESS):
-								if(model.IsFullAccess!=null && model.IsFullAccess!=bool.Parse(userClaim.Value))
-								{
-									await roleManager.RemoveClaimAsync(roleModel, userClaim);
-									await roleManager.AddClaimAsync(roleModel, new Claim(Enum.GetName(typeof(ClaimEnum), ClaimEnum.FULLACCESS), model.IsFullAccess.ToString()));
-								}
+                    foreach (var userClaim in userRoleClaims)
+                    {
+                        switch (userClaim.Type)
+                        {
+                            case nameof(ClaimEnum.FULLACCESS):
+                                if (model.IsFullAccess != null && model.IsFullAccess != bool.Parse(userClaim.Value))
+                                {
+                                    await roleManager.RemoveClaimAsync(roleModel, userClaim);
+                                    await roleManager.AddClaimAsync(roleModel, new Claim(Enum.GetName(typeof(ClaimEnum), ClaimEnum.FULLACCESS), model.IsFullAccess.ToString()));
+                                }
 
-								break;
-							case nameof(ClaimEnum.VIEW):
-								if (model.IsFullAccess != null && model.IsFullAccess != bool.Parse(userClaim.Value))
-								{
-									await roleManager.RemoveClaimAsync(roleModel, userClaim);
-									await roleManager.AddClaimAsync(roleModel, new Claim(Enum.GetName(typeof(ClaimEnum), ClaimEnum.FULLACCESS), model.IsFullAccess.ToString()));
-								}
+                                break;
+                            case nameof(ClaimEnum.VIEW):
+                                if (model.IsFullAccess != null && model.IsFullAccess != bool.Parse(userClaim.Value))
+                                {
+                                    await roleManager.RemoveClaimAsync(roleModel, userClaim);
+                                    await roleManager.AddClaimAsync(roleModel, new Claim(Enum.GetName(typeof(ClaimEnum), ClaimEnum.FULLACCESS), model.IsFullAccess.ToString()));
+                                }
 
-								break;
-							case nameof(ClaimEnum.ADD):
-								if (model.IsFullAccess != null && model.IsFullAccess != bool.Parse(userClaim.Value))
-								{
-									await roleManager.RemoveClaimAsync(roleModel, userClaim);
-									await roleManager.AddClaimAsync(roleModel, new Claim(Enum.GetName(typeof(ClaimEnum), ClaimEnum.FULLACCESS), model.IsFullAccess.ToString())); ;
-								}
+                                break;
+                            case nameof(ClaimEnum.ADD):
+                                if (model.IsFullAccess != null && model.IsFullAccess != bool.Parse(userClaim.Value))
+                                {
+                                    await roleManager.RemoveClaimAsync(roleModel, userClaim);
+                                    await roleManager.AddClaimAsync(roleModel, new Claim(Enum.GetName(typeof(ClaimEnum), ClaimEnum.FULLACCESS), model.IsFullAccess.ToString())); ;
+                                }
 
-								break;
-							case nameof(ClaimEnum.EDIT):
-								if (model.IsFullAccess != null && model.IsFullAccess != bool.Parse(userClaim.Value))
-								{
-									await roleManager.RemoveClaimAsync(roleModel, userClaim);
-									await roleManager.AddClaimAsync(roleModel, new Claim(Enum.GetName(typeof(ClaimEnum), ClaimEnum.FULLACCESS), model.IsFullAccess.ToString())); ;
-								}
+                                break;
+                            case nameof(ClaimEnum.EDIT):
+                                if (model.IsFullAccess != null && model.IsFullAccess != bool.Parse(userClaim.Value))
+                                {
+                                    await roleManager.RemoveClaimAsync(roleModel, userClaim);
+                                    await roleManager.AddClaimAsync(roleModel, new Claim(Enum.GetName(typeof(ClaimEnum), ClaimEnum.FULLACCESS), model.IsFullAccess.ToString())); ;
+                                }
 
-								break;
+                                break;
 
-						}
-					}
-
-					
-
-				}
-			
+                        }
+                    }
 
 
-			}
 
-			return (1, new HelpDeskResults { Succeeded = true, Message = "User updated successfully!" });
-
-		}
+                }
 
 
-        public async Task<(int, HelpDeskResults)> GetUserRoleClaims(ApplicationUser user)
+
+            }
+
+            return (1, new HelpDeskResults { Succeeded = true, Message = "User updated successfully!" });
+
+        }
+
+
+        public async Task<(int, HelpDeskResults)> GetUserRoleClaims(ApplicationUser user, UserTypeEnum userType)
         {
 
             List<UserRoleClaimModel> returnObjList = new List<UserRoleClaimModel>();
             var roles = await userManager.GetRolesAsync(user);
-            
-            if(roles!=null)
+
+            if (roles != null)
             {
-                foreach (var role in roles)
+                foreach (var role in roles.Where(x => x != "ADMIN")) //Leaving admin role
                 {
                     var roleObject = await roleManager.Roles.Where(x => x.Name == role).FirstOrDefaultAsync();
-                    var claims=await roleManager.GetClaimsAsync(roleObject);
+                    var claims = await roleManager.GetClaimsAsync(roleObject);
                     UserRoleClaimModel obj = new UserRoleClaimModel();
                     obj.RoleId = roleObject.Id;
-					foreach (var cl in claims)
+                    obj.RoleName = roleObject.Name;
+                    foreach (var cl in claims)
                     {
-                       switch (cl.Type)
+                        switch (cl.Type)
                         {
                             case nameof(ClaimEnum.FULLACCESS):
-                                obj.IsFullAccess =bool.Parse(cl.Value);
+                                obj.IsFullAccess = bool.Parse(cl.Value);
                                 break;
                             case nameof(ClaimEnum.VIEW):
-								obj.IsViewAccess = bool.Parse(cl.Value);
-								break;
+                                obj.IsViewAccess = bool.Parse(cl.Value);
+                                break;
                             case nameof(ClaimEnum.ADD):
-								obj.IsAddAccess = bool.Parse(cl.Value);
-								break;
+                                obj.IsAddAccess = bool.Parse(cl.Value);
+                                break;
                             case nameof(ClaimEnum.EDIT):
-								obj.IsEditAccess = bool.Parse(cl.Value);
-								break;
+                                obj.IsEditAccess = bool.Parse(cl.Value);
+                                break;
                         }
+                        returnObjList.Add(obj);
+                    }
+                    if (claims == null)
+                    {
                         returnObjList.Add(obj);
                     }
 
                 }
-                
+
             }
-            return (1, new HelpDeskResults { Succeeded = true, Result= returnObjList.ToJArray() });
+            var roleIds = returnObjList.Select(x => x.RoleId);
+            var extraRoles = roleManager.Roles.Where(x => roleIds.Contains(x.Id) == false && x.Id != 1 && 
+            userType==UserTypeEnum.CLIENT?x.IsClient==true:x.IsAgent==true && x.IsActive==true).ToList(); //Leaving admin role
+            foreach (var item in extraRoles)
+            {
+                UserRoleClaimModel obj = new UserRoleClaimModel();
+                obj.RoleId = item.Id;
+                obj.RoleName = item.Name;
+                returnObjList.Add(obj);
+            }
+            return (1, new HelpDeskResults { Succeeded = true, Result = returnObjList.ToJArray() });
         }
 
     }

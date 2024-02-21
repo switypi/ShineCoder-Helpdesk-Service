@@ -544,7 +544,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 				}
 				ApplicationUser user = db.Users.Where(x => x.Id == inputModel.UserId).FirstOrDefault();
 
-				var (data, result) = await _authService.GetUserRoleClaims(user);
+				var (data, result) = await _authService.GetUserRoleClaims(user,inputModel.UserType);
 
 				return _responseBuilder.Success(result.Result, null);
 

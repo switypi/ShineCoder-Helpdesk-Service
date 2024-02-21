@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using ShineCoder_Helpdesk.Core.Enums;
 using ShineCoder_Helpdesk.Core.Models;
 using ShineCoder_Helpdesk.Infrastructure.Models;
 
@@ -21,6 +22,6 @@ namespace ShineCoder_Helpdesk.Core.Helpers
         Task<bool> DeleteRole(int id);
         Task<(int, HelpDeskResults)> UpdateRole(ApplicationRole role);
         Task<(int, HelpDeskResults)> UpdateUserClaim(IEnumerable<ApplicationRole> roles,ApplicationUser user, Dictionary<string, string> claims);
-        Task<(int, HelpDeskResults)> GetUserRoleClaims(ApplicationUser user);
+        Task<(int, HelpDeskResults)> GetUserRoleClaims(ApplicationUser user,UserTypeEnum userType);
     }
 }
