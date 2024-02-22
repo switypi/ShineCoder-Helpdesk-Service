@@ -115,6 +115,7 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 			var authClaims = new List<Claim>
 			{
 			   new Claim(ClaimTypes.Name, user.UserName),
+			   new Claim(ClaimTypes.Email, user.Email),
 			   new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
 			};
 
@@ -126,7 +127,6 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 				foreach (var item in claims)
 				{
 					authClaims.Add(item);
-
 				}
 				
 			}
