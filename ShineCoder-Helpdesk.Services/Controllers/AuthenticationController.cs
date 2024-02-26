@@ -280,17 +280,21 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 
 			try
 			{
-				var userType = _httpContextProxy.GetQueryString("_userType");
-				var dpt = _httpContextProxy.GetQueryString("_departmentId") != null ? _httpContextProxy.GetQueryString("_departmentId") : "0";
+				var searchModel = _httpContextProxy.GetRequestBody<SearchModel>();
 
-				var departmentId = int.Parse(dpt);
-				List<UserModel> result = null;
+				//var dpt = _httpContextProxy.GetQueryString("_departmentId") != null ? _httpContextProxy.GetQueryString("_departmentId") : "0";
+                ///var searchStr = _httpContextProxy.GetQueryString("_searchStr") != null ? _httpContextProxy.GetQueryString("_searchStr") : "";
+
+               // var departmentId = int.Parse(dpt);
+				//List<UserModel> result = null;
 				var db = _unitOfWork.GetDbContext as HelpdeskDbContext;
 				var userRoles = db.UserRoles;
 
-				var data = (from x in db.Users
-							.Where(x => userType == "CLIENT" ? x.UserType == Infrastructure.Enums.UserTypeEnum.CLIENT : x.UserType == Infrastructure.Enums.UserTypeEnum.AGENT)
-							.Where(v => departmentId > 0 ? v.DepartmentId == departmentId : true)
+				var data = from x in db.Users
+							.Where(x => searchModel.UserType == UserTypeEnum.CLIENT ? x.UserType == Infrastructure.Enums.UserTypeEnum.CLIENT : x.UserType == Infrastructure.Enums.UserTypeEnum.AGENT)
+							.Where(v => searchModel.DepartmentId > 0 ? v.DepartmentId == searchModel.DepartmentId : true)
+
+
 							join y in userRoles on x.Id equals y.UserId
 							join z in db.Roles on y.RoleId equals z.Id
 
@@ -301,7 +305,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 								Email = x.Email,
 								PhoneNumber = x.PhoneNumber,
 								RoleName = z.RoleName,
-
+								
 								UserName = x.UserName,
 								Address = x.Address,
 								City = x.City,
@@ -310,10 +314,32 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 								Active = x.Active,
 								ImageBytes = x.ImageBytes
 
-							}).ToList();
+							};
 
 
-				return _responseBuilder.Success(data.ToJArray());
+				switch (searchModel.SearchOption)
+				{
+					case "1":
+						data.Where(x => x.DisplayName.StartsWith(searchModel.SearchString));
+						break;
+					case "2":
+                        data.Where(x => x.UserName.StartsWith(searchModel.SearchString));
+                        break;
+					case "3":
+                        data.Where(x => x.Email.StartsWith(searchModel.SearchString));
+                        break;
+					case "4":
+                        data.Where(x => x.RoleName.StartsWith(searchModel.SearchString));
+                        break;
+					case "5":
+                        data.Where(x => x.JobTitle.StartsWith(searchModel.SearchString));
+                        break;
+					case "6":
+                        data.Where(x => x.PhoneNumber.StartsWith(searchModel.SearchString));
+                        break;
+				}
+
+				return _responseBuilder.Success(data.ToList().ToJArray());
 
 
 			}
