@@ -48,14 +48,14 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 			_mapper = mapper;
 		}
 
-		[HttpGet]
+		[HttpPost]
 		[Route("GetTicketsByIdAsync")]
 		public async Task<JObject> GetTicketsByIdAsync()
 		{
 			try
 			{
-				var id = int.Parse(_httpContextProxy.GetQueryString("_TicketId"));
-				var data = GetTicketDetails(id, "");
+				var searchModel = _httpContextProxy.GetRequestBody<SearchModel>();
+				var data = GetTicketDetails(searchModel);
 
 				return _responseBuilder.Success(data.ToJArray());
 
@@ -82,7 +82,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 			catch (Exception ex)
 			{
 				_logger.LogError(ex.Message);
-				return _responseBuilder.BadRequest(ex.Message,null);
+				return _responseBuilder.BadRequest(ex.Message, null);
 			}
 
 		}
@@ -99,7 +99,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 			catch (Exception ex)
 			{
 				_logger.LogError(ex.Message);
-				return _responseBuilder.BadRequest(ex.Message,null);
+				return _responseBuilder.BadRequest(ex.Message, null);
 			}
 
 		}
@@ -116,7 +116,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 			catch (Exception ex)
 			{
 				_logger.LogError(ex.Message);
-				return _responseBuilder.BadRequest(ex.Message,null);
+				return _responseBuilder.BadRequest(ex.Message, null);
 			}
 
 		}
@@ -133,7 +133,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 			catch (Exception ex)
 			{
 				_logger.LogError(ex.Message);
-				return _responseBuilder.BadRequest(ex.Message,null);
+				return _responseBuilder.BadRequest(ex.Message, null);
 			}
 
 		}
@@ -147,16 +147,16 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 				//var ticketData = await _unitOfWork.TicketRepository.GetAsync();
 				var db = _unitOfWork.GetDbContext as HelpdeskDbContext;
 				var grpdata = (from item in db.Tickets
-							  join item2 in db.Ticket_Status on item.TicketStatusId equals item2.Id
-							  select new
-							  {
-								  Status = item2.Name,
-								  StatusId=item.TicketStatusId,
-								  TicketId = item.Id,
-								  DueDate = item.Tkt_DueDate
-							  }).ToList();
-				var compData=grpdata.GroupBy(x=>x.Status).Select(v=> new ChartModelData { Status=v.Key,Count=v.Count()});
-				
+							   join item2 in db.Ticket_Status on item.TicketStatusId equals item2.Id
+							   select new
+							   {
+								   Status = item2.Name,
+								   StatusId = item.TicketStatusId,
+								   TicketId = item.Id,
+								   DueDate = item.Tkt_DueDate
+							   }).ToList();
+				var compData = grpdata.GroupBy(x => x.Status).Select(v => new ChartModelData { Status = v.Key, Count = v.Count() });
+
 
 				//ticketData.GroupBy(x => x.TicketStatusId).Select(y => new { StatusName = y.ke, Count = y.Count() }).OrderBy(x=>x.StatusName).ToList();
 				return _responseBuilder.Success(compData.ToJArray());
@@ -164,7 +164,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 			catch (Exception ex)
 			{
 				_logger.LogError(ex.Message);
-				return _responseBuilder.BadRequest(ex.Message,null);
+				return _responseBuilder.BadRequest(ex.Message, null);
 			}
 		}
 
@@ -261,7 +261,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 				{
 					await trans.RollbackAsync();
 					_logger.LogError(ex.Message);
-					return _responseBuilder.BadRequest(ex.Message,null);
+					return _responseBuilder.BadRequest(ex.Message, null);
 				}
 			}
 		}
@@ -297,7 +297,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 				{
 					await trans.RollbackAsync();
 					_logger.LogError(ex.Message);
-					return _responseBuilder.BadRequest(ex.Message,null);
+					return _responseBuilder.BadRequest(ex.Message, null);
 				}
 			}
 		}
@@ -334,21 +334,21 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 				{
 					await trans.RollbackAsync();
 					_logger.LogError(ex.Message);
-					return _responseBuilder.BadRequest(ex.Message,null);
+					return _responseBuilder.BadRequest(ex.Message, null);
 				}
 			}
 		}
 
-		[HttpGet]
+		[HttpPost]
 		[Route("GetAllTickets")]
 		public async Task<JObject> GettAllTickets()
 		{
 			try
 			{
-				var status = _httpContextProxy.GetQueryString("_ticketStatus");
+				var searchModel = _httpContextProxy.GetRequestBody<SearchModel>();
 
 
-				var data = GetTicketDetails(status: status);
+				var data = GetTicketDetails(searchModel);
 
 				return _responseBuilder.Success(data.ToJArray());
 
@@ -375,13 +375,13 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 			catch (Exception ex)
 			{
 				_logger.LogError(ex.Message);
-				return _responseBuilder.BadRequest(ex.Message,null);
+				return _responseBuilder.BadRequest(ex.Message, null);
 			}
 		}
 
 		[HttpPost]
 		[Route("AssignTicket")]
-		public  async Task<JObject> AssignTicket()
+		public async Task<JObject> AssignTicket()
 		{
 			IDbContextTransaction trans = null;
 			using (trans = _unitOfWork.GetDbTransaction)
@@ -399,10 +399,10 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 
 					if (tickets != null)
 					{
-						
-						tickets.TicketStatusId =(int) TicketStatusEnum.Open;
+
+						tickets.TicketStatusId = (int)TicketStatusEnum.Open;
 						tickets.Tkt_AssignedUserId = inputModel.Tkt_AssignedUserId;
-					
+
 						_unitOfWork.TicketRepository.UpdateAsync(tickets);
 						await _unitOfWork.SaveAsync();
 						await trans.CommitAsync();
@@ -414,14 +414,14 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 				{
 					await trans.RollbackAsync();
 					_logger.LogError(ex.Message);
-					return _responseBuilder.BadRequest(ex.Message,null);
+					return _responseBuilder.BadRequest(ex.Message, null);
 				}
 			}
 		}
 
 
 
-		private List<TicketsModel> GetTicketDetails(Int32? Tkt_Id = null, string status = null)
+		private List<TicketsModel> GetTicketDetails(SearchModel searchModel)
 		{
 			try
 			{
@@ -429,23 +429,23 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 				IQueryable<Tickets> tksQuery = null;
 				var db = _unitOfWork.GetDbContext as HelpdeskDbContext;
 				//var userRoles = db.UserRoles;
-				if (Tkt_Id != null)
-					tksQuery = db.Tickets.Where(x => x.Active == true && x.Id == Tkt_Id);
+				if (searchModel.Tkt_Id != null)
+					tksQuery = db.Tickets.Where(x => x.Active == true && x.Id == searchModel.Tkt_Id);
 				else
 				{
-					if (status == Enum.GetName(typeof(TicketStatusEnum), TicketStatusEnum.New))
+					if (searchModel.Status == TicketStatusEnum.New)
 						tksQuery = db.Tickets.Where(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.New);
-					else if (status == Enum.GetName(typeof(TicketStatusEnum), TicketStatusEnum.Assigned))
-						tksQuery = db.Tickets.Where(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.Open );
-					else if (status == Enum.GetName(typeof(TicketStatusEnum), TicketStatusEnum.Pending))
+					else if (searchModel.Status == TicketStatusEnum.Assigned)
 						tksQuery = db.Tickets.Where(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.Open);
-					else if (status == Enum.GetName(typeof(TicketStatusEnum), TicketStatusEnum.Closed))
+					else if (searchModel.Status == TicketStatusEnum.Pending)
+						tksQuery = db.Tickets.Where(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.Open);
+					else if (searchModel.Status == TicketStatusEnum.Closed)
 						tksQuery = db.Tickets.Where(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.Closed);
-					else if (status == Enum.GetName(typeof(TicketStatusEnum), TicketStatusEnum.OverDue))
+					else if (searchModel.Status == TicketStatusEnum.OverDue)
 						tksQuery = db.Tickets.Where(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.Open && x.Tkt_DueDate < DateTime.Today);
-					else if (status == Enum.GetName(typeof(TicketStatusEnum), TicketStatusEnum.DueToday))
-						tksQuery = db.Tickets.Where(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.Open && x.Tkt_DueDate== DateTime.Today);
-					else 
+					else if (searchModel.Status == TicketStatusEnum.DueToday)
+						tksQuery = db.Tickets.Where(x => x.Active == true && x.TicketStatusId == (int)TicketStatusEnum.Open && x.Tkt_DueDate == DateTime.Today);
+					else
 						tksQuery = db.Tickets.Where(x => x.Active == true);
 				}
 
@@ -502,16 +502,46 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 
 
 
-							}).ToList();
+							});
+
+				switch (searchModel.SearchOption)
+				{
+					case "1":
+						data.Where(x => x.Tkt_Number.StartsWith(searchModel.SearchString));
+						break;
+					case "2":
+						data.Where(x => x.Tkt_Status.StartsWith(searchModel.SearchString));
+						break;
+					case "3":
+						data.Where(x => x.Tkt_AssignedUser.StartsWith(searchModel.SearchString));
+						break;
+					case "4":
+						data.Where(x => x.Tkt_Priority.StartsWith(searchModel.SearchString));
+						break;
+					case "5":
+						data.Where(x => x.Tkt_Requester.StartsWith(searchModel.SearchString));
+						break;
+					case "6":
+						data.Where(x => x.Tkt_Category.StartsWith(searchModel.SearchString));
+						break;
+					case "7":
+						data.Where(x => x.Tkt_Department.StartsWith(searchModel.SearchString));
+						break;
+					case "8":
+						data.Where(x => x.Tkt_location.StartsWith(searchModel.SearchString));
+						break;
+				}
+
 
 				var atch = (from x in db.Ticket_Attachments.AsEnumerable()
 							join y in data on x.TicketId equals y.Id
 							where x.Active == true
 							select new Ticket_Attachments { Id = x.Id, TicketId = x.TicketId, Name = x.Name }).ToList();
+				var finalResult = data.ToList();
 
-				data.ForEach(x => { x.Ticket_Attachments = atch.Where(c => c.TicketId == x.Id).ToList(); });
+				finalResult.ForEach(x => { x.Ticket_Attachments = atch.Where(c => c.TicketId == x.Id).ToList(); });
 
-				return data.ToList();
+				return finalResult;
 
 
 			}
