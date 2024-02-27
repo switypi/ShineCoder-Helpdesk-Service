@@ -464,7 +464,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 				IQueryable<Tickets> tksQuery = null;
 				var db = _unitOfWork.GetDbContext as HelpdeskDbContext;
 				//var userRoles = db.UserRoles;
-				if (searchModel.Tkt_Id != null)
+				if (searchModel.Tkt_Id != null && searchModel.Tkt_Id>0)
 					tksQuery = db.Tickets.Where(x => x.Active == true && x.Id == searchModel.Tkt_Id);
 				else
 				{
@@ -495,7 +495,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 							join r in db.Ticket_Priorities.Where(qq => qq.Active == true) on x.TicketPriorityId equals r.Id
 							join s in db.RequestTypes.Where(qq => qq.Active == true) on x.Tkt_RequestTypeId equals s.Id
 							join t in db.Ticket_Modes.Where(qq => qq.Active == true) on x.Ticket_ModeId equals t.Id
-							join u in db.Ticket_Levels.Where(qq => qq.Active == true) on x.TicketLevelId equals u.Id
+							//join u in db.Ticket_Levels.Where(qq => qq.Active == true) on x.TicketLevelId equals u.Id
 							join o in db.Users on x.Tkt_RequestUserId equals o.Id
 							from p in db.Users.Where(m => m.Id == x.Tkt_AssignedUserId).DefaultIfEmpty()
 								// from ta in db.Attachments.Where(cv=>cv.TicketId==x.Id).DefaultIfEmpty()
@@ -524,11 +524,11 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 								Tkt_Department = v.Name,
 								Tkt_Category = y.Name,
 								Tkt_Imapct = q.Name,
-								Tkt_Level = u.Name,
+								//Tkt_Level = u.Name,
 								Tkt_Mode = t.Name,
 								Tkt_Requester = o.FirstName + " " + o.LastName,
 								Tkt_Subcategory = y1.Name,
-								Ticket_Subject = u.Name,
+								Ticket_Subject = x.Ticket_Subject,
 								Tkt_AssignedUser = p == null ? null : p.FirstName + " " + p.LastName,
 								Tkt_location = w.Name,
 								Tkt_CreatedDate = x.CreatedDate.Value,
