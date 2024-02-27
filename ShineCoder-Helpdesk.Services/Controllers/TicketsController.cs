@@ -148,6 +148,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 				var db = _unitOfWork.GetDbContext as HelpdeskDbContext;
 				var grpdata = (from item in db.Tickets
 							   join item2 in db.Ticket_Status on item.TicketStatusId equals item2.Id
+
 							   select new
 							   {
 								   Status = item2.Name,
@@ -155,11 +156,45 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 								   TicketId = item.Id,
 								   DueDate = item.Tkt_DueDate
 							   }).ToList();
-				var compData = grpdata.GroupBy(x => x.Status).Select(v => new ChartModelData { Status = v.Key, Count = v.Count() });
+
+
+				List<ChartModelData> retObjList = new List<ChartModelData>();
+
+				ChartModelData model = new ChartModelData();
+				model.Status = nameof(TicketStatusEnum.Closed);
+				model.Count=grpdata.Where(x=>x.Status==nameof(TicketStatusEnum.Closed)).Count();
+				retObjList.Add(model);
+
+                ChartModelData model1 = new ChartModelData();
+                model1.Status = nameof(TicketStatusEnum.Open);
+                model1.Count = grpdata.Where(x => x.Status == nameof(TicketStatusEnum.Open)).Count();
+                retObjList.Add(model1);
+
+                ChartModelData model2 = new ChartModelData();
+                model2.Status = nameof(TicketStatusEnum.Resolved);
+                model2.Count = grpdata.Where(x => x.Status == nameof(TicketStatusEnum.Resolved)).Count();
+                retObjList.Add(model2);
+
+                ChartModelData model3 = new ChartModelData();
+                model3.Status = nameof(TicketStatusEnum.New);
+                model3.Count = grpdata.Where(x => x.Status == nameof(TicketStatusEnum.New)).Count();
+                retObjList.Add(model3);
+
+                ChartModelData model4 = new ChartModelData();
+                model4.Status = nameof(TicketStatusEnum.OverDue);
+                model4.Count = grpdata.Where(x => x.Status == nameof(TicketStatusEnum.Open) && x.DueDate>DateTime.Today).Count();
+                retObjList.Add(model4);
+
+                ChartModelData model5 = new ChartModelData();
+                model5.Status = nameof(TicketStatusEnum.DueToday);
+                model5.Count = grpdata.Where(x => x.Status == nameof(TicketStatusEnum.Open) && x.DueDate == DateTime.Today).Count();
+                retObjList.Add(model5);
+
+                //var compData = grpdata.GroupBy(x => x.Status).Select(v => new ChartModelData { Status = v.Key, Count = v.Count() });
 
 
 				//ticketData.GroupBy(x => x.TicketStatusId).Select(y => new { StatusName = y.ke, Count = y.Count() }).OrderBy(x=>x.StatusName).ToList();
-				return _responseBuilder.Success(compData.ToJArray());
+				return _responseBuilder.Success(retObjList.ToJArray());
 			}
 			catch (Exception ex)
 			{
