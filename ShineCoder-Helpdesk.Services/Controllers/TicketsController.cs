@@ -203,6 +203,8 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 			}
 		}
 
+	
+
 		// GET api/<TicketsController>/5
 		[HttpPost]
 		[Route("CreateTickets")]
@@ -438,6 +440,41 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 						tickets.TicketStatusId = (int)TicketStatusEnum.Open;
 						tickets.Tkt_AssignedUserId = inputModel.Tkt_AssignedUserId;
 
+						_unitOfWork.TicketRepository.UpdateAsync(tickets);
+						await _unitOfWork.SaveAsync();
+						await trans.CommitAsync();
+					}
+
+					return _responseBuilder.Success("Tickets updated.");
+				}
+				catch (Exception ex)
+				{
+					await trans.RollbackAsync();
+					_logger.LogError(ex.Message);
+					return _responseBuilder.BadRequest(ex.Message, null);
+				}
+			}
+		}
+
+		[HttpPost]
+		[Route("UpdateTicketStatus")]
+		public async Task<JObject> UpdateTicketStatus()
+		{
+			IDbContextTransaction trans = null;
+			using (trans = _unitOfWork.GetDbTransaction)
+			{
+				try
+				{
+					var inputModel = _httpContextProxy.GetRequestBody<UpdateTicketStausModel>();
+					var tickets = _unitOfWork.TicketRepository.GetAsync(x => x.Id == inputModel.TicketId).Result.FirstOrDefault();
+
+					if (tickets != null)
+					{
+
+						tickets.TicketStatusId =(int) inputModel.TicketStatus;
+						tickets.StatusUpdateReason = inputModel.StatusUpdateReason;
+						tickets.Tkt_UpdateReasonId = inputModel.TktUpdateReasonId;
+					
 						_unitOfWork.TicketRepository.UpdateAsync(tickets);
 						await _unitOfWork.SaveAsync();
 						await trans.CommitAsync();

@@ -316,27 +316,29 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 
 							};
 
-
-				switch (searchModel.SearchOption)
+				if (searchModel != null)
 				{
-					case "1":
-						data.Where(x => x.DisplayName.StartsWith(searchModel.SearchString));
-						break;
-					case "2":
-                        data.Where(x => x.UserName.StartsWith(searchModel.SearchString));
-                        break;
-					case "3":
-                        data.Where(x => x.Email.StartsWith(searchModel.SearchString));
-                        break;
-					case "4":
-                        data.Where(x => x.RoleName.StartsWith(searchModel.SearchString));
-                        break;
-					case "5":
-                        data.Where(x => x.JobTitle.StartsWith(searchModel.SearchString));
-                        break;
-					case "6":
-                        data.Where(x => x.PhoneNumber.StartsWith(searchModel.SearchString));
-                        break;
+					switch (searchModel.SearchOption)
+					{
+						case "1":
+							data.Where(x => x.DisplayName.StartsWith(searchModel.SearchString));
+							break;
+						case "2":
+							data.Where(x => x.UserName.StartsWith(searchModel.SearchString));
+							break;
+						case "3":
+							data.Where(x => x.Email.StartsWith(searchModel.SearchString));
+							break;
+						case "4":
+							data.Where(x => x.RoleName.StartsWith(searchModel.SearchString));
+							break;
+						case "5":
+							data.Where(x => x.JobTitle.StartsWith(searchModel.SearchString));
+							break;
+						case "6":
+							data.Where(x => x.PhoneNumber.StartsWith(searchModel.SearchString));
+							break;
+					}
 				}
 
 				return _responseBuilder.Success(data.ToList().ToJArray());
@@ -539,6 +541,10 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 							claims.Add(nameof(ClaimEnum.EDIT), item.IsEditAccess.ToString() == "" ? "false" : item.IsEditAccess.ToString());
 							claims.Add(nameof(ClaimEnum.ADD), item.IsAddAccess.ToString() == "" ? "false" : item.IsAddAccess.ToString());
 							claims.Add(nameof(ClaimEnum.DELETE), item.IsDeleteAccess.ToString() == "" ? "false" : item.IsDeleteAccess.ToString());
+
+							claims.Add(nameof(ClaimEnum.PRINTACCESS), item.IsPrintAccess.ToString() == "" ? "false" : item.IsPrintAccess.ToString());
+							claims.Add(nameof(ClaimEnum.EXPORTACCESS), item.IsIsExportAccess.ToString() == "" ? "false" : item.IsIsExportAccess.ToString());
+							claims.Add(nameof(ClaimEnum.UPDATETICKETSTATUS), item.IsUpdateTicketStatusAccess.ToString() == "" ? "false" : item.IsUpdateTicketStatusAccess.ToString());
 
 							var (status, data) = await _authService.UpdateUserClaim(role, user, claims);
 							if (status == 0)

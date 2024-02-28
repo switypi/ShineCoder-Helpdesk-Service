@@ -13,9 +13,9 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 {
 	[ApiController]
 	[Produces("application/json")]
-	[Route("api/v{version:apiVersion}" + ShineCoder_HelpDeskConstants.PRIORITY_SERVICE_API_PREFIX)]
+	[Route("api/v{version:apiVersion}" + ShineCoder_HelpDeskConstants.REASONSTATUS_SERVICE_API_PREFIX)]
 	[ApiVersion(ShineCoder_HelpDeskConstants.SHINECODERLMS_VERSION)]
-	public class PriorityController : ControllerBase
+	public class ReasonStatusController : ControllerBase
 	{
 		private readonly IHttpContextProxy _httpContextProxy;
 		private readonly IUnitOfWork _unitOfWork;
@@ -23,7 +23,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 		private readonly ILogger _logger;
 		private readonly IValidator _customerValidator;
 		private readonly IMapper _mapper;
-		public PriorityController(IHttpContextProxy httpContextProxy, IUnitOfWork unitOfWork, IResponseBuilder responseBuilder,
+		public ReasonStatusController(IHttpContextProxy httpContextProxy, IUnitOfWork unitOfWork, IResponseBuilder responseBuilder,
 			ILogger<PriorityController> logger, IValidator customerValidator, IMapper mapper)
 		{
 			_httpContextProxy = httpContextProxy;
@@ -35,44 +35,44 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 		}
 
 		[HttpGet]
-		[Route("GetPrioritiesAsync")]
-		public async Task<JObject> GetPrioritiesAsync()
+		[Route("GetReasonStatusAsync")]
+		public async Task<JObject> GetReasonStatusAsync()
 		{
 			try
 			{
-				var data = await _unitOfWork.TicketPrioritiesRepository.GetAsync();
+				var data = await _unitOfWork.TktUpdateReasonRepository.GetAsync();
 				return _responseBuilder.Success(data.ToJArray());
 			}
 			catch (Exception ex)
 			{
 				_logger.LogError(ex.Message);
-				return _responseBuilder.BadRequest(ex.Message,null);
+				return _responseBuilder.BadRequest(ex.Message, null);
 			}
 
 		}
 
 		[HttpGet]
-		[Route("GetPriorityBuIdAsync")]
-		public async Task<JObject> GetPriorityBuIdAsync()
+		[Route("GetReasonStatusByIdAsync")]
+		public async Task<JObject> GetReasonStatusByIdAsync()
 		{
 			try
 			{
 				var id = int.Parse(_httpContextProxy.GetQueryString("_Id"));
 
-				var data = _unitOfWork.TicketPrioritiesRepository.GetAsync(x => x.Id == id);
+				var data = _unitOfWork.TktUpdateReasonRepository.GetAsync(x => x.Id == id);
 
 				return _responseBuilder.Success(data.ToJObject());
 			}
 			catch (Exception ex)
 			{
 				_logger.LogError(ex.Message);
-				return _responseBuilder.BadRequest(ex.Message,null);
+				return _responseBuilder.BadRequest(ex.Message, null);
 			}
 
 		}
 
 		[HttpPost]
-		[Route("CreatePriorityAsync")]
+		[Route("CreateReasonStatusAsync")]
 		public async Task<JObject> CreatePriorityAsync()
 		{
 			IDbContextTransaction trans = null;
@@ -80,12 +80,12 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 			{
 				try
 				{
-					var inputData = _httpContextProxy.GetRequestBody<PriorityModel>();
-					var outputModel = _mapper.Map<Ticket_Priorities>(inputData);
-					_unitOfWork.TicketPrioritiesRepository.InsertAsyn(outputModel);
+					var inputData = _httpContextProxy.GetRequestBody<ReasonStatusModel>();
+					var outputModel = _mapper.Map<Tkt_UpdateReason>(inputData);
+					_unitOfWork.TktUpdateReasonRepository.InsertAsyn(outputModel);
 					await _unitOfWork.SaveAsync();
 					await trans.CommitAsync();
-					return _responseBuilder.Success("Priority created.");
+					return _responseBuilder.Success("Status reason created.");
 				}
 				catch (Exception ex)
 				{
@@ -99,18 +99,18 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 
 
 		[HttpPost]
-		[Route("DeletePriorityAsyn")]
-		public async Task<JObject> DeletePriorityAsyn()
+		[Route("DeleteReasonStatusAsyn")]
+		public async Task<JObject> DeleteReasonStatusAsyn()
 		{
 			IDbContextTransaction trans = null;
 			using (trans = _unitOfWork.GetDbTransaction)
 			{
 				try
 				{
-					var inputData = _httpContextProxy.GetRequestBody<PriorityModel>();
-					var outputModel = _mapper.Map<Ticket_Priorities>(inputData);
+					var inputData = _httpContextProxy.GetRequestBody<ReasonStatusModel>();
+					var outputModel = _mapper.Map<Tkt_UpdateReason>(inputData);
 
-					_unitOfWork.TicketPrioritiesRepository.DeleteAsync(outputModel.Id);
+					_unitOfWork.TktUpdateReasonRepository.DeleteAsync(outputModel.Id);
 					await _unitOfWork.SaveAsync();
 					await trans.CommitAsync();
 					return _responseBuilder.Success("Priority deleted.");
@@ -134,10 +134,10 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 			{
 				try
 				{
-					var inputData = _httpContextProxy.GetRequestBody<PriorityModel>();
-					var outputModel = _mapper.Map<Ticket_Priorities>(inputData);
+					var inputData = _httpContextProxy.GetRequestBody<ReasonStatusModel>();
+					var outputModel = _mapper.Map<Tkt_UpdateReason>(inputData);
 
-					_unitOfWork.TicketPrioritiesRepository.UpdateAsync(outputModel);
+					_unitOfWork.TktUpdateReasonRepository.UpdateAsync(outputModel);
 					await _unitOfWork.SaveAsync();
 					await trans.CommitAsync();
 					return _responseBuilder.Success("Priority updated.");

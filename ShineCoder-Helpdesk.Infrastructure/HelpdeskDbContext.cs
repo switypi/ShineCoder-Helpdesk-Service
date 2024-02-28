@@ -35,6 +35,7 @@ namespace ShineCoder_Helpdesk.Infrastructure
 		public DbSet<Ticket_Impact> Ticket_Impacts { get; set; }
 		public DbSet<Ticket_Urgency> Ticket_Urgencies { get; set; }
 		public DbSet<RequestType> RequestTypes { get; set; }
+		public DbSet<Tkt_UpdateReason> Tkt_UpdateReasons { get; set; }
 		public DbSet<Ticket_Attachments> Ticket_Attachments { get; set; }
 		
 
@@ -130,6 +131,11 @@ namespace ShineCoder_Helpdesk.Infrastructure
 			   new Category { Active = true, Id = 1, IsDefault = true, Description = "Network", Name = "Network" },
 			   new Category { Active = true, Id = 2, IsDefault = false, Description = "Printer", Name = "Printer" },
 			   new Category { Active = true, Id = 3, IsDefault = false, Description = "Software program", Name = "Software" });
+
+			builder.Entity<Tkt_UpdateReason>().HasData(
+			   new Tkt_UpdateReason { Active = true, Id = 1, IsDefault = true, Description = "Success", Name = "Success" },
+			   new Tkt_UpdateReason { Active = true, Id = 2, IsDefault = false, Description = "Failed", Name = "Failed to complete" },
+			   new Tkt_UpdateReason { Active = true, Id = 3, IsDefault = false, Description = "No Need", Name = "Not-Needed" });
 
 			builder.Entity<Location>().HasData(
 				new Location { Active = true, Id = 1, IsDefault = true, Description = "Koramangala", Name = "Koramangala" },

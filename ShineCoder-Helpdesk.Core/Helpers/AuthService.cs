@@ -495,6 +495,18 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 
 									clmModel.IsDeleteAccess = bool.Parse(cl.Value);
 									break;
+								case nameof(ClaimEnum.PRINTACCESS):
+
+									clmModel.IsDeleteAccess = bool.Parse(cl.Value);
+									break;
+								case nameof(ClaimEnum.EXPORTACCESS):
+
+									clmModel.IsDeleteAccess = bool.Parse(cl.Value);
+									break;
+								case nameof(ClaimEnum.UPDATETICKETSTATUS):
+
+									clmModel.IsDeleteAccess = bool.Parse(cl.Value);
+									break;
 							}
 							//returnObjList.Add(obj);
 						}

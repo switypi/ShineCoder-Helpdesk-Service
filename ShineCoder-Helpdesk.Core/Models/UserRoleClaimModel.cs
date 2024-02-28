@@ -23,5 +23,8 @@ namespace ShineCoder_Helpdesk.Core.Models
 		public bool IsEditAccess { get; set; }
 		public bool IsViewAccess { get; set; }
 		public bool IsDeleteAccess { get; set; }
+		public bool IsPrintAccess { get; set; }
+		public bool IsExportAccess { get; set; }
+		public bool IsUpdateTicketStatusAccess { get; set; }
 	}
 }

@@ -24,6 +24,7 @@ namespace ShineCoder_Helpdesk.Repository
         GenericRepository<Ticket_Urgency> UrgencyRepository { get; }
         GenericRepository<Ticket_Level> TicketLevelRepository { get; }
 		GenericRepository<Ticket_Attachments> TicketAttachmentRepository { get; }
+		GenericRepository<Tkt_UpdateReason> TktUpdateReasonRepository { get; }
 
 
 

@@ -52,6 +52,7 @@ namespace ShineCoder_Helpdesk.Repository
         private GenericRepository<Ticket_Urgency> urgencyRepository;
         private GenericRepository<Ticket_Level> ticketLevelRepository;
         private GenericRepository<Ticket_Attachments> ticketAttachmentRepository;
+        private GenericRepository<Tkt_UpdateReason> tktUpdateReasonRepository;
 
 		public GenericRepository<Ticket_Attachments> TicketAttachmentRepository
 		{
@@ -63,6 +64,18 @@ namespace ShineCoder_Helpdesk.Repository
 					this.ticketAttachmentRepository = new GenericRepository<Ticket_Attachments>(context);
 				}
 				return ticketAttachmentRepository;
+			}
+		}
+		public GenericRepository<Tkt_UpdateReason> TktUpdateReasonRepository
+		{
+			get
+			{
+
+				if (this.tktUpdateReasonRepository == null)
+				{
+					this.tktUpdateReasonRepository = new GenericRepository<Tkt_UpdateReason>(context);
+				}
+				return tktUpdateReasonRepository;
 			}
 		}
 

@@ -12,4 +12,13 @@ namespace ShineCoder_Helpdesk.Core.Models
 		public int Count { get; set; }
 
 	}
+
+	public class ChartModelDataByMonth
+	{
+		public string Month { get; set; }
+		public int NewCount { get; set; }
+		public int ClosedCount { get; set; }
+		public int OpenCount { get; set; }
+
+	}
 }

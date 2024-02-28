@@ -17,6 +17,7 @@ namespace ShineCoder_Helpdesk.Core
 		public const string TICKET_ATTACHMENT_SERVICE_API_PREFIX = "/TicketAttachment";
 		public const string LOCATION_SERVICE_API_PREFIX = "/Location";
 		public const string PRIORITY_SERVICE_API_PREFIX = "/Priority";
+		public const string REASONSTATUS_SERVICE_API_PREFIX = "/ReasonStatus";
 		public const string IMPACT_SERVICE_API_PREFIX = "/Impact";
 		public const string TICKETSTATUS_SERVICE_API_PREFIX = "/TicketStatus";
 		public const string TICKETLEVEL_SERVICE_API_PREFIX = "/TicketLevel";
