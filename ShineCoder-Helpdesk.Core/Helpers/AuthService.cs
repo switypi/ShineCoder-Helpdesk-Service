@@ -480,18 +480,18 @@ namespace ShineCoder_Helpdesk.Core.Helpers
 							switch (cl.Type)
 							{
 
-								case nameof(ClaimEnum.VIEW):
+								case nameof(ClaimEnum.VIEWACCESS):
 									clmModel.IsViewAccess = bool.Parse(cl.Value);
 									break;
-								case nameof(ClaimEnum.ADD):
+								case nameof(ClaimEnum.ADDACCESS):
 
 									clmModel.IsAddAccess = bool.Parse(cl.Value);
 									break;
-								case nameof(ClaimEnum.EDIT):
+								case nameof(ClaimEnum.EDITACCESS):
 
 									clmModel.IsEditAccess = bool.Parse(cl.Value);
 									break;
-								case nameof(ClaimEnum.DELETE):
+								case nameof(ClaimEnum.DELETEACCESS):
 
 									clmModel.IsDeleteAccess = bool.Parse(cl.Value);
 									break;

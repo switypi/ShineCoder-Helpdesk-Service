@@ -9,10 +9,10 @@ namespace ShineCoder_Helpdesk.Core.Enums
 	public enum ClaimEnum
 	{
 		FULLACCESS=0,
-		VIEW=1,
-		EDIT=2,
-		ADD=3,
-		DELETE=4,
+		VIEWACCESS = 1,
+		EDITACCESS = 2,
+		ADDACCESS = 3,
+		DELETEACCESS = 4,
 		PRINTACCESS = 5,
 		EXPORTACCESS = 6,
 		UPDATETICKETSTATUS = 7

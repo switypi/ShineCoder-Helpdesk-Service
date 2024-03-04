@@ -537,10 +537,10 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 						{
 
 							claims.Add(nameof(ClaimEnum.FULLACCESS), item.IsFullAccess.ToString()==""?"false": item.IsFullAccess.ToString());
-							claims.Add(nameof(ClaimEnum.VIEW), item.IsViewAccess.ToString() == "" ? "false" : item.IsViewAccess.ToString());
-							claims.Add(nameof(ClaimEnum.EDIT), item.IsEditAccess.ToString() == "" ? "false" : item.IsEditAccess.ToString());
-							claims.Add(nameof(ClaimEnum.ADD), item.IsAddAccess.ToString() == "" ? "false" : item.IsAddAccess.ToString());
-							claims.Add(nameof(ClaimEnum.DELETE), item.IsDeleteAccess.ToString() == "" ? "false" : item.IsDeleteAccess.ToString());
+							claims.Add(nameof(ClaimEnum.VIEWACCESS), item.IsViewAccess.ToString() == "" ? "false" : item.IsViewAccess.ToString());
+							claims.Add(nameof(ClaimEnum.EDITACCESS), item.IsEditAccess.ToString() == "" ? "false" : item.IsEditAccess.ToString());
+							claims.Add(nameof(ClaimEnum.ADDACCESS), item.IsAddAccess.ToString() == "" ? "false" : item.IsAddAccess.ToString());
+							claims.Add(nameof(ClaimEnum.DELETEACCESS), item.IsDeleteAccess.ToString() == "" ? "false" : item.IsDeleteAccess.ToString());
 
 							claims.Add(nameof(ClaimEnum.PRINTACCESS), item.IsPrintAccess.ToString() == "" ? "false" : item.IsPrintAccess.ToString());
 							claims.Add(nameof(ClaimEnum.EXPORTACCESS), item.IsIsExportAccess.ToString() == "" ? "false" : item.IsIsExportAccess.ToString());
