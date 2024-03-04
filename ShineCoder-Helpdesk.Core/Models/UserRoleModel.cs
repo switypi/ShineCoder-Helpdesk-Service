@@ -11,7 +11,7 @@ namespace ShineCoder_Helpdesk.Core.Models
     {
         public int UserId { get; set; }
         public int RoleId { get; set; }
-
+        public string RoleName { get; set; }
         public UserTypeEnum UserType { get; set; }
     }
 }

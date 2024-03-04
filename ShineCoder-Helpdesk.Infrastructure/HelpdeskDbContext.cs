@@ -150,7 +150,8 @@ namespace ShineCoder_Helpdesk.Infrastructure
 
 
 			builder.Entity<ApplicationRole>().HasData(
-			   new ApplicationRole { Id = 1, NormalizedName = "Admin", RoleName = "Admin", Name = "ADMIN", IsActive = true, IsAgent = false, IsClient = false });
+			   new ApplicationRole { Id = 1, NormalizedName = "Admin", RoleName = "Admin", Name = "ADMIN", IsActive = true, IsAgent = false, IsClient = false },
+               new ApplicationRole { Id = 2, NormalizedName = "DEFAULT", RoleName = "DEFAULT", Name = "DEFAULT", IsActive = true, IsAgent = false, IsClient = false });
 			  // new ApplicationRole { Id = 2, NormalizedName = "Default", RoleName = "Default", Name = "Default", IsActive = true, IsAgent = false, IsClient = false });
 			//new ApplicationRole { Id = 3, NormalizedName = "AGENT", RoleName = "AGENT", Name = "AGENT", IsActive = true, IsAgent = true, IsClient = false });
 
@@ -180,12 +181,12 @@ namespace ShineCoder_Helpdesk.Infrastructure
 				PasswordHash = hasher.HashPassword(null, "Abc@123"),
 			};
 			builder.Entity<ApplicationUser>().HasData(user);
+		    builder.Entity<IdentityUserRole<Int32>>().HasData(new IdentityUserRole<Int32>() { RoleId = 1, UserId = 1 });
 
-			builder.Entity<IdentityUserRole<Int32>>().HasData(new IdentityUserRole<Int32>() { RoleId = 1, UserId = 1 });
-			builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32>() {Id=1, RoleId = 1,ClaimType= "VIEWACCESS",ClaimValue="True" });
-			builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32>() { Id = 2, RoleId = 1, ClaimType = "ADDACCESS", ClaimValue = "True" });
-			builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32>() { Id = 3, RoleId = 1, ClaimType = "EDITACCESS", ClaimValue = "True" });
-			builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32>() { Id = 4, RoleId = 1, ClaimType = "DELETEACCESS", ClaimValue = "True" });
+			//builder.Entity<IdentityUserClaim<Int32>>().HasData(new IdentityRoleClaim<Int32>() {Id=1, RoleId = 1,ClaimType= "VIEWACCESS",ClaimValue="True" });
+			//builder.Entity<IdentityUserClaim<Int32>>().HasData(new IdentityRoleClaim<Int32>() { Id = 2, RoleId = 1, ClaimType = "ADDACCESS", ClaimValue = "True" });
+			//builder.Entity<IdentityUserClaim<Int32>>().HasData(new IdentityRoleClaim<Int32>() { Id = 3, RoleId = 1, ClaimType = "EDITACCESS", ClaimValue = "True" });
+			//builder.Entity<IdentityUserClaim<Int32>>().HasData(new IdentityRoleClaim<Int32>() { Id = 4, RoleId = 1, ClaimType = "DELETEACCESS", ClaimValue = "True" })/*;*/
 
 		}
 

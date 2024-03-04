@@ -16,5 +16,7 @@ namespace ShineCoder_Helpdesk.Core.Models
         public int Tkt_Id { get; set; }
         public TicketStatusEnum Status { get; set; }
 
+        public bool ShowAll { get; set; }
+
 	}
 }
