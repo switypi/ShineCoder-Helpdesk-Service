@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ShineCoder_Helpdesk.Core.Enums;
 using ShineCoder_Helpdesk.Infrastructure.Models;
 
 namespace ShineCoder_Helpdesk.Core.Models
@@ -61,6 +62,7 @@ namespace ShineCoder_Helpdesk.Core.Models
         public string Tkt_location { get; set; }
         public DateTime? Tkt_CreatedDate { get; set; }
         public string Tkt_Status { get; set; }
+        public  OperationContextEnum OperationContext { get; set; }
 
 		
 		public IList<Ticket_Attachments> Ticket_Attachments { get; set; }

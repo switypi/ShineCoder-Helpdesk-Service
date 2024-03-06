@@ -314,7 +314,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 				try
 				{
 
-					var ticketId = int.Parse(_httpContextProxy.GetQueryString("ticketId"));
+					var ticketId = int.Parse(_httpContextProxy.GetQueryString("_id"));
 					var tickets = _unitOfWork.TicketRepository.GetAsync(x => x.Id == ticketId).Result.FirstOrDefault();
 					if (tickets != null)
 					{
