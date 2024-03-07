@@ -18,7 +18,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 	[Produces("application/json")]
 	[Route("api/v{version:apiVersion}" + ShineCoder_HelpDeskConstants.SUBCATEGORY_SERVICE_API_PREFIX)]
 	[ApiVersion(ShineCoder_HelpDeskConstants.SHINECODERLMS_VERSION)]
-	//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 	public class SubCategoryController : ControllerBase
 	{
 		private readonly IHttpContextProxy _httpContextProxy;

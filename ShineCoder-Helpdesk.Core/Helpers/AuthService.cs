@@ -136,8 +136,6 @@ namespace ShineCoder_Helpdesk.Core.Helpers
             {
                 Issuer = _configuration["JWT:ValidIssuer"],
                 Audience = _configuration["JWT:ValidAudience"],
-
-                //Expires = DateTime.UtcNow.AddHours(_TokenExpiryTimeInHour),
                 Expires = DateTime.UtcNow.AddHours(_TokenExpiryTimeInHour),
                 SigningCredentials = new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256),
                 Subject = new ClaimsIdentity(claims)
@@ -705,5 +703,19 @@ namespace ShineCoder_Helpdesk.Core.Helpers
             return (1, new HelpDeskResults { Succeeded = true, Result = returnObjList.ToJArray() });
         }
 
-    }
+        public async Task<bool> ResetPassword(UserModel userModel)
+        {
+			var user = await userManager.FindByIdAsync(userModel.Id.ToString());
+            //string token =userManager.gene
+			if (!string.IsNullOrEmpty(userModel.Password))
+				user.PasswordHash = userManager.PasswordHasher.HashPassword(user, userModel.Password);
+			var res = await userManager.UpdateAsync(user);
+            if (!res.Succeeded)
+                return false;
+            else
+                return true;
+		}
+
+
+	}
 }

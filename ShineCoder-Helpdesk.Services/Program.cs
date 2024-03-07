@@ -58,6 +58,12 @@ builder.Services.AddApiVersioning(config =>
 																						new MediaTypeApiVersionReader("x-api-version"));
 });
 
+//var emailConfig = builder.Configuration
+//	.GetSection("EmailConfiguration")
+//	.Get<EmailConfiguration>();
+//builder.Services.AddSingleton(emailConfig);
+//builder.Services.AddScoped<IEmailSender, EmailSender>();
+
 
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
 	.AddEntityFrameworkStores<HelpdeskDbContext>()

@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -15,6 +17,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 	[Produces("application/json")]
 	[Route("api/v{version:apiVersion}" + ShineCoder_HelpDeskConstants.LOCATION_SERVICE_API_PREFIX)]
 	[ApiVersion(ShineCoder_HelpDeskConstants.SHINECODERLMS_VERSION)]
+	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 	public class LocationController : ControllerBase
 	{
 		private readonly IHttpContextProxy _httpContextProxy;

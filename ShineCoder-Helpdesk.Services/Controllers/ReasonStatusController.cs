@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -15,6 +17,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 	[Produces("application/json")]
 	[Route("api/v{version:apiVersion}" + ShineCoder_HelpDeskConstants.REASONSTATUS_SERVICE_API_PREFIX)]
 	[ApiVersion(ShineCoder_HelpDeskConstants.SHINECODERLMS_VERSION)]
+	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 	public class ReasonStatusController : ControllerBase
 	{
 		private readonly IHttpContextProxy _httpContextProxy;
@@ -72,33 +75,6 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 		}
 
 		[HttpPost]
-		[Route("CreateReasonStatusAsync")]
-		public async Task<JObject> CreatePriorityAsync()
-		{
-			IDbContextTransaction trans = null;
-			using (trans = _unitOfWork.GetDbTransaction)
-			{
-				try
-				{
-					var inputData = _httpContextProxy.GetRequestBody<ReasonStatusModel>();
-					var outputModel = _mapper.Map<Tkt_UpdateReason>(inputData);
-					_unitOfWork.TktUpdateReasonRepository.InsertAsyn(outputModel);
-					await _unitOfWork.SaveAsync();
-					await trans.CommitAsync();
-					return _responseBuilder.Success("Status reason created.");
-				}
-				catch (Exception ex)
-				{
-					await trans.RollbackAsync();
-					_logger.LogError(ex.Message);
-					return _responseBuilder.ServerError(ex.Message);
-				}
-			}
-
-		}
-
-
-		[HttpPost]
 		[Route("DeleteReasonStatusAsyn")]
 		public async Task<JObject> DeleteReasonStatusAsyn()
 		{
@@ -124,32 +100,6 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 			}
 
 		}
-
-		[HttpPost]
-		[Route("UpdatePriorityAsyn")]
-		public async Task<JObject> UpdatePriorityAsyn()
-		{
-			IDbContextTransaction trans = null;
-			using (trans = _unitOfWork.GetDbTransaction)
-			{
-				try
-				{
-					var inputData = _httpContextProxy.GetRequestBody<ReasonStatusModel>();
-					var outputModel = _mapper.Map<Tkt_UpdateReason>(inputData);
-
-					_unitOfWork.TktUpdateReasonRepository.UpdateAsync(outputModel);
-					await _unitOfWork.SaveAsync();
-					await trans.CommitAsync();
-					return _responseBuilder.Success("Priority updated.");
-				}
-				catch (Exception ex)
-				{
-					await trans.RollbackAsync();
-					_logger.LogError(ex.Message);
-					return _responseBuilder.ServerError(ex.Message);
-				}
-			}
-
-		}
+		
 	}
 }
