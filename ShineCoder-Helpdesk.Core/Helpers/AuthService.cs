@@ -703,7 +703,7 @@ namespace ShineCoder_Helpdesk.Core.Helpers
             return (1, new HelpDeskResults { Succeeded = true, Result = returnObjList.ToJArray() });
         }
 
-        public async Task<bool> ResetPassword(UserModel userModel)
+        public async Task<bool> ResetPasswordFromAdmin(UserModel userModel)
         {
 			var user = await userManager.FindByIdAsync(userModel.Id.ToString());
             //string token =userManager.gene
@@ -715,6 +715,8 @@ namespace ShineCoder_Helpdesk.Core.Helpers
             else
                 return true;
 		}
+
+        
 
 
 	}
