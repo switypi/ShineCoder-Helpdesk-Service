@@ -1,16 +1,21 @@
 ﻿
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Linq;
 using ShineCoder_Helpdesk.Core.Enums;
 using ShineCoder_Helpdesk.Core.Models;
 using ShineCoder_Helpdesk.Infrastructure.Models;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Text;
+using System.Web;
 
 namespace ShineCoder_Helpdesk.Core.Helpers
 {
@@ -18,15 +23,18 @@ namespace ShineCoder_Helpdesk.Core.Helpers
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<ApplicationRole> roleManager;
+        IEmailSender emailSender;
+
         private readonly IConfiguration _configuration;
 
         private readonly ILogger _logger;
         public AuthService(ILogger<AuthService> logger, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager,
-            IConfiguration configuration)
+            IConfiguration configuration,IEmailSender _emailSender)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
             _configuration = configuration;
+            emailSender = _emailSender;
             _logger = logger;
 
         }
@@ -104,6 +112,8 @@ namespace ShineCoder_Helpdesk.Core.Helpers
             {
                new Claim(ClaimTypes.Name, user.UserName),
                new Claim(ClaimTypes.Email, user.Email),
+              
+
                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
 
@@ -716,8 +726,55 @@ namespace ShineCoder_Helpdesk.Core.Helpers
                 return true;
 		}
 
-        
+
+        public async Task<(int, HelpDeskResults)> ForgotPassword(ForgotPasswordModel forgotPassword)
+        {
+            var user = await userManager.FindByEmailAsync(forgotPassword.Email);
+            if (user == null)
+                return (0, new HelpDeskResults { Succeeded = false, Message = "Unable to find User" });
+            var token = await userManager.GeneratePasswordResetTokenAsync(user);
+            var param = new Dictionary<string, string?>
+            {
+                {"token", token },
+                {"email", forgotPassword.Email }
+            };
+
+            var result= await userManager.SetAuthenticationTokenAsync(user, "ResetPassword", "ResetPasswordToken", token);
+            if(!result.Succeeded)
+                return (0, new HelpDeskResults { Succeeded = true, Message = result.Errors.FirstOrDefault().Description });
+            // Build the password reset link which must include the Callback URL
+            // Build the password reset link
+            //var passwordResetLink = Url.Action("ResetPassword", "Account",
+            //new { Email = email, Token = token }, protocol: HttpContext.Request.Scheme);
 
 
-	}
+            var callback = forgotPassword.ClientURI + "?token=" + HttpUtility.UrlEncode(token) + "&email=" + forgotPassword.Email; //QueryHelpers.AddQueryString(forgotPassword.ClientURI, param);
+            var message = new MessageModel(new string[] { user.Email }, "Reset password token", callback, null);
+            await emailSender.SendEmailAsync(message);
+            return (1, new HelpDeskResults { Succeeded = true, Message = "A password reset mail has been sent to "+ forgotPassword.Email });
+
+        }
+
+        public async Task<(int, HelpDeskResults)> ResetPassword(ResetPasswordModel resetPassword)
+        {
+            var user = await userManager.FindByEmailAsync(resetPassword.Email);
+            if (user == null)
+                return (0, new HelpDeskResults { Succeeded = false, Message = "Unable to find User" });
+
+            
+
+            var resetPassResult = await userManager.ResetPasswordAsync(user, resetPassword.Token, resetPassword.PassWord);
+            if (!resetPassResult.Succeeded)
+            {
+                var errors = resetPassResult.Errors.Select(e => e.Description);
+                return (0, new HelpDeskResults { Succeeded = true, Message = errors.FirstOrDefault()});
+            }
+            return (1, new HelpDeskResults { Succeeded = true, Message = "A password has been re-set" });
+        }
+
+
+
+
+
+    }
 }

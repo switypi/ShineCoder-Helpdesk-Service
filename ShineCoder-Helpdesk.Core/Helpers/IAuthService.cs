@@ -26,5 +26,7 @@ namespace ShineCoder_Helpdesk.Core.Helpers
         Task<(int, HelpDeskResults)> GetUserRoleClaims(ApplicationUser user,UserTypeEnum userType,string roleName,int roleId);
        // Task<(int, HelpDeskResults)> GetUserClaims(ApplicationUser user, UserTypeEnum userType, string roleName, int roleId);
        Task<bool> ResetPasswordFromAdmin(UserModel user);
+        Task<(int, HelpDeskResults)> ForgotPassword(ForgotPasswordModel forgotPassword);
+        Task<(int, HelpDeskResults)> ResetPassword(ResetPasswordModel resetPassword);
     }
 }

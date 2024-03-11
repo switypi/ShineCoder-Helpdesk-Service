@@ -18,6 +18,7 @@ using ShineCoder_Helpdesk.Infrastructure;
 using ShineCoder_Helpdesk.Infrastructure.Models;
 using ShineCoder_Helpdesk.Repository;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using static Org.BouncyCastle.Asn1.Cmp.Challenge;
 
 namespace ShineCoder_Helpdesk.Services.Controllers
 {
@@ -634,7 +635,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 		}
 
 		[HttpPost]
-		[Route("ResetPassword")]
+		[Route("ResetPasswordFromAdmin")]
 		[Authorize]
 		public async Task<JObject> ResetPasswordFromAdmin()
 		{
@@ -664,7 +665,71 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 			}
 		}
 
+        [HttpPost]
+        [Route("ForgotPassword")]
+       
+        public async Task<JObject> ForgotPassword()
+		{
+            try
+            {
+                var inputModel = _httpContextProxy.GetRequestBody<ForgotPasswordModel>();
+                var listOfErrors = _customerValidator.Validate(inputModel);
+                if (listOfErrors.Count() > 0)
+                {
+                    return _responseBuilder.BadRequest(listOfErrors.ToJArray());
+                };
 
-	}
+                var (status, retVal) = await _authService.ForgotPassword(inputModel);
+
+                if (status == 0)
+                {
+                    return _responseBuilder.ServerError(retVal.Message);
+                }
+               
+
+                return _responseBuilder.Success(retVal.ToJObject(), null);
+            }
+            catch (Exception ex)
+            {
+                
+                _logger.LogError(ex.Message);
+                return _responseBuilder.ServerError(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("ResetPassword")]
+        public async Task<JObject> ResetPassword()
+        {
+            try
+            {
+                var inputModel = _httpContextProxy.GetRequestBody<ResetPasswordModel>();
+                var listOfErrors = _customerValidator.Validate(inputModel);
+                if (listOfErrors.Count() > 0)
+                {
+                    return _responseBuilder.BadRequest(listOfErrors.ToJArray());
+                };
+
+                var (status, retVal) = await _authService.ResetPassword(inputModel);
+                if (status == 0)
+                {
+                    return _responseBuilder.ServerError(retVal.Message);
+                }
+
+
+                return _responseBuilder.Success(retVal.ToJObject(), null);
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError(ex.Message);
+                return _responseBuilder.ServerError(ex.Message);
+            }
+            
+        }
+
+
+
+    }
 
 }
