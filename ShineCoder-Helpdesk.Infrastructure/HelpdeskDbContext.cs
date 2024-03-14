@@ -152,13 +152,22 @@ namespace ShineCoder_Helpdesk.Infrastructure
 			builder.Entity<ApplicationRole>().HasData(
 			   new ApplicationRole { Id = 1, NormalizedName = "Admin", RoleName = "Admin", Name = "ADMIN", IsActive = true, IsAgent = false, IsClient = false },
                new ApplicationRole { Id = 2, NormalizedName = "DEFAULT", RoleName = "DEFAULT", Name = "DEFAULT", IsActive = true, IsAgent = false, IsClient = false });
-			  // new ApplicationRole { Id = 2, NormalizedName = "Default", RoleName = "Default", Name = "Default", IsActive = true, IsAgent = false, IsClient = false });
+			// new ApplicationRole { Id = 2, NormalizedName = "Default", RoleName = "Default", Name = "Default", IsActive = true, IsAgent = false, IsClient = false });
 			//new ApplicationRole { Id = 3, NormalizedName = "AGENT", RoleName = "AGENT", Name = "AGENT", IsActive = true, IsAgent = true, IsClient = false });
 
-			//builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32> { Id = 1, RoleId = 1, ClaimType = "FULLACCESS", ClaimValue = "True" });
-   //         builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32> { Id = 2, RoleId = 1, ClaimType = "EDIT", ClaimValue = "True" });
-   //         builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32> { Id = 3, RoleId = 1, ClaimType = "ADD", ClaimValue = "True" });
-   //         builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32> { Id = 4, RoleId = 1, ClaimType = "VIEW", ClaimValue = "True" });
+			builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32> { Id = 1, RoleId = 1, ClaimType = "NEWLIST", ClaimValue = "True" });
+			builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32> { Id = 2, RoleId = 1, ClaimType = "OPENLIST", ClaimValue = "True" });
+			builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32> { Id = 3, RoleId = 1, ClaimType = "COMPLETEDLIST", ClaimValue = "True" });
+			builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32> { Id = 4, RoleId = 1, ClaimType = "RESOLVEDLIST", ClaimValue = "True" });
+
+            builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32> { Id = 5, RoleId = 1, ClaimType = "OVERDUELIST", ClaimValue = "True" });
+            builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32> { Id = 6, RoleId = 1, ClaimType = "DUETODAYLIST", ClaimValue = "True" });
+
+            builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32> { Id = 7, RoleId = 1, ClaimType = "MASTERDATA", ClaimValue = "True" });
+            builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32> { Id = 8, RoleId = 1, ClaimType = "APPSETTING", ClaimValue = "True" });
+
+            builder.Entity<IdentityRoleClaim<Int32>>().HasData(new IdentityRoleClaim<Int32> { Id = 9, RoleId = 1, ClaimType = "USERMANAGEMENT", ClaimValue = "True" });
+           
 
             var hasher = new PasswordHasher<ApplicationUser>();
 			var user = new ApplicationUser
@@ -183,7 +192,7 @@ namespace ShineCoder_Helpdesk.Infrastructure
 			builder.Entity<ApplicationUser>().HasData(user);
 		    builder.Entity<IdentityUserRole<Int32>>().HasData(new IdentityUserRole<Int32>() { RoleId = 1, UserId = 1 });
 
-			//builder.Entity<IdentityUserClaim<Int32>>().HasData(new IdentityRoleClaim<Int32>() {Id=1, RoleId = 1,ClaimType= "VIEWACCESS",ClaimValue="True" });
+			builder.Entity<IdentityUserClaim<Int32>>().HasData(new IdentityUserClaim<Int32>() {Id=1, UserId = 1,ClaimType= "FULLACCESS", ClaimValue="True" });
 			//builder.Entity<IdentityUserClaim<Int32>>().HasData(new IdentityRoleClaim<Int32>() { Id = 2, RoleId = 1, ClaimType = "ADDACCESS", ClaimValue = "True" });
 			//builder.Entity<IdentityUserClaim<Int32>>().HasData(new IdentityRoleClaim<Int32>() { Id = 3, RoleId = 1, ClaimType = "EDITACCESS", ClaimValue = "True" });
 			//builder.Entity<IdentityUserClaim<Int32>>().HasData(new IdentityRoleClaim<Int32>() { Id = 4, RoleId = 1, ClaimType = "DELETEACCESS", ClaimValue = "True" })/*;*/
