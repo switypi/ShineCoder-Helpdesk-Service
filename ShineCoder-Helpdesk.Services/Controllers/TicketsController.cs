@@ -72,6 +72,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 
         [HttpGet]
         [Route("GetOpenTickets")]
+
         public async Task<JObject> GetOpenTicketsAsync()
         {
             try
@@ -140,6 +141,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 
         [HttpGet]
         [Route("GetChartData")]
+        
         public async Task<JObject> GetChartData()
         {
             try
@@ -587,33 +589,35 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 
 
 
-                            });
+                            }).AsQueryable();
 
+                if (searchModel.SearchString == null) 
+                    searchModel.SearchString = "";
                 switch (searchModel.SearchOption)
                 {
                     case "1":
-                        data.Where(x => x.Tkt_Number.StartsWith(searchModel.SearchString));
+                        data=data.Where(x => x.Tkt_Number.StartsWith(searchModel.SearchString));
                         break;
                     case "2":
-                        data.Where(x => x.Tkt_Status.StartsWith(searchModel.SearchString));
+                        data = data.Where(x => x.Tkt_Status.StartsWith(searchModel.SearchString));
                         break;
                     case "3":
-                        data.Where(x => x.Tkt_AssignedUser.StartsWith(searchModel.SearchString));
+                        data = data.Where(x => x.Tkt_AssignedUser.StartsWith(searchModel.SearchString));
                         break;
                     case "4":
-                        data.Where(x => x.Tkt_Priority.StartsWith(searchModel.SearchString));
+                        data = data.Where(x => x.Tkt_Priority.StartsWith(searchModel.SearchString));
                         break;
                     case "5":
-                        data.Where(x => x.Tkt_Requester.StartsWith(searchModel.SearchString));
+                        data = data.Where(x => x.Tkt_Requester.StartsWith(searchModel.SearchString));
                         break;
                     case "6":
-                        data.Where(x => x.Tkt_Category.StartsWith(searchModel.SearchString));
+                        data = data.Where(x => x.Tkt_Category.StartsWith(searchModel.SearchString));
                         break;
                     case "7":
-                        data.Where(x => x.Tkt_Department.StartsWith(searchModel.SearchString));
+                        data = data.Where(x => x.Tkt_Department.StartsWith(searchModel.SearchString));
                         break;
                     case "8":
-                        data.Where(x => x.Tkt_location.StartsWith(searchModel.SearchString));
+                        data = data.Where(x => x.Tkt_location.StartsWith(searchModel.SearchString));
                         break;
                 }
 
