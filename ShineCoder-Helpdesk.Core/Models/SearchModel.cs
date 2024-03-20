@@ -12,7 +12,7 @@ namespace ShineCoder_Helpdesk.Core.Models
         public  UserTypeEnum UserType { get; set; }
         public int DepartmentId { get; set; }
         public string SearchOption { get; set; }
-        public string SearchString { get; set; }
+        public string? SearchString { get; set; }
         public int Tkt_Id { get; set; }
         public TicketStatusEnum Status { get; set; }
         public string ? UserName { get; set; }
