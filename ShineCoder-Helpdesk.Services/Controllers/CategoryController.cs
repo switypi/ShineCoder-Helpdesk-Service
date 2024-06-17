@@ -57,16 +57,16 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 		}
 
 		[HttpGet]
-		[Route("GetCategoryByIdAsyn")]
-		public async Task<JObject> GetCategoryByIdAsyn()
+		[Route("GetCategoryByIdAsync")]
+		public async Task<JObject> GetCategoryByIdAsync()
 		{
 			try
 			{
 				var id = int.Parse(_httpContextProxy.GetQueryString("_Id"));
 
-				var data = _unitOfWork.CategorysRepository.GetAsync(x => x.Id == id);
+				var data = await _unitOfWork.CategorysRepository.GetAsync(x => x.Id == id);
 
-				return _responseBuilder.Success(data.ToJObject());
+				return _responseBuilder.Success(data.ToJArray());
 			}
 			catch (Exception ex)
 			{
@@ -102,7 +102,7 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 
 		}
 
-		[HttpPost]
+		[HttpDelete]
 		[Route("DeleteCategorytAsyn")]
 		public async Task<JObject> DeleteCategoryAsyn()
 		{
@@ -111,10 +111,10 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 			{
 				try
 				{
-					var inputData = _httpContextProxy.GetRequestBody<CategoryModel>();
-					var outputModel = _mapper.Map<Category>(inputData);
+					var id = _httpContextProxy.GetQueryString("_Id");//<CategoryModel>();
+					//var outputModel = _mapper.Map<Category>(inputData);
 
-					_unitOfWork.CategorysRepository.DeleteAsync(outputModel.Id);
+					_unitOfWork.CategorysRepository.DeleteAsync(id);
 					await _unitOfWork.SaveAsync();
 					await trans.CommitAsync();
 					return _responseBuilder.Success("Category deleted.");

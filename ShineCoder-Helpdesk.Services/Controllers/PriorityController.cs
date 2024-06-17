@@ -62,9 +62,9 @@ namespace ShineCoder_Helpdesk.Services.Controllers
 			{
 				var id = int.Parse(_httpContextProxy.GetQueryString("_Id"));
 
-				var data = _unitOfWork.TicketPrioritiesRepository.GetAsync(x => x.Id == id);
+				var data = await _unitOfWork.TicketPrioritiesRepository.GetAsync(x => x.Id == id);
 
-				return _responseBuilder.Success(data.ToJObject());
+				return _responseBuilder.Success(data.ToJArray());
 			}
 			catch (Exception ex)
 			{
